@@ -3,6 +3,8 @@ import math
 
 import numpy as np
 
+from utils import copy_and_transpose_matrix
+
 NUM_ROWS = 20
 # NUM_ROWS = 5
 NUM_COLS = 20
@@ -34,13 +36,6 @@ def _parse_clues_rows(clues: str) -> List[List[int]]:
     return temp
 
 
-def _compare_to_expected_helper(matrix, clues):
-    actual_sums = [r.sum() for r in matrix]
-    expected_sums = [math.fsum(r) for r in clues]
-    diffs = [math.fabs(actual_sums[i] - expected_sums[i]) for i in range(len(clues))]
-    return MAX_RETURN_VAL_COMP_TO_EXPECTED - math.fsum(diffs)
-
-
 class Nonogram(object):
     def __init__(self, row_clues: str, col_clues: str) -> None:
         super().__init__()
@@ -67,20 +62,4 @@ class Nonogram(object):
             return row[index]
         return 0
 
-    # heuristics:
-    # heuristics are taken from "Solving Nonograms Using Genetic Algorithms"
 
-    # (1)
-    def compare_to_expected_rows(self):
-        return _compare_to_expected_helper(self.matrix, self.row_clues)
-
-    # (2)
-    def compare_to_expected_cols(self):
-        trans = np.copy(self.matrix)
-        trans = np.transpose(trans)
-        return _compare_to_expected_helper(trans, self.col_clues)
-
-
-    def zeros_diff_rows(self):
-        actual_sum = math.fsum([r.sum() for r in self.matrix])
-        expected_sum = math.fsum([math.fsum(r) for r in self.row_clues])
