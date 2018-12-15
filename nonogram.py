@@ -1,16 +1,9 @@
 from typing import List
-import math
-
 import numpy as np
+from config import NUM_COLS, NUM_ROWS, empty_in_split
 
-from utils import copy_and_transpose_matrix
 
-NUM_ROWS = 20
-# NUM_ROWS = 5
-NUM_COLS = 20
-# NUM_COLS = 5
 MAX_RETURN_VAL_COMP_TO_EXPECTED = NUM_ROWS * NUM_COLS
-empty_in_split = '\xa0'
 
 
 def _parse_clues_cols(clues: str) -> List[List[int]]:
@@ -37,14 +30,23 @@ def _parse_clues_rows(clues: str) -> List[List[int]]:
 
 
 class Nonogram(object):
-    def __init__(self, row_clues: str, col_clues: str) -> None:
-        super().__init__()
+    def __init__(self, row_clues: str, col_clues: str, title: str, number: int, solution_url: str) -> None:
+        # metadata
+        self.title = title
+        self.number = number
+
+        # actual data
+        self.solution_url = solution_url
         self.row_clues = _parse_clues_rows(row_clues)
         self.col_clues = _parse_clues_cols(col_clues)
         self.matrix = np.full((NUM_ROWS, NUM_COLS), False, dtype=bool)
 
+    def __repr__(self) -> str:
+        return self.__str__()
+
     def __str__(self) -> str:
-        return 'row clues: %s,\ncol clues: %s,\nmatrix: %s' % (self.row_clues, self.col_clues, self.matrix)
+        return 'title: %s, \nnumber: %d, \nrow clues: %s,\ncol clues: %s,\nmatrix: %s \nsolution: %s' % \
+               (self.title, self.number, self.row_clues, self.col_clues, self.matrix, self.solution_url)
 
     def get_row_clue(self, row_num: int, index: int) -> int:
         if row_num > len(self.row_clues) or index < 0:
