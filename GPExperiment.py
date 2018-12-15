@@ -10,7 +10,7 @@ from heuristics import *
 from evaluator import *
 from utils import load_nonograms_from_file
 from config import pickle_file_path
-
+import numpy as np
 from typing import List, Dict
 
 nonograms = load_nonograms_from_file(path=pickle_file_path)
@@ -75,7 +75,7 @@ def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
     return toolbox
 
 def _flip_coin() -> bool:
-    res = random.random() > 0.5
+    res = random() > 0.5
     print('flip coin is:', res)
     return res
 
@@ -87,7 +87,7 @@ def _crossover(individual1: Dict, individual2: Dict):
 
     if _flip_coin():  # cx cond trees
         for index in range(len(cond_trees1)):
-            if random.random() <= prob_crossover_individual_cond:
+            if random() <= prob_crossover_individual_cond:
                 print('doing cx on cond trees idx %d' %(index,))
                 t1 = cond_trees1[index]
                 t2 = cond_trees2[index]
@@ -100,7 +100,7 @@ def _crossover(individual1: Dict, individual2: Dict):
                 cond_trees2[index] = t2
     else:
         for index in range(len(val_trees1)):
-            if random.random() <= prob_crossover_individual_val:
+            if random() <= prob_crossover_individual_val:
                 print('doing cx on val trees idx %d' %(index,))
                 t1 = val_trees1[index]
                 t2 = val_trees2[index]
@@ -123,7 +123,7 @@ def _mutate(individual: Dict, cond_expr, val_expr, cond_pset, val_pset):
         prob = prob_mutate_individual_val
         trees = individual['VALUE_TREES']
     for i, tree in enumerate(trees):
-        if random.random() <= prob:
+        if random() <= prob:
             tree, = gp.mutUniform(tree, expr, pset)
             trees[i] = tree
     return individual,
@@ -135,7 +135,7 @@ def evaluate(compile_valtree, compile_condtree, individual):
     compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
     results = []
     for nonogram in utils.load_nonograms_from_file():
-        print(nonogram.title)
+        # print(nonogram.title)
         selected_step = nonogram
         next_steps = generate_next_steps(selected_step)
         while len(next_steps) > 0:
@@ -177,8 +177,8 @@ def evaluate(compile_valtree, compile_condtree, individual):
             next_steps = generate_next_steps(selected_step)
 
         # Here need to compare to the solution!
-        print(selected_step.matrix)
-        results.append(10)
+        # print(selected_step.matrix)
+        results.append(np.sum(selected_step.matrix))
     return results
 
 def init_creator(cond_pset, val_pset):
@@ -195,11 +195,11 @@ class GPExperiment(object):
 
         init_creator(cond_pset, val_pset)
         self.toolbox = make_toolbox(cond_pset, val_pset)
-        self.pop = self.toolbox.population(n=5)
+        self.pop = self.toolbox.population(n=50)
         self.hof = tools.HallOfFame(1)
 
     def start_experiment(self):
         pop, log = algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, 40,
-                                       halloffame=self.hof, verbose=False)
-        return pop, log
+                                       halloffame=self.hof, verbose=True)
+        return pop, log, self.hof
 
