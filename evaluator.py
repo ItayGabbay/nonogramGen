@@ -16,8 +16,6 @@ def generate_next_steps(current_step: Nonogram):
                 candidate[row][col] = True
                 if validate_board(candidate, clues) is True:
                     next_steps.append(candidate)
-                else:
-                    print(candidate)
 
     return next_steps
 
