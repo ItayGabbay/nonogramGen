@@ -11,7 +11,7 @@ def generate_next_steps(current_step: Nonogram):
     for row in range(len(current_step.matrix)):
         for col in range(len(current_step.matrix[0])):
             candidate = current_step.matrix.copy()
-            
+
             if candidate[row][col] == False:
                 candidate[row][col] = True
                 if validate_board(candidate, clues) is True:
@@ -71,7 +71,7 @@ def validate_board(candidate, clues):
 
     return True
 
-ns = utils.load_nonograms_from_file()
-print(ns[0])
-print(len(generate_next_steps(ns[0])))
+# ns = utils.load_nonograms_from_file()
+# print(ns[0])
+# print(len(generate_next_steps(ns[0])))
 
