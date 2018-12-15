@@ -1,37 +1,37 @@
-from nonogram import Nonogram, MAX_RETURN_VAL_COMP_TO_EXPECTED, NUM_ROWS, NUM_COLS
+from nonogram import Nonogram, BOARD_SIZE, NUM_ROWS, NUM_COLS
 import math
 from utils import copy_and_transpose_matrix
 
-def _compare_to_expected_helper(matrix, clues):
+def _ones_diff_helper(matrix, clues):
     actual_sums = [r.sum() for r in matrix]
     expected_sums = [math.fsum(r) for r in clues]
     diffs = [math.fabs(actual_sums[i] - expected_sums[i]) for i in range(len(clues))]
-    return MAX_RETURN_VAL_COMP_TO_EXPECTED - math.fsum(diffs)
+    return (BOARD_SIZE - math.fsum(diffs)) / BOARD_SIZE
 
 
 def _zeros_diff_helper(max_val, matrix, clues):
     actual_sums = [max_val - r.sum() for r in matrix]
     expected_sums = [max_val - math.fsum(r) for r in clues]
     diffs = [math.fabs(actual_sums[i] - expected_sums[i]) for i in range(len(clues))]
-    return max_val - math.fsum(diffs)
+    return (BOARD_SIZE - math.fsum(diffs)) / BOARD_SIZE
 
 
 # heuristics are taken from "Solving Nonograms Using Genetic Algorithms"
 
 # (1)
-def compare_to_expected_rows(nonogram: Nonogram) -> float:
+def ones_diff_rows(nonogram: Nonogram) -> float:
     """
     determines the difference between the expected number and the current number of 1’s in matrix, per row
     """
-    return _compare_to_expected_helper(nonogram.matrix, nonogram.row_clues)
+    return _ones_diff_helper(nonogram.matrix, nonogram.row_clues)
 
 # (2)
-def compare_to_expected_cols(nonogram: Nonogram):
+def ones_diff_cols(nonogram: Nonogram):
     """
     determines the difference between the expected number and the current number of 1’s in matrix, per col
     """
     trans = copy_and_transpose_matrix(nonogram.matrix)
-    return _compare_to_expected_helper(trans, nonogram.col_clues)
+    return _ones_diff_helper(trans, nonogram.col_clues)
 
 # (3)
 def zeros_diff_rows(nonogram: Nonogram):

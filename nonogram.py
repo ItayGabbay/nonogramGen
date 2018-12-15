@@ -2,8 +2,7 @@ from typing import List
 import numpy as np
 from config import NUM_COLS, NUM_ROWS, empty_in_split
 
-
-MAX_RETURN_VAL_COMP_TO_EXPECTED = NUM_ROWS * NUM_COLS
+BOARD_SIZE = NUM_ROWS * NUM_COLS
 
 
 def _parse_clues_cols(clues: str) -> List[List[int]]:
@@ -63,5 +62,3 @@ class Nonogram(object):
         if index < len(row):
             return row[index]
         return 0
-
-
