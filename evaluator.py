@@ -1,12 +1,13 @@
 from nonogram import Nonogram
 import utils
-
+import copy
 
 def evaluate_individual(individual, step: Nonogram):
     next_steps = generate_next_steps(step)
 
     # while len(next_steps) > 0:
     #     print "AAA"
+
 
 def generate_next_steps(current_step: Nonogram):
     next_steps = []
@@ -21,12 +22,8 @@ def generate_next_steps(current_step: Nonogram):
             if candidate[row][col] == False:
                 candidate[row][col] = True
                 if validate_board(candidate, clues) is True:
-                    new_nonogram = Nonogram(current_step.row_clues,
-                                            current_step.col_clues,
-                                            current_step.title,
-                                            current_step.number,
-                                            current_step.solution_url,
-                                            candidate)
+                    new_nonogram = copy.deepcopy(current_step)
+                    new_nonogram.matrix = candidate
                     next_steps.append(new_nonogram)
 
     return next_steps
