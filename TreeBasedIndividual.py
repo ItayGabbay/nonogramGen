@@ -4,7 +4,7 @@ from deap import base
 from deap import creator
 from deap import tools
 from deap import gp
-from config import NUM_COND_TREES
+from config import NUM_COND_TREES, NUM_VAL_TREES
 import copy
 
 
@@ -18,30 +18,60 @@ def _make_condition_tree_pset():
     return cond_pset
 
 
-def _make_toolbox(pset: gp.PrimitiveSet):
+def _make_value_tree_pset():
+    val_pset = gp.PrimitiveSet("MAIN", 1)
+    val_pset.addPrimitive(operator.add, 2)
+    val_pset.addPrimitive(operator.mul, 2)
+    val_pset.renameArguments(ARG0='x')
+    return val_pset
+
+
+def _init_individual(cond_tree, val_tree):
+    cond_trees = tools.initRepeat(list, cond_tree, NUM_COND_TREES)
+    value_trees = tools.initRepeat(list, val_tree, NUM_VAL_TREES)
+
+    return {"CONDITION_TREES": cond_trees, "VALUE_TREES": value_trees, "fitness": {'valid': True}}
+
+
+def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
     toolbox = base.Toolbox()
-    toolbox.register("expr", gp.genHalfAndHalf, pset=pset, min_=1, max_=2)
-    toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
+    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset, min_=1, max_=2)
+    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset, min_=1, max_=2)
+    toolbox.register("value_tree", tools.initIterate, creator.ValueTree, toolbox.value_expr)
+    toolbox.register("cond_tree", tools.initIterate, creator.ConditionTree, toolbox.cond_expr)
+    toolbox.register("compile_valtree", gp.compile, pset=val_pset)
+    toolbox.register("compile_condtree", gp.compile, pset=cond_pset)
+    toolbox.register("evaluate", just_for_debug)  # just so an eval func will be defined
+    toolbox.register("individual", _init_individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    toolbox.register("compile", gp.compile, pset=pset)
-    toolbox.register("evaluate", lambda _: (1,))  # just so an eval func will be defined
     return toolbox
 
-def _make_cond_trees(num_of_trees:int = NUM_COND_TREES):
-    pset = _make_condition_tree_pset()
-    toolbox = _make_toolbox(pset)
-    pop = toolbox.population(n=num_of_trees)
-    return pop
 
-def init_creator():
+def just_for_debug(individual):
+    print(individual)
+# def _make_cond_trees(num_of_trees:int = NUM_COND_TREES):
+#     pset = _make_condition_tree_pset()
+#     toolbox = _make_toolbox(pset)
+#     pop = toolbox.population(n=num_of_trees)
+#     return pop
+
+
+def init_creator(cond_pset, val_pset):
     creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-    creator.create("Individual", gp.PrimitiveTree)
-    creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
+    creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
+    creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
+    creator.create("Individual", dict)
 
 
 class TreeBasedIndividual(object):
     def __init__(self) -> None:
-        init_creator()
-        self.cond_trees = _make_cond_trees()
-        print(self.cond_trees)
+        cond_pset = _make_condition_tree_pset()
+        val_pset = _make_value_tree_pset()
+
+        init_creator(cond_pset, val_pset)
+        toolbox = make_toolbox(cond_pset, val_pset)
+        pop = toolbox.population(n=5)
+        hof = tools.HallOfFame(1)
+        pop, log = algorithms.eaSimple(pop, toolbox, 0.5, 0.1, 40,
+                                       halloffame=hof, verbose=True)
         # TODO make val trees

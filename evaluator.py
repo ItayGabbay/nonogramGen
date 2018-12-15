@@ -2,6 +2,12 @@ from nonogram import Nonogram
 import utils
 
 
+def evaluate_individual(individual, step: Nonogram):
+    next_steps = generate_next_steps(step)
+
+    # while len(next_steps) > 0:
+    #     print "AAA"
+
 def generate_next_steps(current_step: Nonogram):
     next_steps = []
     clues = dict()
