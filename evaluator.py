@@ -1,4 +1,3 @@
-import numpy as np
 from nonogram import Nonogram
 import utils
 
@@ -12,6 +11,7 @@ def generate_next_steps(current_step: Nonogram):
     for row in range(len(current_step.matrix)):
         for col in range(len(current_step.matrix[0])):
             candidate = current_step.matrix.copy()
+            
             if candidate[row][col] == False:
                 candidate[row][col] = True
                 if validate_board(candidate, clues) is True:
@@ -75,10 +75,3 @@ ns = utils.load_nonograms_from_file()
 print(ns[0])
 print(len(generate_next_steps(ns[0])))
 
-# clue_list = dict()
-# clue_list['rows'] = [[4], [2], [3], [3], [1]]
-# clue_list['cols'] = [[0, 2], [2, 1], [0, 4], [1, 1], [1, 1]]
-# step = np.zeros((5, 5))
-# step[0] = [1,1,1,0,0]
-#
-# print(len(generate_next_steps(step, clue_list)))
