@@ -26,11 +26,11 @@ def _make_value_tree_pset():
     return val_pset
 
 
-def _init_individual(cond_tree, val_tree):
+def _init_individual(cls, cond_tree, val_tree):
     cond_trees = tools.initRepeat(list, cond_tree, NUM_COND_TREES)
     value_trees = tools.initRepeat(list, val_tree, NUM_VAL_TREES)
 
-    return {"CONDITION_TREES": cond_trees, "VALUE_TREES": value_trees, "fitness": {'valid': True}}
+    return cls({"CONDITION_TREES": cond_trees, "VALUE_TREES": value_trees})
 
 
 def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
@@ -42,7 +42,7 @@ def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
     toolbox.register("compile_valtree", gp.compile, pset=val_pset)
     toolbox.register("compile_condtree", gp.compile, pset=cond_pset)
     toolbox.register("evaluate", just_for_debug)  # just so an eval func will be defined
-    toolbox.register("individual", _init_individual, toolbox.cond_tree, toolbox.value_tree)
+    toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     return toolbox
 
@@ -60,7 +60,7 @@ def init_creator(cond_pset, val_pset):
     creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
     creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
     creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
-    creator.create("Individual", dict)
+    creator.create("Individual", dict, fitness=creator.FitnessMin)
 
 
 class TreeBasedIndividual(object):
