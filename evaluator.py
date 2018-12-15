@@ -21,7 +21,13 @@ def generate_next_steps(current_step: Nonogram):
             if candidate[row][col] == False:
                 candidate[row][col] = True
                 if validate_board(candidate, clues) is True:
-                    next_steps.append(candidate)
+                    new_nonogram = Nonogram(current_step.row_clues,
+                                            current_step.col_clues,
+                                            current_step.title,
+                                            current_step.number,
+                                            current_step.solution_url,
+                                            candidate)
+                    next_steps.append(new_nonogram)
 
     return next_steps
 
@@ -75,7 +81,4 @@ def validate_board(candidate, clues):
 
     return True
 
-# ns = utils.load_nonograms_from_file()
-# print(ns[0])
-# print(len(generate_next_steps(ns[0])))
 

@@ -5,24 +5,38 @@ from deap import creator
 from deap import tools
 from deap import gp
 from config import NUM_COND_TREES, NUM_VAL_TREES
-import copy
+from heuristics import *
+from evaluator import *
+from main import nonograms
 
 
 def _make_condition_tree_pset():
-    cond_pset = gp.PrimitiveSet("MAIN", 1)
+    cond_pset = gp.PrimitiveSet("MAIN", 6)
     cond_pset.addPrimitive(operator.and_, 2)
     cond_pset.addPrimitive(operator.or_, 2)
     cond_pset.addPrimitive(operator.le, 2)
     cond_pset.addPrimitive(operator.ge, 2)
-    cond_pset.renameArguments(ARG0='x')
+    cond_pset.renameArguments(ARG0='ones_diff_rows')
+    cond_pset.renameArguments(ARG1='ones_diff_cols')
+    cond_pset.renameArguments(ARG2='zeros_diff_rows')
+    cond_pset.renameArguments(ARG3='zeros_diff_cols')
+    cond_pset.renameArguments(ARG4='compare_blocks_rows')
+    cond_pset.renameArguments(ARG5='compare_blocks_cols')
+
     return cond_pset
 
 
 def _make_value_tree_pset():
-    val_pset = gp.PrimitiveSet("MAIN", 1)
+    val_pset = gp.PrimitiveSet("MAIN", 6)
     val_pset.addPrimitive(operator.add, 2)
     val_pset.addPrimitive(operator.mul, 2)
-    val_pset.renameArguments(ARG0='x')
+    val_pset.renameArguments(ARG0='ones_diff_rows')
+    val_pset.renameArguments(ARG1='ones_diff_cols')
+    val_pset.renameArguments(ARG2='zeros_diff_rows')
+    val_pset.renameArguments(ARG3='zeros_diff_cols')
+    val_pset.renameArguments(ARG4='compare_blocks_rows')
+    val_pset.renameArguments(ARG5='compare_blocks_cols')
+
     return val_pset
 
 
@@ -41,19 +55,29 @@ def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
     toolbox.register("cond_tree", tools.initIterate, creator.ConditionTree, toolbox.cond_expr)
     toolbox.register("compile_valtree", gp.compile, pset=val_pset)
     toolbox.register("compile_condtree", gp.compile, pset=cond_pset)
-    toolbox.register("evaluate", just_for_debug)  # just so an eval func will be defined
+    toolbox.register("evaluate", just_for_debug, toolbox.compile_valtree, toolbox.compile_condtree)  # just so an eval func will be defined
     toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     return toolbox
 
 
-def just_for_debug(individual):
+def just_for_debug(compile_valtree, compile_condtree, individual):
+    for nonogram in nonograms:
+        next_steps = generate_next_steps(nonogram)
+
+        while len(next_steps) > 0:
+            # Evaluating the heuristics on the candidates and choosing the best
+            for option in next_steps:
+                ones_diff_rows_val = ones_diff_rows(option)
+                ones_diff_cols_val = ones_diff_cols(option)
+                zeros_diff_rows_val = zeros_diff_rows(option)
+                zeros_diff_cols_val = zeros_diff_cols(option)
+                compare_blocks_rows_val = compare_blocks_rows(option)
+                compare_blocks_cols_val = compare_blocks_cols(option)
+
+    # while len(next_steps) > 0:
+    #     print "AAA"
     print(individual)
-# def _make_cond_trees(num_of_trees:int = NUM_COND_TREES):
-#     pset = _make_condition_tree_pset()
-#     toolbox = _make_toolbox(pset)
-#     pop = toolbox.population(n=num_of_trees)
-#     return pop
 
 
 def init_creator(cond_pset, val_pset):
@@ -63,15 +87,17 @@ def init_creator(cond_pset, val_pset):
     creator.create("Individual", dict, fitness=creator.FitnessMin)
 
 
-class TreeBasedIndividual(object):
+class GPExperiment(object):
     def __init__(self) -> None:
         cond_pset = _make_condition_tree_pset()
         val_pset = _make_value_tree_pset()
 
         init_creator(cond_pset, val_pset)
-        toolbox = make_toolbox(cond_pset, val_pset)
-        pop = toolbox.population(n=5)
-        hof = tools.HallOfFame(1)
-        pop, log = algorithms.eaSimple(pop, toolbox, 0.5, 0.1, 40,
-                                       halloffame=hof, verbose=True)
-        # TODO make val trees
+        self.toolbox = make_toolbox(cond_pset, val_pset)
+        self.pop = self.toolbox.population(n=5)
+        self.hof = tools.HallOfFame(1)
+
+    def start_experiment(self):
+        pop, log = algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, 40,
+                                       halloffame=self.hof, verbose=True)
+

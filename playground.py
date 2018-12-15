@@ -92,6 +92,6 @@
 #
 # ns = utils.load_nonograms_from_file()
 # print(ns)
-from TreeBasedIndividual import TreeBasedIndividual
+from GPExperiment import GPExperiment
 
-inds = TreeBasedIndividual()
+inds = GPExperiment()

@@ -29,7 +29,8 @@ def _parse_clues_rows(clues: str) -> List[List[int]]:
 
 
 class Nonogram(object):
-    def __init__(self, row_clues: str, col_clues: str, title: str, number: int, solution_url: str) -> None:
+    def __init__(self, row_clues: str, col_clues: str, title: str, number: int, solution_url: str,
+                 matrix: np.array = None) -> None:
         # metadata
         self.title = title
         self.number = number
@@ -38,7 +39,10 @@ class Nonogram(object):
         self.solution_url = solution_url
         self.row_clues = _parse_clues_rows(row_clues)
         self.col_clues = _parse_clues_cols(col_clues)
-        self.matrix = np.full((NUM_ROWS, NUM_COLS), False, dtype=bool)
+        if matrix is None:
+            self.matrix = np.full((NUM_ROWS, NUM_COLS), False, dtype=bool)
+        else:
+            self.matrix = matrix
 
     def __repr__(self) -> str:
         return self.__str__()
