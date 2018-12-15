@@ -1,6 +1,5 @@
 import operator
-from random import random
-
+from random import random, choice, uniform
 from deap import algorithms
 from deap import base
 from deap import creator
@@ -12,7 +11,7 @@ from heuristics import *
 from evaluator import *
 from utils import load_nonograms_from_file
 from config import pickle_file_path
-import random
+
 from typing import List, Dict
 
 nonograms = load_nonograms_from_file(path=pickle_file_path)
@@ -25,8 +24,8 @@ def _make_condition_tree_pset():
     cond_pset.addPrimitive(operator.__or__, [bool, bool], bool)
     cond_pset.addPrimitive(operator.le, [float, float], bool)
     cond_pset.addPrimitive(operator.ge, [float, float], bool)
-    cond_pset.addEphemeralConstant('ephemeral_float', lambda: random.uniform(-5, -5), float)
-    cond_pset.addEphemeralConstant('ephemeral_bool', lambda: random.choice([True, False]), bool)
+    cond_pset.addEphemeralConstant('ephemeral_float', lambda: uniform(-5, -5), float)
+    cond_pset.addEphemeralConstant('ephemeral_bool', lambda: choice([True, False]), bool)
     cond_pset.addPrimitive(if_then_else, [bool, float, float], float)
     cond_pset.renameArguments(ARG0='ones_diff_rows')
     cond_pset.renameArguments(ARG1='ones_diff_cols')
