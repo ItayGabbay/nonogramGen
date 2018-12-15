@@ -6,8 +6,7 @@ from deap import base
 from deap import creator
 from deap import tools
 from deap import gp
-from config import NUM_COND_TREES, NUM_VAL_TREES, prob_crossover_global, prob_crossover_individual_cond, \
-    prob_crossover_individual_val
+from config import *
 from heuristics import *
 from evaluator import *
 from utils import load_nonograms_from_file
@@ -72,10 +71,12 @@ def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     toolbox.register("select", tools.selTournament, tournsize=3)
     toolbox.register("mate", _crossover)
+    toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
+                     cond_pset=cond_pset, val_pset=val_pset)
     return toolbox
 
 def _flip_coin() -> bool:
-    res = random() > 0.5
+    res = random.random() > 0.5
     print('flip coin is:', res)
     return res
 
@@ -87,7 +88,7 @@ def _crossover(individual1: Dict, individual2: Dict):
 
     if _flip_coin():  # cx cond trees
         for index in range(len(cond_trees1)):
-            if random() <= prob_crossover_individual_cond:
+            if random.random() <= prob_crossover_individual_cond:
                 print('doing cx on cond trees idx %d' %(index,))
                 t1 = cond_trees1[index]
                 t2 = cond_trees2[index]
@@ -100,7 +101,7 @@ def _crossover(individual1: Dict, individual2: Dict):
                 cond_trees2[index] = t2
     else:
         for index in range(len(val_trees1)):
-            if random() <= prob_crossover_individual_val:
+            if random.random() <= prob_crossover_individual_val:
                 print('doing cx on val trees idx %d' %(index,))
                 t1 = val_trees1[index]
                 t2 = val_trees2[index]
@@ -110,12 +111,31 @@ def _crossover(individual1: Dict, individual2: Dict):
     print('done cx')
     return individual1, individual2
 
+def _mutate(individual: Dict, cond_expr, val_expr, cond_pset, val_pset):
+    print('mutating', individual)
+    if _flip_coin():
+        expr = cond_expr
+        pset = cond_pset
+        prob = prob_mutate_individual_cond
+        trees = individual['CONDITION_TREES']
+    else:
+        expr = val_expr
+        pset = val_pset
+        prob = prob_mutate_individual_val
+        trees = individual['VALUE_TREES']
+    for i, tree in enumerate(trees):
+        if random.random() <= prob:
+            tree, = gp.mutUniform(tree, expr, pset)
+            trees[i] = tree
+    return individual,
+
+
 
 def evaluate(compile_valtree, compile_condtree, individual):
     compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
     compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
     results = []
-    for nonogram in nonograms:
+    for nonogram in utils.load_nonograms_from_file():
         print(nonogram.title)
         selected_step = nonogram
         next_steps = generate_next_steps(selected_step)
@@ -181,6 +201,6 @@ class GPExperiment(object):
 
     def start_experiment(self):
         pop, log = algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, 40,
-                                       halloffame=self.hof, verbose=True)
+                                       halloffame=self.hof, verbose=False)
         return pop, log
 

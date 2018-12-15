@@ -11,4 +11,6 @@ NUM_VAL_TREES = NUM_COND_TREES + 1
 prob_crossover_global = 0.5  # global probability for cx
 prob_crossover_individual_cond = 1  # probability to cx a specific cond tree in an individual
 prob_crossover_individual_val = 1  # probability to cx a specific cond tree in an individual
-
+prob_mutate_global = 0.5
+prob_mutate_individual_cond = 1
+prob_mutate_individual_val = 1
