@@ -94,4 +94,7 @@
 # print(ns)
 from GPExperiment import GPExperiment
 
-inds = GPExperiment()
+gp = GPExperiment()
+print(gp.pop)
+pop, log = gp.start_experiment()
+print(log, '\n', pop)

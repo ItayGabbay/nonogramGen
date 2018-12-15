@@ -37,8 +37,14 @@ class Nonogram(object):
 
         # actual data
         self.solution_url = solution_url
-        self.row_clues = _parse_clues_rows(row_clues)
-        self.col_clues = _parse_clues_cols(col_clues)
+        if type(row_clues) is str:
+            self.row_clues = _parse_clues_rows(row_clues)
+        else:
+            self.row_clues = row_clues
+        if type(col_clues) is str:
+            self.col_clues = _parse_clues_cols(col_clues)
+        else:
+            self.col_clues = col_clues
         if matrix is None:
             self.matrix = np.full((NUM_ROWS, NUM_COLS), False, dtype=bool)
         else:
