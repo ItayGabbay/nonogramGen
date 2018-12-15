@@ -7,8 +7,10 @@ from deap import gp
 from config import NUM_COND_TREES, NUM_VAL_TREES
 from heuristics import *
 from evaluator import *
-from main import nonograms
+from utils import load_nonograms_from_file
+from config import pickle_file_path
 
+nonograms = load_nonograms_from_file(path=pickle_file_path)
 
 def _make_condition_tree_pset():
     cond_pset = gp.PrimitiveSet("MAIN", 6)
@@ -49,8 +51,8 @@ def _init_individual(cls, cond_tree, val_tree):
 
 def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
     toolbox = base.Toolbox()
-    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset, min_=1, max_=2)
-    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset, min_=1, max_=2)
+    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset, min_=3, max_=5)
+    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset, min_=3, max_=5)
     toolbox.register("value_tree", tools.initIterate, creator.ValueTree, toolbox.value_expr)
     toolbox.register("cond_tree", tools.initIterate, creator.ConditionTree, toolbox.cond_expr)
     toolbox.register("compile_valtree", gp.compile, pset=val_pset)
@@ -62,6 +64,9 @@ def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
 
 
 def just_for_debug(compile_valtree, compile_condtree, individual):
+    compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
+    compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
+
     for nonogram in nonograms:
         next_steps = generate_next_steps(nonogram)
 
@@ -74,6 +79,30 @@ def just_for_debug(compile_valtree, compile_condtree, individual):
                 zeros_diff_cols_val = zeros_diff_cols(option)
                 compare_blocks_rows_val = compare_blocks_rows(option)
                 compare_blocks_cols_val = compare_blocks_cols(option)
+                heuristic = None
+                for condition_index in range(compiled_conditions):
+                    res = compiled_conditions[condition_index](ones_diff_rows_val,
+                                                               ones_diff_cols_val,
+                                                               zeros_diff_rows_val,
+                                                               zeros_diff_cols_val,
+                                                               compare_blocks_rows_val,
+                                                               compare_blocks_cols_val)
+                    if res is True:
+                        heuristic = compiled_values[condition_index](ones_diff_rows_val,
+                                                                     ones_diff_cols_val,
+                                                                     zeros_diff_rows_val,
+                                                                     zeros_diff_cols_val,
+                                                                     compare_blocks_rows_val,
+                                                                     compare_blocks_cols_val)
+                        break;
+                if heuristic is None:
+                    heuristic = compiled_values[-1](ones_diff_rows_val,
+                                                    ones_diff_cols_val,
+                                                    zeros_diff_rows_val,
+                                                    zeros_diff_cols_val,
+                                                    compare_blocks_rows_val,
+                                                    compare_blocks_cols_val)
+
 
     # while len(next_steps) > 0:
     #     print "AAA"
