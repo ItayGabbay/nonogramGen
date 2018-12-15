@@ -15,7 +15,7 @@ from config import pickle_file_path
 import random
 from typing import List, Dict
 
-
+nonograms = load_nonograms_from_file(path=pickle_file_path)
 def _make_condition_tree_pset():
     def if_then_else(input, output1, output2):
         return output1 if input else output2
