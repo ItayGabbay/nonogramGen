@@ -6,3 +6,6 @@ empty_in_split = '\xa0'
 
 pickle_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
 
+NUM_COND_TREES = 5
+NUM_VAL_TREES = 6
+
