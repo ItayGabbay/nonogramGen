@@ -1,5 +1,7 @@
 import operator
 from random import random, choice, uniform
+
+import time
 from deap import algorithms
 from deap import base
 from deap import creator
@@ -234,7 +236,9 @@ class GPExperiment(object):
         self.stats = mstats
 
     def start_experiment(self):
+        start = time.time()
         pop, log = algorithms.eaSimple(self.pop, self.toolbox, prob_crossover_global, prob_mutate_global, num_gen,
                                        halloffame=self.hof, verbose=True, stats=self.stats)
-        return pop, log, self.hof, self.stats
+        end = time.time()
+        return pop, log, self.hof, self.stats, end - start
 
