@@ -10,12 +10,12 @@ from deap import gp
 from config import *
 from heuristics import *
 from evaluator import *
-from utils import load_nonograms_from_file
+from utils import load_unsolved_nonograms_from_file
 from config import pickle_unsolved_file_path, points_correct_box, points_incorrect_box
 import numpy as np
 from typing import Callable, Dict
 
-nonograms = load_nonograms_from_file(path=pickle_unsolved_file_path)
+nonograms = load_unsolved_nonograms_from_file(path=pickle_unsolved_file_path)
 def _make_condition_tree_pset():
     def if_then_else(input, output1, output2):
         return output1 if input else output2

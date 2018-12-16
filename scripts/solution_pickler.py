@@ -1,4 +1,4 @@
-from utils import load_nonograms_from_file
+from utils import load_unsolved_nonograms_from_file
 from config import pickle_unsolved_file_path, pickle_solved_file_path
 from typing import List
 from nonogram import Nonogram
@@ -334,7 +334,7 @@ def solve_nono(index: int, unsolved_nono: Nonogram):
               }[index](unsolved_nono)
     return solved
 
-nonograms = load_nonograms_from_file('../' + pickle_unsolved_file_path)
+nonograms = load_unsolved_nonograms_from_file('../' + pickle_unsolved_file_path)
 res = [solve_nono(i, n) for (i, n) in enumerate(nonograms)]
 save(res)
 print('done')
