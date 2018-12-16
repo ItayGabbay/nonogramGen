@@ -221,11 +221,20 @@ class GPExperiment(object):
 
         init_creator(cond_pset, val_pset)
         self.toolbox = make_toolbox(cond_pset, val_pset)
-        self.pop = self.toolbox.population(n=50)
-        self.hof = tools.HallOfFame(1)
+        self.pop = self.toolbox.population(n=pop_size)
+        self.hof = tools.HallOfFame(hof_size)
+
+        stats_fit = tools.Statistics(lambda ind: ind.fitness.values)
+        stats_size = tools.Statistics(len)
+        mstats = tools.MultiStatistics(fitness=stats_fit, size=stats_size)
+        mstats.register("avg", np.mean)
+        mstats.register("std", np.std)
+        mstats.register("min", np.min)
+        mstats.register("max", np.max)
+        self.stats = mstats
 
     def start_experiment(self):
-        pop, log = algorithms.eaSimple(self.pop, self.toolbox, 0.5, 0.1, 40,
-                                       halloffame=self.hof, verbose=True)
-        return pop, log, self.hof
+        pop, log = algorithms.eaSimple(self.pop, self.toolbox, prob_crossover_global, prob_mutate_global, num_gen,
+                                       halloffame=self.hof, verbose=True, stats=self.stats)
+        return pop, log, self.hof, self.stats
 

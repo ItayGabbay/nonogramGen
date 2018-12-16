@@ -96,5 +96,9 @@ from GPExperiment import GPExperiment
 
 gp = GPExperiment()
 print(gp.pop)
-pop, log, hof = gp.start_experiment()
-print(log, '\n', pop, '\n', hof)
+pop, log, hof, stats = gp.start_experiment()
+print('\n\n*******DONE!!!******\n\n')
+print('log:\n', log, '\n')
+print('pop:\n', pop, '\n')
+print('hof:\n', hof, '\n')
+print('stats:\n', stats, '\n')
