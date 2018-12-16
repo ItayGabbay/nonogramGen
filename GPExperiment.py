@@ -9,9 +9,9 @@ from config import *
 from heuristics import *
 from evaluator import *
 from utils import load_nonograms_from_file
-from config import pickle_unsolved_file_path
+from config import pickle_unsolved_file_path, points_correct_box, points_incorrect_box
 import numpy as np
-from typing import List, Dict
+from typing import Callable, Dict
 
 nonograms = load_nonograms_from_file(path=pickle_unsolved_file_path)
 def _make_condition_tree_pset():
@@ -128,64 +128,86 @@ def _mutate(individual: Dict, cond_expr, val_expr, cond_pset, val_pset):
             trees[i] = tree
     return individual,
 
+def _compare_to_solution(nonogram: Nonogram) -> int:
+    def mapper_func(f: Callable[[bool, bool], bool], solved_mat: np.ndarray, check_mat: np.ndarray):
+        inner_func = lambda row_solved, row_check: np.fromiter(map(f, row_solved, row_check), dtype=bool)
+        m = map(inner_func, solved_mat, check_mat)
+        return np.array(list(m))
 
+    # TODO change this to be able to get any solved nonogram, not just Bomb
+    solved = utils.load_bomb_nonogram_from_file().matrix
+    to_check = nonogram.matrix
+    corrects = mapper_func(lambda s, c: s and c, solved, to_check)
+    wrongs = mapper_func(lambda s, c: (not s) and c, solved, to_check)
+    res = points_correct_box * np.sum(corrects) - points_incorrect_box * np.sum(wrongs)
+    return res if res >=0 else 0
 
 def evaluate(compile_valtree, compile_condtree, individual):
     compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
     compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
     results = []
-    for nonogram in utils.load_nonograms_from_file():
-        # print(nonogram.title)
-        selected_step = nonogram
-        next_steps = generate_next_steps(selected_step)
-        while len(next_steps) > 0:
-            heuristics = []
-            # Evaluating the heuristics on the candidates and choosing the best
-            for option in next_steps:
-                ones_diff_rows_val = ones_diff_rows(option)
-                ones_diff_cols_val = ones_diff_cols(option)
-                zeros_diff_rows_val = zeros_diff_rows(option)
-                zeros_diff_cols_val = zeros_diff_cols(option)
-                compare_blocks_rows_val = compare_blocks_rows(option)
-                compare_blocks_cols_val = compare_blocks_cols(option)
-                heuristic = None
-                for condition_index in range(len(compiled_conditions)):
-                    res = compiled_conditions[condition_index](ones_diff_rows_val,
-                                                               ones_diff_cols_val,
-                                                               zeros_diff_rows_val,
-                                                               zeros_diff_cols_val,
-                                                               compare_blocks_rows_val,
-                                                               compare_blocks_cols_val)
-                    if res is True:
-                        heuristic = compiled_values[condition_index](ones_diff_rows_val,
-                                                                     ones_diff_cols_val,
-                                                                     zeros_diff_rows_val,
-                                                                     zeros_diff_cols_val,
-                                                                     compare_blocks_rows_val,
-                                                                     compare_blocks_cols_val)
-                        break;
-                if heuristic is None:
-                    heuristic = compiled_values[-1](ones_diff_rows_val,
-                                                    ones_diff_cols_val,
-                                                    zeros_diff_rows_val,
-                                                    zeros_diff_cols_val,
-                                                    compare_blocks_rows_val,
-                                                    compare_blocks_cols_val)
-                heuristics.append(heuristic)
-            min_heuristic_index = heuristics.index(min(heuristics))
-            selected_step = next_steps[min_heuristic_index]
-            next_steps = generate_next_steps(selected_step)
-
-        # Here need to compare to the solution!
-        # print(selected_step.matrix)
-        results.append(np.sum(selected_step.matrix))
+    nonogram = utils.load_bomb_nonogram_from_file()
+    results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram))
+    # TODO uncomment when we have solutions for all nonograms
+    # for nonogram in utils.load_nonograms_from_file():
+    #     results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram))
+    #     # results.append(np.sum(selected_step.matrix))
     return results
 
+
+def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram):
+    # print(nonogram.title)
+    selected_step = nonogram
+    next_steps = generate_next_steps(selected_step)
+    while len(next_steps) > 0:
+        heuristics = []
+        # Evaluating the heuristics on the candidates and choosing the best
+        for option in next_steps:
+            ones_diff_rows_val = ones_diff_rows(option)
+            ones_diff_cols_val = ones_diff_cols(option)
+            zeros_diff_rows_val = zeros_diff_rows(option)
+            zeros_diff_cols_val = zeros_diff_cols(option)
+            compare_blocks_rows_val = compare_blocks_rows(option)
+            compare_blocks_cols_val = compare_blocks_cols(option)
+            heuristic = None
+            for condition_index in range(len(compiled_conditions)):
+                res = compiled_conditions[condition_index](ones_diff_rows_val,
+                                                           ones_diff_cols_val,
+                                                           zeros_diff_rows_val,
+                                                           zeros_diff_cols_val,
+                                                           compare_blocks_rows_val,
+                                                           compare_blocks_cols_val)
+                if res is True:
+                    heuristic = compiled_values[condition_index](ones_diff_rows_val,
+                                                                 ones_diff_cols_val,
+                                                                 zeros_diff_rows_val,
+                                                                 zeros_diff_cols_val,
+                                                                 compare_blocks_rows_val,
+                                                                 compare_blocks_cols_val)
+                    break
+            if heuristic is None:
+                heuristic = compiled_values[-1](ones_diff_rows_val,
+                                                ones_diff_cols_val,
+                                                zeros_diff_rows_val,
+                                                zeros_diff_cols_val,
+                                                compare_blocks_rows_val,
+                                                compare_blocks_cols_val)
+            heuristics.append(heuristic)
+
+        # heuristics are max based (the bigger the result the better)
+        max_heuristic_index = heuristics.index(max(heuristics))
+        selected_step = next_steps[max_heuristic_index]
+        next_steps = generate_next_steps(selected_step)
+    # Here need to compare to the solution!
+    # print(selected_step.matrix)
+    return _compare_to_solution(selected_step)
+
+
 def init_creator(cond_pset, val_pset):
-    creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+    creator.create("FitnessMax", base.Fitness, weights=(1.0,)) # TODO change this to be length of nonograms list
     creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
     creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
-    creator.create("Individual", dict, fitness=creator.FitnessMin)
+    creator.create("Individual", dict, fitness=creator.FitnessMax)
 
 
 class GPExperiment(object):
