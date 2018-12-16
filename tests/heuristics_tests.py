@@ -1,13 +1,13 @@
 import unittest
 from utils import load_nonograms_from_file
 import copy
-from config import pickle_file_path
+from config import pickle_unsolved_file_path
 import heuristics
 
 class TestHeuristics(unittest.TestCase):
 
     def setUp(self):
-        self.nonograms = load_nonograms_from_file('../' + pickle_file_path)
+        self.nonograms = load_nonograms_from_file('../' + pickle_unsolved_file_path)
         self.bomb_nonogram_unsolved = self.nonograms[0]
         self.bomb_nonogram_solved = copy.deepcopy(self.bomb_nonogram_unsolved)
         self.solve_bomb_nonogram()

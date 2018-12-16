@@ -1,5 +1,5 @@
 import unittest
-from config import pickle_file_path
+from config import pickle_unsolved_file_path
 from utils import load_nonograms_from_file
 import evaluator
 
@@ -7,7 +7,7 @@ import evaluator
 class EvaluatorTests(unittest.TestCase):
 
     def setUp(self):
-        from_files = load_nonograms_from_file('../' + pickle_file_path)
+        from_files = load_nonograms_from_file('../' + pickle_unsolved_file_path)
         self.semi_nonogram = from_files[0]
         self.semi_nonogram.matrix[0] = [False, True, True, False, False]
         self.empty_nonogram = from_files[1]

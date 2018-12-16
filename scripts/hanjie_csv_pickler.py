@@ -1,9 +1,9 @@
 import csv
-from config import NUM_COLS, NUM_ROWS, pickle_file_path
+from config import NUM_COLS, NUM_ROWS, pickle_unsolved_file_path
 from nonogram import Nonogram
 import pickle
 
-csv_path = 'data/hanjie.csv'
+csv_path = '../data/hanjie.csv'
 
 save = True  # True -> save to file, False -> load file
 
@@ -15,5 +15,5 @@ with open(csv_path) as csvfile:
                 for i, row in enumerate(readCSV) if i > 0 and int(row[0]) == NUM_COLS and int(row[1]) == NUM_ROWS]
     nonograms = [Nonogram(d['rows'], d['cols'], d['title'], d['number'], d['solution']) for d in filtered]
 
-with open(pickle_file_path, 'wb') as f:
+with open(pickle_unsolved_file_path, 'wb') as f:
     pickle.dump(nonograms, f)
