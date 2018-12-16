@@ -14,6 +14,7 @@ from utils import load_unsolved_nonograms_from_file
 from config import pickle_unsolved_file_path, points_correct_box, points_incorrect_box
 import numpy as np
 from typing import Callable, Dict
+# from scoop import futures
 
 train_test_sets = utils.load_train_and_test_sets()
 train_dicts = train_test_sets['train']
@@ -31,8 +32,10 @@ def _make_condition_tree_pset():
     cond_pset.addPrimitive(operator.__or__, [bool, bool], bool)
     cond_pset.addPrimitive(operator.le, [float, float], bool)
     cond_pset.addPrimitive(operator.ge, [float, float], bool)
-    cond_pset.addEphemeralConstant('ephemeral_float', lambda: uniform(-5, -5), float)
-    cond_pset.addEphemeralConstant('ephemeral_bool', lambda: choice([True, False]), bool)
+    cond_pset.addTerminal(True, bool)
+    cond_pset.addTerminal(False, bool)
+    for i in range(-5, 5, 1):
+        cond_pset.addTerminal(i, float)
     cond_pset.addPrimitive(if_then_else, [bool, float, float], float)
     cond_pset.renameArguments(ARG0='ones_diff_rows')
     cond_pset.renameArguments(ARG1='ones_diff_cols')
@@ -76,15 +79,17 @@ def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
     toolbox.register("evaluate", evaluate, toolbox.compile_valtree, toolbox.compile_condtree)
     toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    toolbox.register("select", tools.selTournament, tournsize=3)
+    # toolbox.register("select", tools.selTournament, tournsize=3)
+    toolbox.register("select", tools.selDoubleTournament, fitness_size=3, parsimony_size=1.5, fitness_first=True)
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
                      cond_pset=cond_pset, val_pset=val_pset)
+    # toolbox.register("map", futures.map)
     return toolbox
 
 def _flip_coin() -> bool:
     res = random() > 0.5
-    print('flip coin is:', res)
+    # print('flip coin is:', res)
     return res
 
 def _crossover(individual1: Dict, individual2: Dict):
@@ -96,30 +101,30 @@ def _crossover(individual1: Dict, individual2: Dict):
     if _flip_coin():  # cx cond trees
         for index in range(len(cond_trees1)):
             if random() <= prob_crossover_individual_cond:
-                print('doing cx on cond trees idx %d' %(index,))
+                # print('doing cx on cond trees idx %d' %(index,))
                 t1 = cond_trees1[index]
                 t2 = cond_trees2[index]
-                print('t1 is', t1)
-                print('t2 is', t2)
+                # print('t1 is', t1)
+                # print('t2 is', t2)
                 t1, t2 = gp.cxOnePoint(t1, t2)
-                print('t1 is', t1)
-                print('t2 is', t2)
+                # print('t1 is', t1)
+                # print('t2 is', t2)
                 cond_trees1[index] = t1
                 cond_trees2[index] = t2
     else:
         for index in range(len(val_trees1)):
             if random() <= prob_crossover_individual_val:
-                print('doing cx on val trees idx %d' %(index,))
+                # print('doing cx on val trees idx %d' %(index,))
                 t1 = val_trees1[index]
                 t2 = val_trees2[index]
                 t1, t2 = gp.cxOnePoint(t1, t2)
                 val_trees1[index] = t1
                 val_trees2[index] = t2
-    print('done cx')
+    # print('done cx')
     return individual1, individual2
 
 def _mutate(individual: Dict, cond_expr, val_expr, cond_pset, val_pset):
-    print('mutating', individual)
+    # print('mutating', individual)
     if _flip_coin():
         expr = cond_expr
         pset = cond_pset
@@ -148,7 +153,8 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
     wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
     res = points_correct_box * np.sum(corrects) - points_incorrect_box * np.sum(wrongs)
-    return res if res >=0 else 0
+    return res if res >=0  else 0
+
 
 def evaluate(compile_valtree, compile_condtree, individual):
     compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
@@ -209,9 +215,9 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
         selected_step = next_steps[max_heuristic_index]
         next_steps = generate_next_steps(selected_step)
     # Here need to compare to the solution!
-    print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
+    # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
     fitness = _compare_to_solution(selected_step, nonogram_solved)
-    print('fitness:', fitness)
+    # print('fitness:', fitness)
     return fitness
 
 
