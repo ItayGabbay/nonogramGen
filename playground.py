@@ -96,5 +96,5 @@ from GPExperiment import GPExperiment
 
 gp = GPExperiment()
 print(gp.pop)
-pop, log = gp.start_experiment()
-print(log, '\n', pop)
+pop, log, hof = gp.start_experiment()
+print(log, '\n', pop, '\n', hof)

@@ -48,7 +48,7 @@ class Nonogram(object):
         if matrix is None:
             self.matrix = np.full((NUM_ROWS, NUM_COLS), False, dtype=bool)
         else:
-            self.matrix = matrix
+            self.matrix = np.copy(matrix)
 
     def __repr__(self) -> str:
         return self.__str__()

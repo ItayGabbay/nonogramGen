@@ -14,6 +14,9 @@ def load_nonograms_from_file(path: str = pickle_unsolved_file_path) -> List[Nono
     with open(path, 'rb') as f:
         return pickle.load(f)
 
-def load_bomb_nonogram_from_file(path: str = pickle_solved_file_path) -> Nonogram:
+def load_solved_bomb_nonogram_from_file(path: str = pickle_solved_file_path) -> Nonogram:
     with open(path, 'rb') as f:
         return pickle.load(f)
+
+def load_unsolved_bomb_nonogram_from_file(path: str = pickle_unsolved_file_path) -> Nonogram:
+    return load_nonograms_from_file(path)[0]

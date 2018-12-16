@@ -128,17 +128,17 @@ def _mutate(individual: Dict, cond_expr, val_expr, cond_pset, val_pset):
             trees[i] = tree
     return individual,
 
-def _compare_to_solution(nonogram: Nonogram) -> int:
+def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     def mapper_func(f: Callable[[bool, bool], bool], solved_mat: np.ndarray, check_mat: np.ndarray):
         inner_func = lambda row_solved, row_check: np.fromiter(map(f, row_solved, row_check), dtype=bool)
         m = map(inner_func, solved_mat, check_mat)
         return np.array(list(m))
 
     # TODO change this to be able to get any solved nonogram, not just Bomb
-    solved = utils.load_bomb_nonogram_from_file().matrix
+    mat_solved = nonogram_solved.matrix
     to_check = nonogram.matrix
-    corrects = mapper_func(lambda s, c: s and c, solved, to_check)
-    wrongs = mapper_func(lambda s, c: (not s) and c, solved, to_check)
+    corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
+    wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
     res = points_correct_box * np.sum(corrects) - points_incorrect_box * np.sum(wrongs)
     return res if res >=0 else 0
 
@@ -146,8 +146,9 @@ def evaluate(compile_valtree, compile_condtree, individual):
     compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
     compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
     results = []
-    nonogram = utils.load_bomb_nonogram_from_file()
-    results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram))
+    nonogram_solved = utils.load_solved_bomb_nonogram_from_file()
+    nonogram_unsolved = utils.load_unsolved_bomb_nonogram_from_file()
+    results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
     # TODO uncomment when we have solutions for all nonograms
     # for nonogram in utils.load_nonograms_from_file():
     #     results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram))
@@ -155,9 +156,9 @@ def evaluate(compile_valtree, compile_condtree, individual):
     return results
 
 
-def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram):
+def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram, nonogram_unsolved: Nonogram):
     # print(nonogram.title)
-    selected_step = nonogram
+    selected_step = nonogram_unsolved
     next_steps = generate_next_steps(selected_step)
     while len(next_steps) > 0:
         heuristics = []
@@ -199,8 +200,11 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram):
         selected_step = next_steps[max_heuristic_index]
         next_steps = generate_next_steps(selected_step)
     # Here need to compare to the solution!
-    # print(selected_step.matrix)
-    return _compare_to_solution(selected_step)
+    print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
+    fitness = _compare_to_solution(selected_step, nonogram_solved)
+    print('fitness:', fitness)
+    return fitness
+
 
 
 def init_creator(cond_pset, val_pset):
