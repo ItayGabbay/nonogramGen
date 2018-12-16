@@ -15,7 +15,13 @@ from config import pickle_unsolved_file_path, points_correct_box, points_incorre
 import numpy as np
 from typing import Callable, Dict
 
-nonograms = load_unsolved_nonograms_from_file(path=pickle_unsolved_file_path)
+train_test_sets = utils.load_train_and_test_sets()
+train_dicts = train_test_sets['train']
+train_nonograms = [(d['unsolved'], d['solved']) for d in train_dicts]
+test_dicts = train_test_sets['test']
+test_nonograms = [(d['unsolved'], d['solved']) for d in test_dicts]
+# nonograms = load_unsolved_nonograms_from_file(path=pickle_unsolved_file_path)
+
 def _make_condition_tree_pset():
     def if_then_else(input, output1, output2):
         return output1 if input else output2
@@ -148,14 +154,15 @@ def evaluate(compile_valtree, compile_condtree, individual):
     compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
     compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
     results = []
-    nonogram_solved = utils.load_solved_bomb_nonogram_from_file()
-    nonogram_unsolved = utils.load_unsolved_bomb_nonogram_from_file()
-    results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
-    # TODO uncomment when we have solutions for all nonograms
-    # for nonogram in utils.load_nonograms_from_file():
-    #     results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram))
-    #     # results.append(np.sum(selected_step.matrix))
-    return results
+    # run with Bomb only
+    # nonogram_solved = utils.load_solved_bomb_nonogram_from_file()
+    # nonogram_unsolved = utils.load_unsolved_bomb_nonogram_from_file()
+    # results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
+
+    # run on all solved nonograms
+    for nonogram_unsolved, nonogram_solved in train_nonograms:
+        results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
+    return np.mean(results),
 
 
 def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram, nonogram_unsolved: Nonogram):
@@ -236,6 +243,9 @@ class GPExperiment(object):
         self.stats = mstats
 
     def start_experiment(self):
+        nonogram_names = [unsolved.title for unsolved, solved in train_nonograms]
+        print('running experiment on', train_size, 'nonograms. names:', nonogram_names)
+
         start = time.time()
         pop, log = algorithms.eaSimple(self.pop, self.toolbox, prob_crossover_global, prob_mutate_global, num_gen,
                                        halloffame=self.hof, verbose=True, stats=self.stats)

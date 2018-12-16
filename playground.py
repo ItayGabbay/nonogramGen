@@ -92,14 +92,18 @@
 #
 # ns = utils.load_nonograms_from_file()
 # print(ns)
+import utils
 from GPExperiment import GPExperiment
+import logging
+
+logging.basicConfig(filename='log/gp.log',level=logging.DEBUG)
 
 gp = GPExperiment()
-print(gp.pop)
+logging.info('\n\n*******STARTING!!!******\n\n')
 pop, log, hof, stats, elapsed_time = gp.start_experiment()
-print('\n\n*******DONE!!!******\n\n')
-print('run time:', elapsed_time, '\n')
-print('log:\n', log, '\n')
-print('pop:\n', pop, '\n')
-print('hof:\n', hof, '\n')
-print('stats:\n', stats, '\n')
+logging.info('\n\n*******DONE!!!******\n\n')
+logging.info('run time: %d sec\n', elapsed_time)
+logging.info('log: %s\n', log)
+logging.info('pop: %s\n', utils.individual_lst_to_str(pop))
+logging.info('hof: %s\n', utils.individual_lst_to_str(hof))
+logging.info('stats: %s\n', stats)
