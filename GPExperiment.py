@@ -105,8 +105,8 @@ creator.create("Individual", DoubleTreeBasedIndividual, fitness=creator.FitnessM
 #     return val_pset
 
 
-def _init_individual(cond_tree, val_tree):
-    return DoubleTreeBasedIndividual(cond_tree, val_tree)
+def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMax()):
+    return DoubleTreeBasedIndividual(cond_tree, val_tree, fitness)
 
 # def _init_individual(cls, cond_tree, val_tree):
 #     cond_trees = tools.initRepeat(list, cond_tree, NUM_COND_TREES)
@@ -145,11 +145,15 @@ def _flip_coin() -> bool:
     return res
 
 
-def _crossover(individual1: Dict, individual2: Dict):
-    cond_trees1 = individual1['CONDITION_TREES']
-    cond_trees2 = individual2['CONDITION_TREES']
-    val_trees1 = individual1['VALUE_TREES']
-    val_trees2 = individual2['VALUE_TREES']
+def _crossover(individual1: DoubleTreeBasedIndividual, individual2: DoubleTreeBasedIndividual):
+    # cond_trees1 = individual1['CONDITION_TREES']
+    cond_trees1 = individual1.cond_trees
+    cond_trees2 = individual2.cond_trees
+    # cond_trees2 = individual2['CONDITION_TREES']
+    val_trees1 = individual1.cond_trees
+    val_trees2 = individual2.cond_trees
+    # val_trees1 = individual1['VALUE_TREES']
+    # val_trees2 = individual2['VALUE_TREES']
 
     if _flip_coin():  # cx cond trees
         for index in range(len(cond_trees1)):
@@ -177,18 +181,20 @@ def _crossover(individual1: Dict, individual2: Dict):
     return individual1, individual2
 
 
-def _mutate(individual: Dict, cond_expr, val_expr, cond_pset, val_pset):
+def _mutate(individual: DoubleTreeBasedIndividual, cond_expr, val_expr, cond_pset, val_pset):
     # print('mutating', individual)
     if _flip_coin():
         expr = cond_expr
         pset = cond_pset
         prob = prob_mutate_individual_cond
-        trees = individual['CONDITION_TREES']
+        trees = individual.cond_trees
+        # trees = individual['CONDITION_TREES']
     else:
         expr = val_expr
         pset = val_pset
         prob = prob_mutate_individual_val
-        trees = individual['VALUE_TREES']
+        trees = individual.value_trees
+        # trees = individual['VALUE_TREES']
     for i, tree in enumerate(trees):
         if random() <= prob:
             tree, = gp.mutUniform(tree, expr, pset)
@@ -217,9 +223,11 @@ def _calc_max_possible_fitness():
     return res
 
 
-def evaluate(compile_valtree, compile_condtree, individual):
-    compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
-    compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
+def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndividual):
+    compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual.cond_trees]
+    # compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
+    compiled_values = [compile_valtree(val_tree) for val_tree in individual.value_trees]
+    # compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
     results = []
     # run with Bomb only
     # nonogram_solved = utils.load_solved_bomb_nonogram_from_file()
