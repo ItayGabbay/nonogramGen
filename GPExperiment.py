@@ -4,17 +4,20 @@ from random import random
 from typing import Callable, Dict
 
 import numpy as np
+from sys import stderr
 from deap import algorithms
 from deap import base
 from deap import creator
 from deap import gp
 from deap import tools
-from scoop import futures
-
 from config import *
-from config import points_correct_box, points_incorrect_box
 from evaluator import *
 from heuristics import *
+
+if should_run_in_parallel:
+    from scoop import futures
+    stderr.write("RUNNING WITH SCOOP! MAKE SURE YOU ARE RUNNING WITH: 'python -m scoop playground.py' !!\n")
+
 
 train_test_sets = utils.load_train_and_test_sets()
 train_dicts = train_test_sets['train']
@@ -124,10 +127,10 @@ def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: 
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
                      cond_pset=cond_pset_arg, val_pset=val_pset_arg)
-    if should_ran_in_parallel:
+    if should_run_in_parallel:
+        print('running in parallel')
         toolbox.register("map", futures.map)
 
-    # toolbox.register("map", futures.map)
     return toolbox
 
 
