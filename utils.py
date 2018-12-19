@@ -4,6 +4,8 @@ import random
 import numpy as np
 from config import pickle_unsolved_file_path, pickle_solved_file_path, train_size
 from typing import List
+
+from individual import DoubleTreeBasedIndividual
 from nonogram import Nonogram
 
 
@@ -12,16 +14,19 @@ def copy_and_transpose_matrix(matrix):
     trans = np.transpose(trans)
     return trans
 
+
 def load_unsolved_nonograms_from_file(path: str = pickle_unsolved_file_path) -> List[Nonogram]:
     with open(path, 'rb') as f:
         return pickle.load(f)
+
 
 def load_solved_nonograms_from_file(path: str = pickle_solved_file_path) -> List[Nonogram]:
     with open(path, 'rb') as f:
         return pickle.load(f)
 
-def load_train_and_test_sets(solved_path = pickle_solved_file_path, unsolved_path = pickle_unsolved_file_path,
-                             train_set_size = train_size):
+
+def load_train_and_test_sets(solved_path=pickle_solved_file_path, unsolved_path=pickle_unsolved_file_path,
+                             train_set_size=train_size):
     solved_nonograms = load_solved_nonograms_from_file(solved_path)
     unsolved_nonograms = load_unsolved_nonograms_from_file(unsolved_path)
 
@@ -39,19 +44,31 @@ def load_solved_bomb_nonogram_from_file(path: str = pickle_solved_file_path) -> 
     with open(path, 'rb') as f:
         return pickle.load(f)
 
+
 def load_unsolved_bomb_nonogram_from_file(path: str = pickle_unsolved_file_path) -> Nonogram:
     return load_unsolved_nonograms_from_file(path)[0]
 
-def individual_to_str(individual) -> str:
+
+# def individual_to_str(individual) -> str:
+#     res_lst = ['COND TREES:\n']
+#     for tree in individual['CONDITION_TREES']:
+#         res_lst.append(str(tree) + '\n')
+#     res_lst.append('VAL TREES:\n')
+#     for tree in individual['VALUE_TREES']:
+#         res_lst.append(str(tree) + '\n')
+#     return "".join(res_lst)
+
+def individual_to_str(individual: DoubleTreeBasedIndividual) -> str:
     res_lst = ['COND TREES:\n']
-    for tree in individual['CONDITION_TREES']:
+    for tree in individual.cond_trees:
         res_lst.append(str(tree) + '\n')
     res_lst.append('VAL TREES:\n')
-    for tree in individual['VALUE_TREES']:
+    for tree in individual.value_trees:
         res_lst.append(str(tree) + '\n')
     return "".join(res_lst)
 
-def individual_lst_to_str(lst: List, max_to_print = -1):
+
+def individual_lst_to_str(lst: List, max_to_print=-1):
     if max_to_print < 0:
         max_to_print = len(lst)
     res_lst = [individual_to_str(i) for i in lst[:max_to_print]]

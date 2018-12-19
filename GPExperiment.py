@@ -13,6 +13,7 @@ from deap import tools
 from config import *
 from evaluator import *
 from heuristics import *
+from individual import DoubleTreeBasedIndividual
 
 if should_run_in_parallel:
     from scoop import futures
@@ -63,7 +64,7 @@ val_pset.renameArguments(ARG5='compare_blocks_cols')
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
 creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
-creator.create("Individual", dict, fitness=creator.FitnessMax)
+creator.create("Individual", DoubleTreeBasedIndividual, fitness=creator.FitnessMax)
 
 
 # nonograms = load_unsolved_nonograms_from_file(path=pickle_unsolved_file_path)
@@ -104,11 +105,14 @@ creator.create("Individual", dict, fitness=creator.FitnessMax)
 #     return val_pset
 
 
-def _init_individual(cls, cond_tree, val_tree):
-    cond_trees = tools.initRepeat(list, cond_tree, NUM_COND_TREES)
-    value_trees = tools.initRepeat(list, val_tree, NUM_VAL_TREES)
+def _init_individual(cond_tree, val_tree):
+    return DoubleTreeBasedIndividual(cond_tree, val_tree)
 
-    return cls({"CONDITION_TREES": cond_trees, "VALUE_TREES": value_trees})
+# def _init_individual(cls, cond_tree, val_tree):
+#     cond_trees = tools.initRepeat(list, cond_tree, NUM_COND_TREES)
+#     value_trees = tools.initRepeat(list, val_tree, NUM_VAL_TREES)
+#
+#     return cls({"CONDITION_TREES": cond_trees, "VALUE_TREES": value_trees})
 
 
 def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: gp.PrimitiveSetTyped = val_pset):
@@ -120,7 +124,8 @@ def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: 
     toolbox.register("compile_valtree", gp.compile, pset=val_pset_arg)
     toolbox.register("compile_condtree", gp.compile, pset=cond_pset_arg)
     toolbox.register("evaluate", evaluate, toolbox.compile_valtree, toolbox.compile_condtree)
-    toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
+    toolbox.register("individual", _init_individual, toolbox.cond_tree, toolbox.value_tree)
+    # toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     # toolbox.register("select", tools.selTournament, tournsize=3)
     toolbox.register("select", tools.selDoubleTournament, fitness_size=3, parsimony_size=1.5, fitness_first=True)
