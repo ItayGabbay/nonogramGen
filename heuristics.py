@@ -71,3 +71,25 @@ def compare_blocks_cols(nonogram: Nonogram):
                                 (row, col, len(nonogram.matrix), len(nonogram.matrix[0])))
             diff_sum += math.fabs(clue - nonogram.matrix[row][col])
     return diff_sum
+
+
+def get_max_row_clue(nonogram: Nonogram):
+    max_row_clue = 0
+
+    for row_index in range(len(nonogram.row_clues)):
+        for clue_index in range(len(nonogram.row_clues[row_index])):
+            if max_row_clue < nonogram.row_clues[row_index][clue_index]:
+                max_row_clue = nonogram.row_clues[row_index][clue_index]
+
+    return float(max_row_clue)
+
+
+def get_max_col_clue(nonogram: Nonogram):
+    max_col_clue = 0
+
+    for col_index in range(len(nonogram.col_clues)):
+        for clue_index in range(len(nonogram.col_clues[col_index])):
+            if max_col_clue < nonogram.col_clues[col_index][clue_index]:
+                max_col_clue = nonogram.col_clues[col_index][clue_index]
+
+    return float(max_col_clue)
