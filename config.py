@@ -23,5 +23,5 @@ points_incorrect_box = 0
 pop_size = 100
 hof_size = 1
 # num_gen = 40
-num_gen = 5
-train_size = 5
+num_gen = 10
+train_size = 3

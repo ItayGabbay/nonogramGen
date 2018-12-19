@@ -28,15 +28,16 @@ def _if_then_else(inp, out1, out2):
 
 
 # condition pset:
-cond_pset = gp.PrimitiveSetTyped("MAIN", [float, float, float, float, float, float], bool)
+cond_pset = gp.PrimitiveSetTyped("MAIN", [float, float, float, float, float, float, float, float], bool)
 cond_pset.addPrimitive(operator.__and__, [bool, bool], bool)
 cond_pset.addPrimitive(operator.__or__, [bool, bool], bool)
 cond_pset.addPrimitive(operator.le, [float, float], bool)
 cond_pset.addPrimitive(operator.ge, [float, float], bool)
 cond_pset.addTerminal(True, bool)
 cond_pset.addTerminal(False, bool)
-for i in range(-5, 5, 1):
+for i in range(0, 5, 1):
     cond_pset.addTerminal(i, float)
+
 cond_pset.addPrimitive(_if_then_else, [bool, float, float], float)
 cond_pset.renameArguments(ARG0='ones_diff_rows')
 cond_pset.renameArguments(ARG1='ones_diff_cols')
@@ -44,6 +45,8 @@ cond_pset.renameArguments(ARG2='zeros_diff_rows')
 cond_pset.renameArguments(ARG3='zeros_diff_cols')
 cond_pset.renameArguments(ARG4='compare_blocks_rows')
 cond_pset.renameArguments(ARG5='compare_blocks_cols')
+cond_pset.renameArguments(ARG6='max_row_clue')
+cond_pset.renameArguments(ARG7='max_col_clue')
 
 # value pset:
 val_pset = gp.PrimitiveSet("MAIN", 6)
@@ -119,8 +122,8 @@ def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: 
     toolbox.register("evaluate", evaluate, toolbox.compile_valtree, toolbox.compile_condtree)
     toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    # toolbox.register("select", tools.selTournament, tournsize=3)
-    toolbox.register("select", tools.selDoubleTournament, fitness_size=3, parsimony_size=1.5, fitness_first=True)
+    toolbox.register("select", tools.selTournament, tournsize=5)
+    # toolbox.register("select", tools.selDoubleTournament, fitness_size=3, parsimony_size=1.5, fitness_first=True)
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
                      cond_pset=cond_pset_arg, val_pset=val_pset_arg)
@@ -240,6 +243,8 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
             zeros_diff_cols_val = zeros_diff_cols(option)
             compare_blocks_rows_val = compare_blocks_rows(option)
             compare_blocks_cols_val = compare_blocks_cols(option)
+            max_row_clue = get_max_col_clue(option)
+            max_col_clue = get_max_col_clue(option)
             heuristic = None
             for condition_index in range(len(compiled_conditions)):
                 res = compiled_conditions[condition_index](ones_diff_rows_val,
@@ -247,7 +252,9 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
                                                            zeros_diff_rows_val,
                                                            zeros_diff_cols_val,
                                                            compare_blocks_rows_val,
-                                                           compare_blocks_cols_val)
+                                                           compare_blocks_cols_val,
+                                                           max_row_clue,
+                                                           max_col_clue)
                 if res is True:
                     heuristic = compiled_values[condition_index](ones_diff_rows_val,
                                                                  ones_diff_cols_val,
