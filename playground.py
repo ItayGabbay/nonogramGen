@@ -97,20 +97,25 @@ from GPExperiment import GPExperiment
 import logging
 import time
 
-logging.basicConfig(filename='log/log_gp' + str(time.time()) + '.log',level=logging.DEBUG)
 
-gp = GPExperiment()
-logging.info('\n\n*******STARTING!!!******\n\n')
-logging.info('\n\n*******Configuration******\n\n')
-with open('./config.py', 'r') as f:
-    config = f.readlines()
-for line in config:
-    logging.info(line + '\n')
-pop, log, hof, stats, elapsed_time, max_possible_fitness = gp.start_experiment()
-logging.info('\n\n*******DONE!!!******\n\n')
-logging.info('run time: %d sec\n', elapsed_time)
-logging.info('max possible fitness for the nonograms ran: %d\n', max_possible_fitness)
-logging.info('log: %s\n', log)
-logging.info('pop: %s\n', utils.individual_lst_to_str(pop))
-logging.info('hof: %s\n', utils.individual_lst_to_str(hof))
-logging.info('stats: %s\n', stats)
+def main():
+    logging.basicConfig(filename='log/log_gp' + str(time.time()) + '.log',level=logging.DEBUG)
+    gp = GPExperiment()
+    logging.info('\n\n*******STARTING!!!******\n\n')
+    logging.info('\n\n*******Configuration******\n\n')
+    with open('./config.py', 'r') as f:
+        config = f.readlines()
+    for line in config:
+        logging.info(line + '\n')
+    pop, log, hof, stats, elapsed_time, max_possible_fitness = gp.start_experiment()
+    logging.info('\n\n*******DONE!!!******\n\n')
+    logging.info('run time: %d sec\n', elapsed_time)
+    logging.info('max possible fitness for the nonograms ran: %d\n', max_possible_fitness)
+    logging.info('log: %s\n', log)
+    logging.info('pop: %s\n', utils.individual_lst_to_str(pop))
+    logging.info('hof: %s\n', utils.individual_lst_to_str(hof))
+
+    logging.info('stats: %s\n', stats)
+
+if __name__ == '__main__':
+    main()

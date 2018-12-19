@@ -1,64 +1,104 @@
 import operator
-from random import random, choice, uniform
-
 import time
+from random import random
+from typing import Callable, Dict
+
+import numpy as np
 from deap import algorithms
 from deap import base
 from deap import creator
-from deap import tools
 from deap import gp
+from deap import tools
+from scoop import futures
+
 from config import *
-from heuristics import *
+from config import points_correct_box, points_incorrect_box
 from evaluator import *
-from utils import load_unsolved_nonograms_from_file
-from config import pickle_unsolved_file_path, points_correct_box, points_incorrect_box
-import numpy as np
-from typing import Callable, Dict
-# from scoop import futures
+from heuristics import *
 
 train_test_sets = utils.load_train_and_test_sets()
 train_dicts = train_test_sets['train']
 train_nonograms = [(d['unsolved'], d['solved']) for d in train_dicts]
 test_dicts = train_test_sets['test']
 test_nonograms = [(d['unsolved'], d['solved']) for d in test_dicts]
+
+
+def _if_then_else(inp, out1, out2):
+    return out1 if inp else out2
+
+
+# condition pset:
+cond_pset = gp.PrimitiveSetTyped("MAIN", [float, float, float, float, float, float], bool)
+cond_pset.addPrimitive(operator.__and__, [bool, bool], bool)
+cond_pset.addPrimitive(operator.__or__, [bool, bool], bool)
+cond_pset.addPrimitive(operator.le, [float, float], bool)
+cond_pset.addPrimitive(operator.ge, [float, float], bool)
+cond_pset.addTerminal(True, bool)
+cond_pset.addTerminal(False, bool)
+for i in range(-5, 5, 1):
+    cond_pset.addTerminal(i, float)
+cond_pset.addPrimitive(_if_then_else, [bool, float, float], float)
+cond_pset.renameArguments(ARG0='ones_diff_rows')
+cond_pset.renameArguments(ARG1='ones_diff_cols')
+cond_pset.renameArguments(ARG2='zeros_diff_rows')
+cond_pset.renameArguments(ARG3='zeros_diff_cols')
+cond_pset.renameArguments(ARG4='compare_blocks_rows')
+cond_pset.renameArguments(ARG5='compare_blocks_cols')
+
+# value pset:
+val_pset = gp.PrimitiveSet("MAIN", 6)
+val_pset.addPrimitive(operator.add, 2)
+val_pset.addPrimitive(operator.mul, 2)
+val_pset.renameArguments(ARG0='ones_diff_rows')
+val_pset.renameArguments(ARG1='ones_diff_cols')
+val_pset.renameArguments(ARG2='zeros_diff_rows')
+val_pset.renameArguments(ARG3='zeros_diff_cols')
+val_pset.renameArguments(ARG4='compare_blocks_rows')
+val_pset.renameArguments(ARG5='compare_blocks_cols')
+
+# creator stuff:
+creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
+creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
+creator.create("Individual", dict, fitness=creator.FitnessMax)
+
+
 # nonograms = load_unsolved_nonograms_from_file(path=pickle_unsolved_file_path)
 
-def _make_condition_tree_pset():
-    def if_then_else(input, output1, output2):
-        return output1 if input else output2
 
-    cond_pset = gp.PrimitiveSetTyped("MAIN", [float, float, float, float, float, float], bool)
-    cond_pset.addPrimitive(operator.__and__, [bool, bool], bool)
-    cond_pset.addPrimitive(operator.__or__, [bool, bool], bool)
-    cond_pset.addPrimitive(operator.le, [float, float], bool)
-    cond_pset.addPrimitive(operator.ge, [float, float], bool)
-    cond_pset.addTerminal(True, bool)
-    cond_pset.addTerminal(False, bool)
-    for i in range(-5, 5, 1):
-        cond_pset.addTerminal(i, float)
-    cond_pset.addPrimitive(if_then_else, [bool, float, float], float)
-    cond_pset.renameArguments(ARG0='ones_diff_rows')
-    cond_pset.renameArguments(ARG1='ones_diff_cols')
-    cond_pset.renameArguments(ARG2='zeros_diff_rows')
-    cond_pset.renameArguments(ARG3='zeros_diff_cols')
-    cond_pset.renameArguments(ARG4='compare_blocks_rows')
-    cond_pset.renameArguments(ARG5='compare_blocks_cols')
-
-    return cond_pset
+# def _make_condition_tree_pset():
+#     cond_pset = gp.PrimitiveSetTyped("MAIN", [float, float, float, float, float, float], bool)
+#     cond_pset.addPrimitive(operator.__and__, [bool, bool], bool)
+#     cond_pset.addPrimitive(operator.__or__, [bool, bool], bool)
+#     cond_pset.addPrimitive(operator.le, [float, float], bool)
+#     cond_pset.addPrimitive(operator.ge, [float, float], bool)
+#     cond_pset.addTerminal(True, bool)
+#     cond_pset.addTerminal(False, bool)
+#     for i in range(-5, 5, 1):
+#         cond_pset.addTerminal(i, float)
+#     cond_pset.addPrimitive(_if_then_else, [bool, float, float], float)
+#     cond_pset.renameArguments(ARG0='ones_diff_rows')
+#     cond_pset.renameArguments(ARG1='ones_diff_cols')
+#     cond_pset.renameArguments(ARG2='zeros_diff_rows')
+#     cond_pset.renameArguments(ARG3='zeros_diff_cols')
+#     cond_pset.renameArguments(ARG4='compare_blocks_rows')
+#     cond_pset.renameArguments(ARG5='compare_blocks_cols')
+#
+#     return cond_pset
 
 
-def _make_value_tree_pset():
-    val_pset = gp.PrimitiveSet("MAIN", 6)
-    val_pset.addPrimitive(operator.add, 2)
-    val_pset.addPrimitive(operator.mul, 2)
-    val_pset.renameArguments(ARG0='ones_diff_rows')
-    val_pset.renameArguments(ARG1='ones_diff_cols')
-    val_pset.renameArguments(ARG2='zeros_diff_rows')
-    val_pset.renameArguments(ARG3='zeros_diff_cols')
-    val_pset.renameArguments(ARG4='compare_blocks_rows')
-    val_pset.renameArguments(ARG5='compare_blocks_cols')
-
-    return val_pset
+# def _make_value_tree_pset():
+#     val_pset = gp.PrimitiveSet("MAIN", 6)
+#     val_pset.addPrimitive(operator.add, 2)
+#     val_pset.addPrimitive(operator.mul, 2)
+#     val_pset.renameArguments(ARG0='ones_diff_rows')
+#     val_pset.renameArguments(ARG1='ones_diff_cols')
+#     val_pset.renameArguments(ARG2='zeros_diff_rows')
+#     val_pset.renameArguments(ARG3='zeros_diff_cols')
+#     val_pset.renameArguments(ARG4='compare_blocks_rows')
+#     val_pset.renameArguments(ARG5='compare_blocks_cols')
+#
+#     return val_pset
 
 
 def _init_individual(cls, cond_tree, val_tree):
@@ -68,14 +108,14 @@ def _init_individual(cls, cond_tree, val_tree):
     return cls({"CONDITION_TREES": cond_trees, "VALUE_TREES": value_trees})
 
 
-def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
+def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: gp.PrimitiveSetTyped = val_pset):
     toolbox = base.Toolbox()
-    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset, min_=3, max_=5)
-    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset, min_=3, max_=5)
+    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=3, max_=5)
+    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=3, max_=5)
     toolbox.register("value_tree", tools.initIterate, creator.ValueTree, toolbox.value_expr)
     toolbox.register("cond_tree", tools.initIterate, creator.ConditionTree, toolbox.cond_expr)
-    toolbox.register("compile_valtree", gp.compile, pset=val_pset)
-    toolbox.register("compile_condtree", gp.compile, pset=cond_pset)
+    toolbox.register("compile_valtree", gp.compile, pset=val_pset_arg)
+    toolbox.register("compile_condtree", gp.compile, pset=cond_pset_arg)
     toolbox.register("evaluate", evaluate, toolbox.compile_valtree, toolbox.compile_condtree)
     toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
@@ -83,15 +123,19 @@ def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
     toolbox.register("select", tools.selDoubleTournament, fitness_size=3, parsimony_size=1.5, fitness_first=True)
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
-                     cond_pset=cond_pset, val_pset=val_pset)
+                     cond_pset=cond_pset_arg, val_pset=val_pset_arg)
+    if should_ran_in_parallel:
+        toolbox.register("map", futures.map)
 
     # toolbox.register("map", futures.map)
     return toolbox
+
 
 def _flip_coin() -> bool:
     res = random() > 0.5
     # print('flip coin is:', res)
     return res
+
 
 def _crossover(individual1: Dict, individual2: Dict):
     cond_trees1 = individual1['CONDITION_TREES']
@@ -124,6 +168,7 @@ def _crossover(individual1: Dict, individual2: Dict):
     # print('done cx')
     return individual1, individual2
 
+
 def _mutate(individual: Dict, cond_expr, val_expr, cond_pset, val_pset):
     # print('mutating', individual)
     if _flip_coin():
@@ -142,6 +187,7 @@ def _mutate(individual: Dict, cond_expr, val_expr, cond_pset, val_pset):
             trees[i] = tree
     return individual,
 
+
 def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     def mapper_func(f: Callable[[bool, bool], bool], solved_mat: np.ndarray, check_mat: np.ndarray):
         inner_func = lambda row_solved, row_check: np.fromiter(map(f, row_solved, row_check), dtype=bool)
@@ -153,7 +199,8 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
     wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
     res = points_correct_box * np.sum(corrects) - points_incorrect_box * np.sum(wrongs)
-    return res if res >=0  else 0
+    return res if res >= 0 else 0
+
 
 def _calc_max_possible_fitness():
     compares = [_compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
@@ -173,11 +220,13 @@ def evaluate(compile_valtree, compile_condtree, individual):
 
     # run on all solved nonograms
     for nonogram_unsolved, nonogram_solved in train_nonograms:
-        results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
+        results.append(
+            evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
     return np.mean(results),
 
 
-def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram, nonogram_unsolved: Nonogram):
+def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram,
+                             nonogram_unsolved: Nonogram):
     # print(nonogram.title)
     selected_step = nonogram_unsolved
     next_steps = generate_next_steps(selected_step)
@@ -227,21 +276,21 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
     return fitness
 
 
-
-def init_creator(cond_pset, val_pset):
-    creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-    creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
-    creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
-    creator.create("Individual", dict, fitness=creator.FitnessMax)
+# TODO was pulled to global scope
+# def init_creator(cond_pset, val_pset):
+#     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+#     creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
+#     creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
+#     creator.create("Individual", dict, fitness=creator.FitnessMax)
 
 
 class GPExperiment(object):
     def __init__(self) -> None:
-        cond_pset = _make_condition_tree_pset()
-        val_pset = _make_value_tree_pset()
+        # cond_pset = _make_condition_tree_pset()
+        # val_pset = _make_value_tree_pset()
 
-        init_creator(cond_pset, val_pset)
-        self.toolbox = make_toolbox(cond_pset, val_pset)
+        # init_creator(cond_pset, val_pset)
+        self.toolbox = make_toolbox()
         self.pop = self.toolbox.population(n=pop_size)
         self.hof = tools.HallOfFame(hof_size)
 
@@ -264,4 +313,3 @@ class GPExperiment(object):
                                        halloffame=self.hof, verbose=True, stats=self.stats)
         end = time.time()
         return pop, log, self.hof, self.stats, end - start, max_possible_fitness
-

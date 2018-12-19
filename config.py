@@ -6,6 +6,7 @@ empty_in_split = '\xa0'
 
 pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
+should_ran_in_parallel = True
 
 NUM_COND_TREES = 5
 NUM_VAL_TREES = NUM_COND_TREES + 1
