@@ -84,6 +84,7 @@ def make_toolbox(cond_pset: gp.PrimitiveSet, val_pset: gp.PrimitiveSet):
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
                      cond_pset=cond_pset, val_pset=val_pset)
+
     # toolbox.register("map", futures.map)
     return toolbox
 
@@ -147,13 +148,18 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
         m = map(inner_func, solved_mat, check_mat)
         return np.array(list(m))
 
-    # TODO change this to be able to get any solved nonogram, not just Bomb
     mat_solved = nonogram_solved.matrix
     to_check = nonogram.matrix
     corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
     wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
     res = points_correct_box * np.sum(corrects) - points_incorrect_box * np.sum(wrongs)
     return res if res >=0  else 0
+
+def _calc_max_possible_fitness():
+    compares = [_compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
+    res = np.mean(compares)
+    print('max possible fitness is:', res)
+    return res
 
 
 def evaluate(compile_valtree, compile_condtree, individual):
@@ -223,7 +229,7 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
 
 
 def init_creator(cond_pset, val_pset):
-    creator.create("FitnessMax", base.Fitness, weights=(1.0,)) # TODO change this to be length of nonograms list
+    creator.create("FitnessMax", base.Fitness, weights=(1.0,))
     creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
     creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
     creator.create("Individual", dict, fitness=creator.FitnessMax)
@@ -251,10 +257,11 @@ class GPExperiment(object):
     def start_experiment(self):
         nonogram_names = [unsolved.title for unsolved, solved in train_nonograms]
         print('running experiment on', train_size, 'nonograms. names:', nonogram_names)
+        max_possible_fitness = _calc_max_possible_fitness()
 
         start = time.time()
         pop, log = algorithms.eaSimple(self.pop, self.toolbox, prob_crossover_global, prob_mutate_global, num_gen,
                                        halloffame=self.hof, verbose=True, stats=self.stats)
         end = time.time()
-        return pop, log, self.hof, self.stats, end - start
+        return pop, log, self.hof, self.stats, end - start, max_possible_fitness
 
