@@ -242,6 +242,7 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     for nonogram_unsolved, nonogram_solved in train_nonograms:
         results.append(
             evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
+        print("Fitness:", results, np.mean(results))
     return np.mean(results),
 
 
