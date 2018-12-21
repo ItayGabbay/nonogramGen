@@ -2,6 +2,7 @@ from nonogram import Nonogram
 import utils
 import copy
 
+
 def evaluate_individual(individual, step: Nonogram):
     next_steps = generate_next_steps(step)
 
@@ -77,5 +78,3 @@ def validate_board(candidate, clues):
             return False
 
     return True
-
-

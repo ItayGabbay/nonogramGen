@@ -4,7 +4,7 @@ import random
 import numpy as np
 from config import pickle_unsolved_file_path, pickle_solved_file_path, train_size
 from typing import List
-
+from config import pickle_row_options_path
 from individual import DoubleTreeBasedIndividual
 from nonogram import Nonogram
 
@@ -15,14 +15,22 @@ def copy_and_transpose_matrix(matrix):
     return trans
 
 
-def load_unsolved_nonograms_from_file(path: str = pickle_unsolved_file_path) -> List[Nonogram]:
+# TODO remove unnecessary funcs
+def _load_pickled(path):
     with open(path, 'rb') as f:
         return pickle.load(f)
+
+
+def load_unsolved_nonograms_from_file(path: str = pickle_unsolved_file_path) -> List[Nonogram]:
+    return _load_pickled(path)
 
 
 def load_solved_nonograms_from_file(path: str = pickle_solved_file_path) -> List[Nonogram]:
-    with open(path, 'rb') as f:
-        return pickle.load(f)
+    return _load_pickled(path)
+
+
+def load_all_row_opts(path=pickle_row_options_path):
+    return _load_pickled(path)
 
 
 def load_train_and_test_sets(solved_path=pickle_solved_file_path, unsolved_path=pickle_unsolved_file_path,
@@ -41,12 +49,7 @@ def load_train_and_test_sets(solved_path=pickle_solved_file_path, unsolved_path=
 
 
 def load_solved_bomb_nonogram_from_file(path: str = pickle_solved_file_path) -> Nonogram:
-    with open(path, 'rb') as f:
-        return pickle.load(f)
-
-
-def load_unsolved_bomb_nonogram_from_file(path: str = pickle_unsolved_file_path) -> Nonogram:
-    return load_unsolved_nonograms_from_file(path)[0]
+    return _load_pickled(path)
 
 
 # def individual_to_str(individual) -> str:
@@ -57,6 +60,10 @@ def load_unsolved_bomb_nonogram_from_file(path: str = pickle_unsolved_file_path)
 #     for tree in individual['VALUE_TREES']:
 #         res_lst.append(str(tree) + '\n')
 #     return "".join(res_lst)
+
+def load_unsolved_bomb_nonogram_from_file(path: str = pickle_unsolved_file_path) -> Nonogram:
+    return load_unsolved_nonograms_from_file(path)[0]
+
 
 def individual_to_str(individual: DoubleTreeBasedIndividual) -> str:
     res_lst = ['COND TREES:\n']
