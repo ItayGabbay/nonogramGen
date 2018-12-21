@@ -220,11 +220,11 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     return res if res >= 0 else 0
 
 
-def _calc_max_possible_fitness():
-    compares = [_compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
-    res = np.mean(compares)
-    print('max possible fitness is:', res)
-    return res
+# def _calc_max_possible_fitness():
+#     compares = [_compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
+#     res = np.mean(compares)
+#     print('max possible fitness is:', res)
+#     return res
 
 
 def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndividual):
@@ -327,15 +327,16 @@ class GPExperiment(object):
         mstats.register("std", np.std)
         mstats.register("min", np.min)
         mstats.register("max", np.max)
+        mstats.register("size", len)
         self.stats = mstats
 
     def start_experiment(self):
         nonogram_names = [unsolved.title for unsolved, solved in train_nonograms]
         print('running experiment on', train_size, 'nonograms. names:', nonogram_names)
-        max_possible_fitness = _calc_max_possible_fitness()
+        # max_possible_fitness = _calc_max_possible_fitness()
 
         start = time.time()
         pop, log = algorithms.eaSimple(self.pop, self.toolbox, prob_crossover_global, prob_mutate_global, num_gen,
                                        halloffame=self.hof, verbose=True, stats=self.stats)
         end = time.time()
-        return pop, log, self.hof, self.stats, end - start, max_possible_fitness
+        return pop, log, self.hof, self.stats, end - start

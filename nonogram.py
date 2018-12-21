@@ -51,6 +51,7 @@ class Nonogram(object):
         else:
             self.matrix = np.copy(matrix)
 
+        print('initing clue to sat for nonogram', title)
         self.converter_to_sat = clues_to_sat(self.col_clues, self.row_clues)
 
     def __repr__(self) -> str:
@@ -77,9 +78,6 @@ class Nonogram(object):
         return 0
 
     def convert_to_sat(self, and_op=np.mean):
-        if not self.converter_to_sat:
-            self.converter_to_sat = clues_to_sat(self.col_clues, self.row_clues)
-
         row_res = [self.converter_to_sat(r) for r in self.matrix]
         res = and_op(row_res)
         return res
