@@ -40,6 +40,7 @@ cond_pset.addPrimitive(operator.le, [float, float], bool)
 cond_pset.addPrimitive(operator.ge, [float, float], bool)
 cond_pset.addTerminal(True, bool)
 cond_pset.addTerminal(False, bool)
+cond_pset.addEphemeralConstant("rand101", lambda: np.random.randint(-100, 100), float)
 for i in range(0, 5, 1):
     cond_pset.addTerminal(i, float)
 
@@ -121,8 +122,8 @@ def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMax()):
 
 def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: gp.PrimitiveSetTyped = val_pset):
     toolbox = base.Toolbox()
-    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=3, max_=5)
-    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=3, max_=5)
+    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=1, max_=5)
+    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=1, max_=10)
     toolbox.register("value_tree", tools.initIterate, creator.ValueTree, toolbox.value_expr)
     toolbox.register("cond_tree", tools.initIterate, creator.ConditionTree, toolbox.cond_expr)
     toolbox.register("compile_valtree", gp.compile, pset=val_pset_arg)
@@ -242,7 +243,8 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     for nonogram_unsolved, nonogram_solved in train_nonograms:
         results.append(
             evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
-    print("Fitness:", results, np.mean(results))
+    if print_individual_fitness:
+        print("Fitness:", results, np.mean(results))
     return np.mean(results),
 
 

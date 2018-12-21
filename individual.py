@@ -11,6 +11,12 @@ class DoubleTreeBasedIndividual(dict):
         self.value_trees: List[gp.PrimitiveTree] = tools.initRepeat(list, val_tree, NUM_VAL_TREES)
         self.fitness = fitness
 
+        # trees = ([str(tree) for tree in self.cond_trees])
+        # print('******************************')
+        # for t in trees:
+        #     print(t + '\n')
+        # print('******************************')
+
     def __len__(self):
         sum_func = lambda trees: np.mean([tree.height for tree in trees])
         return int(sum_func(self.cond_trees) + sum_func(self.value_trees))
