@@ -1,7 +1,7 @@
 # NUM_ROWS = 20
-NUM_ROWS = 10
+NUM_ROWS = 20
 # NUM_COLS = 20
-NUM_COLS = 10
+NUM_COLS = 20
 empty_in_split = '\xa0'
 
 pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
