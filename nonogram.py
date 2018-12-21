@@ -1,6 +1,6 @@
 from typing import List
 import numpy as np
-from config import NUM_COLS, NUM_ROWS, empty_in_split
+from config import NUM_COLS, NUM_ROWS, empty_in_split,convert_to_sat
 from nonogram_to_sat import clues_to_sat
 
 BOARD_SIZE = NUM_ROWS * NUM_COLS
@@ -51,8 +51,8 @@ class Nonogram(object):
         else:
             self.matrix = np.copy(matrix)
 
-        print('initing clue to sat for nonogram', title)
-        self.converter_to_sat = clues_to_sat(self.col_clues, self.row_clues)
+        if convert_to_sat:
+            self.converter_to_sat = clues_to_sat(self.col_clues, self.row_clues)
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -78,6 +78,9 @@ class Nonogram(object):
         return 0
 
     def convert_to_sat(self, and_op=np.mean):
-        row_res = [self.converter_to_sat(r) for r in self.matrix]
-        res = and_op(row_res)
-        return res
+        if convert_to_sat:
+            row_res = [self.converter_to_sat(r) for r in self.matrix]
+            res = and_op(row_res)
+            return res
+        else:
+            raise Exception('convert to sat is disabled but convert_to_sat was called!')
