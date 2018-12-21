@@ -6,7 +6,6 @@ from config import pickle_unsolved_file_path, pickle_solved_file_path, train_siz
 from typing import List
 from config import pickle_row_options_path
 from individual import DoubleTreeBasedIndividual
-from nonogram import Nonogram
 
 
 def copy_and_transpose_matrix(matrix):
@@ -21,11 +20,11 @@ def _load_pickled(path):
         return pickle.load(f)
 
 
-def load_unsolved_nonograms_from_file(path: str = pickle_unsolved_file_path) -> List[Nonogram]:
+def load_unsolved_nonograms_from_file(path: str = pickle_unsolved_file_path):
     return _load_pickled(path)
 
 
-def load_solved_nonograms_from_file(path: str = pickle_solved_file_path) -> List[Nonogram]:
+def load_solved_nonograms_from_file(path: str = pickle_solved_file_path):
     return _load_pickled(path)
 
 
@@ -48,7 +47,7 @@ def load_train_and_test_sets(solved_path=pickle_solved_file_path, unsolved_path=
     return {'train': train_nonos, 'test': test_nonos}
 
 
-def load_solved_bomb_nonogram_from_file(path: str = pickle_solved_file_path) -> Nonogram:
+def load_solved_bomb_nonogram_from_file(path: str = pickle_solved_file_path):
     return _load_pickled(path)
 
 
@@ -61,7 +60,7 @@ def load_solved_bomb_nonogram_from_file(path: str = pickle_solved_file_path) -> 
 #         res_lst.append(str(tree) + '\n')
 #     return "".join(res_lst)
 
-def load_unsolved_bomb_nonogram_from_file(path: str = pickle_unsolved_file_path) -> Nonogram:
+def load_unsolved_bomb_nonogram_from_file(path: str = pickle_unsolved_file_path):
     return load_unsolved_nonograms_from_file(path)[0]
 
 

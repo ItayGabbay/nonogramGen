@@ -7,7 +7,7 @@ empty_in_split = '\xa0'
 pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
-should_run_in_parallel = True
+should_run_in_parallel = False
 
 NUM_COND_TREES = 5
 NUM_VAL_TREES = NUM_COND_TREES + 1
@@ -21,7 +21,7 @@ prob_mutate_individual_val = 0.7
 points_correct_box = 5
 points_incorrect_box = 0
 # points_incorrect_box = -2
-pop_size = 100
+pop_size = 10
 hof_size = 1
 # num_gen = 40
 num_gen = 10

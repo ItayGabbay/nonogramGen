@@ -14,13 +14,14 @@ from config import *
 from evaluator import *
 from heuristics import *
 from individual import DoubleTreeBasedIndividual
+from utils import load_train_and_test_sets
 
 if should_run_in_parallel:
     from scoop import futures
     stderr.write("RUNNING WITH SCOOP! MAKE SURE YOU ARE RUNNING WITH: 'python -m scoop playground.py' !!\n")
 
 
-train_test_sets = utils.load_train_and_test_sets()
+train_test_sets = load_train_and_test_sets()
 train_dicts = train_test_sets['train']
 train_nonograms = [(d['unsolved'], d['solved']) for d in train_dicts]
 test_dicts = train_test_sets['test']
@@ -294,7 +295,9 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
         next_steps = generate_next_steps(selected_step)
     # Here need to compare to the solution!
     # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
-    fitness = _compare_to_solution(selected_step, nonogram_solved)
+    # TODO switched to sat!
+    fitness = selected_step.convert_to_sat()
+    # fitness = _compare_to_solution(selected_step, nonogram_solved)
     # print('fitness:', fitness)
     return fitness
 

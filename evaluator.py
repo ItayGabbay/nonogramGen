@@ -1,16 +1,14 @@
-from nonogram import Nonogram
-import utils
 import copy
 
 
-def evaluate_individual(individual, step: Nonogram):
+def evaluate_individual(individual, step):
     next_steps = generate_next_steps(step)
 
     # while len(next_steps) > 0:
     #     print "AAA"
 
 
-def generate_next_steps(current_step: Nonogram):
+def generate_next_steps(current_step):
     next_steps = []
     clues = dict()
     clues['rows'] = current_step.row_clues

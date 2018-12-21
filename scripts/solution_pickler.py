@@ -26,6 +26,7 @@ def solve_bomb(bomb: Nonogram):
     mat[4][2] = True
     return bomb
 
+
 def solve_camel(camel: Nonogram):
     mat = camel.matrix
     mat[0][1] = True
@@ -46,6 +47,7 @@ def solve_camel(camel: Nonogram):
     mat[4][0] = True
     mat[4][2] = True
     return camel
+
 
 def solve_tetris(tetris: Nonogram):
     mat = tetris.matrix
@@ -68,6 +70,7 @@ def solve_tetris(tetris: Nonogram):
     mat[4][4] = True
     return tetris
 
+
 def solve_baby_carriage(baby_carriage: Nonogram):
     mat = baby_carriage.matrix
     mat[0][1] = True
@@ -88,6 +91,7 @@ def solve_baby_carriage(baby_carriage: Nonogram):
     mat[4][0] = True
     mat[4][3] = True
     return baby_carriage
+
 
 def solve_fountain(fountain: Nonogram):
     mat = fountain.matrix
@@ -110,6 +114,7 @@ def solve_fountain(fountain: Nonogram):
     mat[4][2] = True
     mat[4][3] = True
     return fountain
+
 
 def solve_rabbit(rabbit: Nonogram):
     mat = rabbit.matrix
@@ -135,6 +140,7 @@ def solve_rabbit(rabbit: Nonogram):
     mat[4][4] = True
     return rabbit
 
+
 def solve_candle(candle: Nonogram):
     mat = candle.matrix
     mat[0][1] = True
@@ -150,6 +156,7 @@ def solve_candle(candle: Nonogram):
     mat[4][2] = True
     mat[4][3] = True
     return candle
+
 
 def solve_chicken(chicken: Nonogram):
     mat = chicken.matrix
@@ -171,6 +178,7 @@ def solve_chicken(chicken: Nonogram):
     mat[4][2] = True
     return chicken
 
+
 def solve_dog(dog: Nonogram):
     mat = dog.matrix
     mat[0][3] = True
@@ -191,6 +199,7 @@ def solve_dog(dog: Nonogram):
     mat[4][1] = True
     mat[4][3] = True
     return dog
+
 
 def solve_hourglass(hourglass: Nonogram):
     mat = hourglass.matrix
@@ -216,6 +225,7 @@ def solve_hourglass(hourglass: Nonogram):
     mat[4][4] = True
     return hourglass
 
+
 def solve_watch(watch: Nonogram):
     mat = watch.matrix
     mat[0][1] = True
@@ -238,6 +248,7 @@ def solve_watch(watch: Nonogram):
     mat[4][2] = True
     mat[4][3] = True
     return watch
+
 
 def solve_cat(cat: Nonogram):
     mat = cat.matrix
@@ -266,6 +277,7 @@ def solve_cat(cat: Nonogram):
     mat[4][4] = True
     return cat
 
+
 def solve_camel2(camel: Nonogram):
     mat = camel.matrix
     mat[0][3] = True
@@ -286,6 +298,7 @@ def solve_camel2(camel: Nonogram):
     mat[4][0] = True
     mat[4][2] = True
     return camel
+
 
 def solve_tiny_heart(heart: Nonogram):
     mat = heart.matrix
@@ -311,9 +324,11 @@ def solve_tiny_heart(heart: Nonogram):
     mat[4][2] = True
     return heart
 
+
 def save(nonos: List[Nonogram]):
     with open('../' + pickle_solved_file_path, 'wb') as f:
         pickle.dump(nonos, f)
+
 
 def solve_nono(index: int, unsolved_nono: Nonogram):
     print('solving', unsolved_nono.title, unsolved_nono.number)
@@ -333,6 +348,7 @@ def solve_nono(index: int, unsolved_nono: Nonogram):
               13: solve_tiny_heart,
               }[index](unsolved_nono)
     return solved
+
 
 nonograms = load_unsolved_nonograms_from_file('../' + pickle_unsolved_file_path)
 res = [solve_nono(i, n) for (i, n) in enumerate(nonograms)]
