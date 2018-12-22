@@ -64,6 +64,7 @@ val_pset.renameArguments(ARG2='zeros_diff_rows')
 val_pset.renameArguments(ARG3='zeros_diff_cols')
 val_pset.renameArguments(ARG4='compare_blocks_rows')
 val_pset.renameArguments(ARG5='compare_blocks_cols')
+val_pset.addEphemeralConstant("rand101_1", lambda : np.random.randint(-100, 100))
 
 # creator stuff:
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -122,8 +123,8 @@ def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMax()):
 
 def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: gp.PrimitiveSetTyped = val_pset):
     toolbox = base.Toolbox()
-    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=1, max_=5)
-    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=1, max_=10)
+    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=2, max_=5)
+    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=2, max_=5)
     toolbox.register("value_tree", tools.initIterate, creator.ValueTree, toolbox.value_expr)
     toolbox.register("cond_tree", tools.initIterate, creator.ConditionTree, toolbox.cond_expr)
     toolbox.register("compile_valtree", gp.compile, pset=val_pset_arg)
@@ -216,16 +217,20 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     mat_solved = nonogram_solved.matrix
     to_check = nonogram.matrix
     corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
+    maximum = mapper_func(lambda s, c: s and c, mat_solved, mat_solved)
     wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
     res = points_correct_box * np.sum(corrects) - points_incorrect_box * np.sum(wrongs)
+
+    if np.sum(maximum) == np.sum(corrects) and np.sum(wrongs) == 0:
+        print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
     return res if res >= 0 else 0
 
 
-# def _calc_max_possible_fitness():
-#     compares = [_compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
-#     res = np.mean(compares)
-#     print('max possible fitness is:', res)
-#     return res
+def _calc_max_possible_fitness():
+    compares = [_compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
+    res = np.mean(compares)
+    print('max possible fitness is:', res)
+    return res
 
 
 def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndividual):
@@ -242,9 +247,9 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     # run on all solved nonograms
     for nonogram_unsolved, nonogram_solved in train_nonograms:
         results.append(
-            evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
+            round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4))
     if print_individual_fitness:
-        print("Fitness:", results, np.mean(results))
+        print("Fitness:", results, round(np.mean(results), 4))
     return np.mean(results),
 
 
@@ -252,7 +257,7 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
                              nonogram_unsolved: Nonogram):
     # print(nonogram.title)
     selected_step = nonogram_unsolved
-    next_steps = generate_next_steps(selected_step)
+    next_steps = generate_next_steps_blocks(selected_step)
     while len(next_steps) > 0:
         heuristics = []
         # Evaluating the heuristics on the candidates and choosing the best
@@ -294,13 +299,15 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
 
         # heuristics are max based (the bigger the result the better)
         max_heuristic_index = heuristics.index(max(heuristics))
+        # print("Max heuristic:", max(heuristics), " index:", max_heuristic_index)
         selected_step = next_steps[max_heuristic_index]
-        next_steps = generate_next_steps(selected_step)
+        # print(selected_step.matrix)
+        next_steps = generate_next_steps_blocks(selected_step)
     # Here need to compare to the solution!
     # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
     # TODO switched to sat!
-    fitness = selected_step.convert_to_sat()
-    # fitness = _compare_to_solution(selected_step, nonogram_solved)
+    # fitness = selected_step.convert_to_sat()
+    fitness = _compare_to_solution(selected_step, nonogram_solved)
     # print('fitness:', fitness)
     return fitness
 
@@ -336,7 +343,7 @@ class GPExperiment(object):
     def start_experiment(self):
         nonogram_names = [unsolved.title for unsolved, solved in train_nonograms]
         print('running experiment on', train_size, 'nonograms. names:', nonogram_names)
-        # max_possible_fitness = _calc_max_possible_fitness()
+        max_possible_fitness = _calc_max_possible_fitness()
 
         start = time.time()
         pop, log = algorithms.eaSimple(self.pop, self.toolbox, prob_crossover_global, prob_mutate_global, num_gen,

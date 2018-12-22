@@ -27,6 +27,91 @@ def generate_next_steps(current_step):
 
     return next_steps
 
+# def _generate_clues_combinations(clues_list):
+#     combs = []
+#
+#
+#     return combs
+#
+#
+# def generate_next_steps_rows(current_step):
+#     next_steps = []
+#     clues = dict()
+#     clues['rows'] = current_step.row_clues
+#     clues['cols'] = current_step.col_clues
+#
+#     for row in range(len(current_step.matrix)):
+#         combinations = _generate_clues_combinations(clues['rows'][row])
+
+
+def generate_next_steps_blocks(current_step):
+    next_steps = []
+    clues = dict()
+    clues['rows'] = current_step.row_clues
+    clues['cols'] = current_step.col_clues
+
+    for row in range(len(current_step.matrix)):
+        options = []
+        for clue_index in range(len(clues['rows'][row])):
+            clue = clues['rows'][row][clue_index]
+            if is_block_exist(current_step.matrix[row], clue) == False:
+                options = _generate_block(current_step.matrix[row], clue, clue_index * 2)
+
+                for option in options:
+                    next_step = copy.deepcopy(current_step)
+                    next_step.matrix[row] = option
+                    next_steps.append(next_step)
+
+    for col in range(len(current_step.matrix[0])):
+        for clue_index in range(len(clues['cols'][col])):
+            clue = clues['cols'][col][clue_index]
+            if is_block_exist(current_step.matrix[:, col], clue) == False:
+                options = _generate_block(current_step.matrix[:, col], clue, clue_index * 2)
+
+                for option in options:
+                    next_step = copy.deepcopy(current_step)
+                    next_step.matrix[:, col] = option
+                    if validate_board(next_step.matrix, clues) == True:
+                        next_steps.append(next_step)
+                    else:
+                        del next_step
+
+    return next_steps
+
+
+def _generate_block(row, size, min_index):
+    options = []
+    for cell in range(len(row) - size + 1 - min_index):
+        if row[cell + min_index] == False:
+            option = copy.copy(row)
+            option[cell + min_index] = True
+            for i in range(1, size):
+                option[cell + i + min_index] = True
+
+            options.append(option)
+    return options
+
+
+def is_block_exist(row, size):
+    index = 0
+    row_len = len(row)
+    while index < row_len:
+        clue_len = size
+        while index < row_len and row[index] == False:
+            index += 1
+
+        while clue_len > 0 and index < row_len and row[index] == True:
+            clue_len -= 1
+            index += 1
+
+        if index == row_len and clue_len == 0:
+            return True
+
+        if clue_len == 0 and (index <= row_len - 1 and row[index] == False):
+            return True
+
+    return False
+
 
 def _check_block(row, clues_list):
     index = 0
