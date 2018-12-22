@@ -34,16 +34,16 @@ def load_all_row_opts(path=pickle_row_options_path):
 
 def load_train_and_test_sets(solved_path=pickle_solved_file_path, unsolved_path=pickle_unsolved_file_path,
                              train_set_size=train_size):
-    # solved_nonograms = load_solved_nonograms_from_file(solved_path)
+    solved_nonograms = load_solved_nonograms_from_file(solved_path)
     unsolved_nonograms = load_unsolved_nonograms_from_file(unsolved_path)
 
-    if train_set_size > len(unsolved_nonograms):
+    if train_set_size > len(solved_nonograms):
         raise Exception("Train size is bigger than the number of available Nonograms!")
 
-    train_indxs = random.sample(range(1, len(unsolved_nonograms)), train_set_size)
-    test_indxs = filter(lambda x: x not in train_indxs, range(len(unsolved_nonograms)))
-    train_nonos = [{'unsolved': unsolved_nonograms[i], 'solved': None} for i in train_indxs]
-    test_nonos = [{'unsolved': unsolved_nonograms[i], 'solved': None} for i in test_indxs]
+    train_indxs = random.sample(range(1, len(solved_nonograms)), train_set_size)
+    test_indxs = filter(lambda x: x not in train_indxs, range(len(solved_nonograms)))
+    train_nonos = [{'unsolved': unsolved_nonograms[i], 'solved': solved_nonograms[i]} for i in train_indxs]
+    test_nonos = [{'unsolved': unsolved_nonograms[i], 'solved': solved_nonograms[i]} for i in test_indxs]
     return {'train': train_nonos, 'test': test_nonos}
 
 
