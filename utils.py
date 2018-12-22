@@ -27,7 +27,7 @@ def _load_pickled(path):
 def load_unsolved_nonograms_from_file(path: str = unsolved_nonograms_archive_name):
     archive = dir_archive(path, {}, serialized=True)
     archive.load()
-    return archive['nonograms']
+    return [val for val in archive.values()]
 
 
 def load_solved_nonograms_from_file(path: str = pickle_solved_file_path):

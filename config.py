@@ -35,4 +35,4 @@ pop_size = 150
 hof_size = 1
 # num_gen = 40
 num_gen = 10
-train_size = 100
+train_size = 1

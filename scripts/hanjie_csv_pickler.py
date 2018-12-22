@@ -15,11 +15,10 @@ with open(csv_path) as csvfile:
     filtered = [{'title': row[2], 'number': int(row[3]), 'solution': row[4], 'rows':row[6], 'cols': row[7]}
                 for i, row in enumerate(readCSV) if i > 0 and int(row[0]) == NUM_COLS and int(row[1]) == NUM_ROWS]
     nonograms = [Nonogram(d['rows'], d['cols'], d['title'], d['number'], d['solution']) for d in filtered]
-    for nono in nonograms:
-        print(nono)
+    d = {n.title: n for n in nonograms}
 
-d = {'nonograms': nonograms}
-archive = dir_archive('../' + unsolved_nonograms_archive_name, d, serialized=True)
+# d = {'nonograms': nonograms}
+archive = dir_archive(unsolved_nonograms_archive_name, d, serialized=True)
 archive.dump()
 
 # with open('../' + pickle_unsolved_file_path, 'wb') as f:
