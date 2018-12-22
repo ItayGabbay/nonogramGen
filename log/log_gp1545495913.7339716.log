@@ -1,0 +1,750 @@
+INFO:root:
+
+*******STARTING!!!******
+
+
+INFO:root:
+
+*******Configuration******
+
+
+INFO:root:# NUM_ROWS = 20
+
+
+INFO:root:NUM_ROWS = 5
+
+
+INFO:root:# NUM_COLS = 20
+
+
+INFO:root:NUM_COLS = 5
+
+
+INFO:root:empty_in_split = '\xa0'
+
+
+INFO:root:pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
+
+
+INFO:root:pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
+
+
+INFO:root:pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
+
+
+INFO:root:convert_to_sat = True
+
+
+INFO:root:should_run_in_parallel = True
+
+
+INFO:root:print_individual_fitness = False
+
+
+INFO:root:
+
+
+INFO:root:NUM_COND_TREES = 5
+
+
+INFO:root:NUM_VAL_TREES = NUM_COND_TREES + 1
+
+
+INFO:root:prob_crossover_global = 0.8  # global probability for cx
+
+
+INFO:root:prob_crossover_individual_cond = 0.7  # probability to cx a specific cond tree in an individual
+
+
+INFO:root:prob_crossover_individual_val = 0.7  # probability to cx a specific cond tree in an individual
+
+
+INFO:root:prob_mutate_global = 0.2
+
+
+INFO:root:prob_mutate_individual_cond = 1
+
+
+INFO:root:prob_mutate_individual_val = 1
+
+
+INFO:root:
+
+
+INFO:root:points_correct_box = 5
+
+
+INFO:root:points_incorrect_box = 0
+
+
+INFO:root:# points_incorrect_box = -2
+
+
+INFO:root:pop_size = 40
+
+
+INFO:root:hof_size = 1
+
+
+INFO:root:# num_gen = 40
+
+
+INFO:root:num_gen = 100
+
+
+INFO:root:train_size = 3
+
+
+INFO:root:
+
+*******DONE!!!******
+
+
+INFO:root:run time: 692 sec
+
+INFO:root:max possible fitness for the nonograms ran: %d
+
+INFO:root:log:    	      	                                            fitness                                             
+   	      	------------------------------------------------------------------------------------------------
+gen	nevals	avg |  	max | 	min |  	most common |        	num max |	num min |	size |	std |   
+0  	40    	2.7302 	2.7302	2.7302 	(2.7302,)            	40       	40       	40    	0       
+1  	38    	2.43533	3.1612	1.63663	(2.5500333333333334,)	2        	1        	40    	0.386466
+2  	29    	2.55025	3.1612	1.63663	(2.624166666666667,) 	3        	2        	40    	0.406301
+3  	36    	2.54167	3.1612	1.63663	(2.812566666666667,) 	5        	3        	40    	0.4962  
+4  	37    	2.8233 	3.1612	1.63663	(2.5015,)            	11       	2        	40    	0.359449
+5  	37    	2.87631	3.1612	2.09333	(2.6930666666666667,)	9        	1        	40    	0.240873
+6  	34    	2.9179 	3.1612	2.15007	(2.4365,)            	11       	1        	40    	0.215567
+7  	37    	2.90021	3.1612	2.62417	(2.6512999999999995,)	7        	1        	40    	0.150951
+8  	35    	2.86272	3.1612	1.76733	(2.8443,)            	10       	1        	40    	0.273777
+9  	32    	2.96143	3.1612	2.22493	(2.224933333333333,) 	16       	1        	40    	0.201184
+10 	38    	2.90123	3.1612	2.16317	(2.1631666666666667,)	11       	2        	40    	0.230215
+11 	36    	2.82571	3.1612	1.76733	(1.7673333333333332,)	7        	1        	40    	0.279461
+12 	31    	2.87382	3.1612	1.8793 	(2.0933333333333333,)	8        	1        	40    	0.251089
+13 	35    	2.85361	3.1612	1.6438 	(2.4064,)            	9        	1        	40    	0.280843
+14 	32    	2.90639	3.1612	2.15007	(2.150066666666667,) 	11       	1        	40    	0.216661
+15 	34    	2.89063	3.1612	2.16317	(2.817833333333333,) 	12       	1        	40    	0.238279
+16 	24    	2.91508	3.1612	1.72427	(2.5775,)            	15       	1        	40    	0.286823
+17 	31    	2.92059	3.1612	2.1565 	(2.1565,)            	14       	1        	40    	0.224721
+18 	35    	2.92617	3.1612	2.48557	(2.624166666666667,) 	13       	1        	40    	0.19469 
+19 	37    	2.81496	3.1612	1.63663	(1.6366333333333334,)	12       	1        	40    	0.388189
+20 	28    	2.9655 	3.1612	2.42833	(2.8144333333333336,)	17       	1        	40    	0.195167
+21 	36    	2.85563	3.1612	1.76733	(2.6460333333333335,)	11       	1        	40    	0.308638
+22 	32    	2.90288	3.1612	2.05687	(2.7548333333333335,)	12       	1        	40    	0.222794
+23 	33    	2.83705	3.1612	1.6797 	(2.163233333333334,) 	12       	1        	40    	0.339133
+24 	33    	2.87304	3.1612	1.6438 	(1.6797000000000002,)	13       	1        	40    	0.354954
+25 	33    	2.88074	3.1612	1.63663	(2.5966666666666667,)	13       	1        	40    	0.308569
+26 	35    	2.88642	3.1612	1.63663	(1.6366333333333334,)	13       	1        	40    	0.343991
+27 	34    	2.90951	3.1612	1.6438 	(1.6438,)            	14       	1        	40    	0.283903
+28 	31    	2.85642	3.1612	1.63663	(2.723333333333333,) 	14       	2        	40    	0.377465
+29 	31    	2.93183	3.1612	1.63663	(2.7302,)            	15       	1        	40    	0.281371
+30 	34    	2.8943 	3.1612	2.16317	(2.4066666666666667,)	10       	1        	40    	0.212691
+31 	30    	2.90114	3.1612	1.76733	(2.7302,)            	15       	1        	40    	0.308925
+32 	35    	2.8185 	3.1612	1.7578 	(2.3125,)            	11       	1        	40    	0.360972
+33 	33    	2.90733	3.1612	1.6797 	(2.7954333333333334,)	12       	1        	40    	0.258257
+34 	37    	2.88336	3.1612	1.76733	(2.3666666666666667,)	11       	1        	40    	0.268138
+35 	33    	2.92697	3.1612	1.954  	(2.639366666666667,) 	13       	1        	40    	0.228388
+36 	36    	2.82647	3.1612	1.66187	(1.6618666666666666,)	11       	1        	40    	0.338839
+37 	29    	2.94544	3.1612	2.13877	(2.1387666666666667,)	15       	1        	40    	0.236167
+38 	32    	2.92245	3.1612	1.6797 	(2.1631666666666667,)	15       	1        	40    	0.287146
+39 	33    	2.92822	3.1612	2.4365 	(2.4365,)            	12       	1        	40    	0.187397
+40 	32    	2.88539	3.1612	1.63663	(2.639366666666667,) 	12       	1        	40    	0.307506
+41 	36    	2.91325	3.1612	2.09333	(2.8443,)            	10       	1        	40    	0.201274
+42 	38    	2.8668 	3.1612	1.63663	(2.4714,)            	11       	1        	40    	0.309885
+43 	34    	2.8185 	3.1612	1.63663	(2.639366666666667,) 	13       	1        	40    	0.371322
+44 	33    	2.9145 	3.1612	2.09333	(2.0933333333333333,)	11       	1        	40    	0.211846
+45 	35    	2.90959	3.1612	2.09333	(2.5125,)            	10       	1        	40    	0.209064
+46 	35    	2.88757	3.1612	1.6797 	(2.7481666666666666,)	12       	1        	40    	0.283588
+47 	33    	2.84413	3.1612	1.63663	(2.7194333333333334,)	13       	2        	40    	0.375685
+48 	32    	2.85629	3.1612	1.63663	(2.6930666666666667,)	12       	1        	40    	0.316477
+49 	39    	2.80095	3.1612	1.63663	(2.6541333333333337,)	9        	1        	40    	0.315354
+50 	33    	2.89079	3.1612	2.4064 	(2.8443,)            	9        	1        	40    	0.190819
+51 	31    	2.8455 	3.1612	1.63663	(1.6366333333333334,)	11       	1        	40    	0.314827
+52 	30    	2.885  	3.1612	1.6438 	(2.7302,)            	11       	1        	40    	0.271775
+53 	34    	2.91659	3.1612	2.5125 	(2.9183333333333334,)	10       	1        	40    	0.173226
+54 	33    	2.80848	3.1612	1.6085 	(2.9183333333333334,)	8        	1        	40    	0.302489
+55 	34    	2.82531	3.1612	1.6085 	(1.6085,)            	9        	1        	40    	0.347093
+56 	35    	2.84673	3.1612	2.13877	(2.510866666666667,) 	11       	1        	40    	0.286896
+57 	34    	2.89704	3.1612	1.78903	(2.4283333333333332,)	11       	1        	40    	0.258536
+58 	34    	2.8742 	3.1612	1.72427	(2.864166666666667,) 	10       	1        	40    	0.274756
+59 	30    	2.92336	3.1612	2.15297	(2.436666666666667,) 	12       	1        	40    	0.214288
+60 	32    	2.89163	3.1612	2.13877	(2.7252333333333336,)	12       	2        	40    	0.27166 
+61 	36    	2.8312 	3.1612	1.8793 	(2.639366666666667,) 	6        	1        	40    	0.268795
+62 	32    	2.90779	3.1612	2.16317	(2.1631666666666667,)	12       	1        	40    	0.22972 
+63 	35    	2.8627 	3.1612	1.6797 	(2.1631666666666667,)	11       	1        	40    	0.330595
+64 	37    	2.85597	3.1612	2.09333	(2.7302,)            	8        	2        	40    	0.245354
+65 	27    	2.85731	3.1612	1.77673	(2.7302,)            	9        	1        	40    	0.294559
+66 	36    	2.86132	3.1612	1.76733	(1.7673333333333332,)	8        	1        	40    	0.265238
+67 	32    	2.861  	3.1612	1.6438 	(1.8793,)            	11       	1        	40    	0.351667
+68 	37    	2.86498	3.1612	1.6438 	(2.8672333333333335,)	10       	1        	40    	0.287311
+69 	33    	2.88737	3.1612	1.63663	(2.0933333333333333,)	10       	1        	40    	0.282211
+70 	34    	2.81853	3.1612	1.63663	(2.4855666666666667,)	12       	1        	40    	0.343551
+71 	36    	2.88503	3.1612	2.13877	(2.817833333333333,) 	12       	1        	40    	0.25965 
+72 	26    	2.83779	3.1612	1.63663	(2.639366666666667,) 	14       	1        	40    	0.367282
+73 	35    	2.84646	3.1612	1.63663	(2.4064,)            	11       	1        	40    	0.321946
+74 	32    	2.87285	3.1612	2.33467	(2.6424999999999996,)	7        	1        	40    	0.194242
+75 	31    	2.85803	3.1612	2.08667	(2.8144333333333336,)	7        	1        	40    	0.241969
+76 	28    	2.91814	3.1612	1.66187	(2.5787666666666667,)	11       	1        	40    	0.255476
+77 	35    	2.88601	3.1612	2.06037	(2.1631666666666667,)	11       	1        	40    	0.258076
+78 	35    	2.91603	3.1612	2.23753	(2.2375333333333334,)	11       	1        	40    	0.191761
+79 	29    	2.92146	3.1612	1.76733	(2.639366666666667,) 	15       	1        	40    	0.283831
+80 	30    	2.90114	3.1612	2.15297	(2.468166666666667,) 	12       	1        	40    	0.244169
+81 	38    	2.80371	3.1612	1.71253	(2.6930666666666667,)	9        	1        	40    	0.332711
+82 	37    	2.86393	3.1612	1.63663	(2.373633333333333,) 	9        	1        	40    	0.281218
+83 	29    	2.89187	3.1612	2.06037	(2.0933333333333333,)	13       	1        	40    	0.281577
+84 	36    	2.80764	3.1612	1.76733	(2.658333333333333,) 	10       	1        	40    	0.348322
+85 	35    	2.81153	3.1612	1.63663	(2.4480666666666666,)	11       	3        	40    	0.408145
+86 	34    	2.84978	3.1612	1.72427	(2.1631666666666667,)	9        	1        	40    	0.284998
+87 	31    	2.82346	3.1612	2.08667	(2.281333333333333,) 	9        	1        	40    	0.304036
+88 	37    	2.8856 	3.1612	1.76733	(2.7030666666666665,)	11       	1        	40    	0.259693
+89 	35    	2.86912	3.1612	1.72483	(2.2375333333333334,)	12       	1        	40    	0.318075
+90 	35    	2.80345	3.1612	1.72427	(1.7242666666666666,)	8        	1        	40    	0.342335
+91 	30    	2.81125	3.1612	1.76733	(2.6047333333333333,)	7        	1        	40    	0.318203
+92 	35    	2.80568	3.1612	2.09333	(2.6616666666666666,)	9        	3        	40    	0.322811
+93 	39    	2.84609	3.1612	1.65627	(2.7078,)            	9        	2        	40    	0.345393
+94 	36    	2.86055	3.1612	1.63663	(2.639366666666667,) 	9        	1        	40    	0.29645 
+95 	36    	2.83967	3.1612	1.71253	(1.7125333333333332,)	11       	1        	40    	0.31808 
+96 	36    	2.81021	3.1612	2.09333	(2.658333333333333,) 	10       	1        	40    	0.31708 
+97 	35    	2.84635	3.1612	1.65877	(2.638333333333333,) 	13       	1        	40    	0.347721
+98 	37    	2.80093	3.1612	1.76733	(2.624166666666667,) 	10       	1        	40    	0.341589
+99 	33    	2.88909	3.1612	2.16317	(2.639366666666667,) 	12       	2        	40    	0.249631
+100	29    	2.92839	3.1612	2.16317	(2.1631666666666667,)	12       	1        	40    	0.201682
+
+INFO:root:pop: COND TREES:
+ge(max_col_clue, _if_then_else(ge(compare_blocks_cols, 4), _if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, ones_diff_cols, -71)))
+le(_if_then_else(True, -20, ones_diff_cols), zeros_diff_cols)
+ge(_if_then_else(True, 3, 2), _if_then_else(or_(False, and_(True, False)), ones_diff_rows, -71))
+or_(le(_if_then_else(le(_if_then_else(True, compare_blocks_rows, ones_diff_cols), _if_then_else(True, zeros_diff_rows, max_col_clue)), _if_then_else(True, _if_then_else(True, max_col_clue, compare_blocks_cols), _if_then_else(False, 4, ones_diff_cols)), _if_then_else(or_(True, False), _if_then_else(True, zeros_diff_cols, 2), _if_then_else(False, max_row_clue, 4))), -26), True)
+le(max_row_clue, _if_then_else(le(max_row_clue, max_col_clue), max_row_clue, _if_then_else(le(_if_then_else(and_(False, True), _if_then_else(True, max_row_clue, 4), _if_then_else(True, max_col_clue, ones_diff_cols)), _if_then_else(le(compare_blocks_cols, compare_blocks_rows), _if_then_else(True, max_col_clue, compare_blocks_rows), _if_then_else(True, max_row_clue, zeros_diff_cols))), _if_then_else(or_(le(4, ones_diff_rows), le(0, max_col_clue)), _if_then_else(le(53, compare_blocks_cols), _if_then_else(True, 15, 1), _if_then_else(True, zeros_diff_rows, 4)), _if_then_else(or_(False, True), _if_then_else(True, zeros_diff_cols, max_col_clue), _if_then_else(False, max_col_clue, max_col_clue))), _if_then_else(or_(ge(-87, ones_diff_rows), le(max_row_clue, compare_blocks_rows)), _if_then_else(le(zeros_diff_cols, 3), _if_then_else(True, max_row_clue, 81), _if_then_else(False, 2, zeros_diff_cols)), _if_then_else(le(2, 2), _if_then_else(False, zeros_diff_cols, max_col_clue), _if_then_else(False, 1, compare_blocks_rows))))))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+or_(ge(4, -71), ge(compare_blocks_rows, max_col_clue))
+le(_if_then_else(and_(or_(False, True), le(3, 2)), max_col_clue, 1), _if_then_else(True, zeros_diff_cols, zeros_diff_rows))
+ge(_if_then_else(False, _if_then_else(le(_if_then_else(le(4, max_row_clue), _if_then_else(True, ones_diff_cols, ones_diff_cols), _if_then_else(False, 1, max_col_clue)), _if_then_else(or_(False, True), _if_then_else(True, compare_blocks_rows, max_row_clue), _if_then_else(False, 4, zeros_diff_rows))), _if_then_else(ge(_if_then_else(True, compare_blocks_cols, 73), _if_then_else(False, compare_blocks_rows, 1)), _if_then_else(or_(True, True), _if_then_else(True, ones_diff_rows, max_col_clue), _if_then_else(False, max_row_clue, 3)), _if_then_else(le(4, 4), _if_then_else(False, zeros_diff_cols, compare_blocks_cols), _if_then_else(False, zeros_diff_cols, max_row_clue))), _if_then_else(ge(_if_then_else(False, 3, 43), _if_then_else(False, -51, zeros_diff_cols)), _if_then_else(and_(False, False), _if_then_else(False, -48, 2), _if_then_else(True, 0, max_col_clue)), _if_then_else(or_(False, True), _if_then_else(False, compare_blocks_cols, ones_diff_cols), _if_then_else(True, max_col_clue, 3)))), compare_blocks_cols), zeros_diff_rows)
+or_(or_(True, True), ge(zeros_diff_rows, _if_then_else(le(compare_blocks_rows, zeros_diff_cols), zeros_diff_cols, 0)))
+le(_if_then_else(ge(_if_then_else(False, compare_blocks_rows, -44), _if_then_else(True, 4, 3)), _if_then_else(le(4, 4), _if_then_else(True, max_row_clue, 1), _if_then_else(False, ones_diff_rows, zeros_diff_rows)), _if_then_else(ge(max_row_clue, 2), _if_then_else(True, compare_blocks_rows, ones_diff_rows), _if_then_else(True, 4, compare_blocks_cols))), compare_blocks_cols)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(False, zeros_diff_cols, zeros_diff_cols), zeros_diff_cols)
+ge(3, compare_blocks_cols)
+or_(le(max_row_clue, -26), True)
+le(max_row_clue, _if_then_else(False, max_row_clue, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(ge(compare_blocks_cols, 4), _if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, ones_diff_cols, -71)), -71)
+le(_if_then_else(False, max_col_clue, 1), _if_then_else(True, zeros_diff_cols, zeros_diff_rows))
+ge(_if_then_else(False, compare_blocks_cols, compare_blocks_cols), -71)
+or_(True, True)
+le(1, compare_blocks_cols)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(False, zeros_diff_cols, zeros_diff_cols), zeros_diff_cols)
+ge(3, -71)
+or_(le(max_row_clue, -26), True)
+le(max_row_clue, _if_then_else(False, compare_blocks_cols, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_row_clue, ones_diff_rows)
+le(zeros_diff_cols, max_col_clue)
+ge(3, 3)
+or_(True, True)
+le(max_row_clue, 4)
+VAL TREES:
+mul(mul(90, mul(55, compare_blocks_cols)), add(add(ones_diff_rows, ones_diff_cols), zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), add(add(ones_diff_cols, zeros_diff_rows), mul(ones_diff_rows, 71)))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(-35, ones_diff_cols)), compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, mul(mul(zeros_diff_rows, 61), mul(zeros_diff_cols, compare_blocks_rows))), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(add(add(ones_diff_cols, compare_blocks_cols), add(add(compare_blocks_rows, ones_diff_cols), ones_diff_rows)), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(mul(add(ones_diff_rows, ones_diff_rows), add(zeros_diff_cols, compare_blocks_cols)), add(add(ones_diff_cols, ones_diff_rows), add(compare_blocks_rows, compare_blocks_rows))))
+COND TREES:
+ge(max_row_clue, _if_then_else(and_(le(_if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, 0, max_col_clue)), le(_if_then_else(True, zeros_diff_cols, compare_blocks_rows), _if_then_else(True, zeros_diff_cols, -9))), _if_then_else(ge(_if_then_else(False, max_col_clue, max_row_clue), _if_then_else(False, compare_blocks_cols, 1)), _if_then_else(le(zeros_diff_cols, ones_diff_cols), _if_then_else(False, ones_diff_rows, ones_diff_cols), _if_then_else(True, 57, 4)), _if_then_else(or_(False, False), _if_then_else(False, 3, 2), _if_then_else(True, compare_blocks_rows, 0))), _if_then_else(le(_if_then_else(True, 3, max_row_clue), _if_then_else(False, zeros_diff_rows, 3)), _if_then_else(ge(zeros_diff_rows, ones_diff_rows), _if_then_else(False, -77, ones_diff_cols), _if_then_else(False, 0, compare_blocks_rows)), _if_then_else(or_(False, True), _if_then_else(True, compare_blocks_rows, max_row_clue), _if_then_else(True, compare_blocks_cols, 3)))))
+le(_if_then_else(or_(ge(_if_then_else(False, max_row_clue, compare_blocks_rows), _if_then_else(False, max_row_clue, 0)), and_(and_(False, False), le(max_col_clue, ones_diff_rows))), _if_then_else(le(_if_then_else(True, max_row_clue, 13), _if_then_else(True, 4, 1)), _if_then_else(or_(False, True), _if_then_else(False, compare_blocks_cols, 4), _if_then_else(True, 2, 16)), _if_then_else(le(1, ones_diff_cols), _if_then_else(False, compare_blocks_rows, ones_diff_rows), _if_then_else(False, compare_blocks_rows, zeros_diff_rows))), _if_then_else(le(_if_then_else(True, max_row_clue, max_row_clue), _if_then_else(True, 4, compare_blocks_rows)), _if_then_else(ge(ones_diff_cols, compare_blocks_rows), _if_then_else(True, 0, 3), _if_then_else(False, compare_blocks_rows, 3)), _if_then_else(ge(3, max_col_clue), _if_then_else(False, max_row_clue, 3), _if_then_else(False, compare_blocks_rows, ones_diff_rows)))), max_col_clue)
+ge(_if_then_else(le(_if_then_else(True, -49, max_col_clue), max_col_clue), _if_then_else(True, 36, zeros_diff_rows), _if_then_else(True, 2, compare_blocks_cols)), 3)
+or_(or_(le(_if_then_else(True, 0, 4), _if_then_else(True, 3, compare_blocks_cols)), le(_if_then_else(True, max_row_clue, max_row_clue), _if_then_else(True, ones_diff_rows, 4))), True)
+le(_if_then_else(le(_if_then_else(ge(_if_then_else(False, 1, compare_blocks_cols), _if_then_else(True, 3, 0)), _if_then_else(le(ones_diff_cols, 1), _if_then_else(True, zeros_diff_rows, zeros_diff_rows), _if_then_else(False, 3, ones_diff_cols)), _if_then_else(le(max_col_clue, 4), _if_then_else(True, 4, -72), _if_then_else(True, 0, ones_diff_rows))), _if_then_else(and_(ge(2, zeros_diff_cols), ge(2, compare_blocks_cols)), _if_then_else(and_(False, False), _if_then_else(False, 3, 4), _if_then_else(False, compare_blocks_rows, zeros_diff_rows)), _if_then_else(ge(compare_blocks_cols, 2), _if_then_else(False, 0, 4), _if_then_else(True, compare_blocks_cols, zeros_diff_cols)))), _if_then_else(le(_if_then_else(or_(False, True), _if_then_else(False, 94, max_row_clue), _if_then_else(True, compare_blocks_cols, ones_diff_rows)), _if_then_else(ge(max_col_clue, 3), _if_then_else(True, 4, ones_diff_cols), _if_then_else(True, zeros_diff_rows, max_col_clue))), _if_then_else(or_(and_(False, True), and_(True, True)), _if_then_else(or_(True, False), _if_then_else(True, compare_blocks_cols, zeros_diff_rows), _if_then_else(True, max_row_clue, ones_diff_cols)), _if_then_else(or_(True, False), _if_then_else(True, max_col_clue, ones_diff_rows), _if_then_else(False, 0, 4))), _if_then_else(le(_if_then_else(True, 2, ones_diff_cols), _if_then_else(False, ones_diff_rows, max_row_clue)), _if_then_else(le(compare_blocks_rows, max_row_clue), _if_then_else(True, zeros_diff_cols, max_col_clue), _if_then_else(True, ones_diff_rows, 4)), _if_then_else(and_(True, False), _if_then_else(True, zeros_diff_cols, max_row_clue), _if_then_else(False, compare_blocks_cols, max_col_clue)))), _if_then_else(and_(ge(_if_then_else(True, 1, max_row_clue), _if_then_else(True, compare_blocks_cols, 3)), and_(or_(False, True), le(max_col_clue, zeros_diff_cols))), _if_then_else(and_(le(2, -85), and_(True, True)), _if_then_else(and_(False, True), _if_then_else(False, 0, ones_diff_cols), _if_then_else(False, max_row_clue, compare_blocks_rows)), _if_then_else(ge(max_col_clue, max_row_clue), _if_then_else(True, 2, compare_blocks_rows), _if_then_else(False, ones_diff_rows, compare_blocks_rows))), _if_then_else(or_(or_(True, False), le(0, max_row_clue)), _if_then_else(ge(2, max_col_clue), _if_then_else(True, zeros_diff_rows, compare_blocks_rows), _if_then_else(True, max_row_clue, 3)), _if_then_else(le(0, max_col_clue), _if_then_else(False, compare_blocks_cols, compare_blocks_cols), _if_then_else(True, max_row_clue, -69))))), 4)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+and_(and_(le(_if_then_else(ge(zeros_diff_cols, zeros_diff_cols), _if_then_else(False, 3, zeros_diff_cols), _if_then_else(True, compare_blocks_cols, zeros_diff_cols)), _if_then_else(ge(4, 0), _if_then_else(True, 1, max_col_clue), _if_then_else(True, max_row_clue, ones_diff_rows))), or_(ge(_if_then_else(True, 4, compare_blocks_rows), _if_then_else(False, compare_blocks_cols, ones_diff_cols)), or_(ge(zeros_diff_cols, 4), le(0, zeros_diff_rows)))), ge(_if_then_else(le(_if_then_else(True, zeros_diff_rows, ones_diff_cols), _if_then_else(True, 3, ones_diff_rows)), _if_then_else(le(max_row_clue, max_row_clue), _if_then_else(False, 2, max_row_clue), _if_then_else(False, max_col_clue, 1)), _if_then_else(or_(False, False), _if_then_else(True, max_row_clue, -68), _if_then_else(True, 3, ones_diff_rows))), _if_then_else(and_(le(ones_diff_cols, ones_diff_cols), and_(True, True)), _if_then_else(or_(False, True), _if_then_else(False, 3, 4), _if_then_else(False, zeros_diff_cols, compare_blocks_cols)), _if_then_else(ge(max_row_clue, zeros_diff_cols), _if_then_else(False, zeros_diff_cols, 2), _if_then_else(False, 2, ones_diff_rows)))))
+or_(le(_if_then_else(and_(False, True), _if_then_else(False, zeros_diff_cols, zeros_diff_rows), _if_then_else(True, 4, 1)), _if_then_else(and_(True, True), _if_then_else(True, compare_blocks_cols, zeros_diff_rows), _if_then_else(False, max_col_clue, zeros_diff_cols))), or_(le(_if_then_else(False, 2, max_col_clue), _if_then_else(False, 4, compare_blocks_rows)), and_(le(2, compare_blocks_rows), le(ones_diff_rows, max_col_clue))))
+ge(-71, _if_then_else(ge(2, _if_then_else(True, max_row_clue, _if_then_else(False, 0, max_row_clue))), _if_then_else(False, max_col_clue, max_row_clue), _if_then_else(and_(False, ge(max_row_clue, _if_then_else(False, 1, 4))), _if_then_else(ge(3, zeros_diff_rows), 27, _if_then_else(True, _if_then_else(True, max_col_clue, 0), 2)), 85)))
+or_(le(_if_then_else(True, zeros_diff_rows, 0), _if_then_else(True, 4, 4)), le(max_row_clue, _if_then_else(False, ones_diff_rows, compare_blocks_rows)))
+le(compare_blocks_cols, _if_then_else(ge(_if_then_else(True, 3, ones_diff_rows), _if_then_else(True, ones_diff_rows, zeros_diff_cols)), _if_then_else(and_(True, True), _if_then_else(True, 2, ones_diff_rows), _if_then_else(False, compare_blocks_cols, zeros_diff_rows)), _if_then_else(and_(True, True), _if_then_else(False, 2, 1), _if_then_else(True, 2, 3))))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(ge(compare_blocks_cols, 4), _if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, max_row_clue, -71)), -71)
+le(_if_then_else(False, max_col_clue, 1), _if_then_else(le(zeros_diff_cols, zeros_diff_rows), zeros_diff_cols, zeros_diff_rows))
+ge(_if_then_else(False, compare_blocks_cols, 3), -71)
+or_(True, True)
+le(4, compare_blocks_cols)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(ones_diff_cols, ones_diff_rows)
+le(zeros_diff_cols, max_col_clue)
+ge(compare_blocks_cols, 3)
+or_(True, True)
+le(max_row_clue, 1)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(True, -20, ones_diff_cols), zeros_diff_cols)
+ge(_if_then_else(True, 3, 2), _if_then_else(or_(False, and_(True, False)), ones_diff_rows, zeros_diff_rows))
+or_(le(_if_then_else(le(_if_then_else(True, compare_blocks_rows, ones_diff_cols), _if_then_else(True, zeros_diff_rows, max_col_clue)), _if_then_else(True, _if_then_else(True, max_col_clue, compare_blocks_cols), _if_then_else(False, 4, ones_diff_cols)), _if_then_else(or_(True, False), _if_then_else(False, zeros_diff_cols, 2), _if_then_else(False, max_row_clue, 4))), -26), True)
+le(max_row_clue, _if_then_else(le(max_row_clue, max_col_clue), max_row_clue, _if_then_else(le(_if_then_else(and_(False, True), _if_then_else(True, max_row_clue, 4), _if_then_else(True, max_col_clue, ones_diff_cols)), _if_then_else(le(compare_blocks_cols, compare_blocks_rows), _if_then_else(True, max_col_clue, compare_blocks_rows), _if_then_else(True, max_row_clue, zeros_diff_cols))), _if_then_else(or_(le(4, ones_diff_rows), le(0, max_col_clue)), _if_then_else(le(53, compare_blocks_cols), _if_then_else(True, 15, 1), _if_then_else(True, zeros_diff_rows, 4)), _if_then_else(or_(False, True), _if_then_else(True, zeros_diff_cols, max_col_clue), _if_then_else(False, max_col_clue, max_col_clue))), _if_then_else(or_(ge(-87, ones_diff_rows), le(max_row_clue, compare_blocks_rows)), _if_then_else(le(zeros_diff_cols, 3), _if_then_else(True, max_row_clue, 81), _if_then_else(False, 2, zeros_diff_cols)), _if_then_else(le(2, 2), _if_then_else(False, zeros_diff_cols, max_col_clue), _if_then_else(False, 1, compare_blocks_rows))))))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(ge(compare_blocks_cols, 4), _if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, ones_diff_cols, -71)), -71)
+le(_if_then_else(False, max_col_clue, 1), _if_then_else(le(zeros_diff_cols, zeros_diff_rows), zeros_diff_cols, zeros_diff_rows))
+ge(_if_then_else(False, compare_blocks_cols, compare_blocks_cols), -71)
+or_(True, True)
+le(1, max_row_clue)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(ones_diff_rows, ones_diff_rows)
+le(zeros_diff_cols, max_col_clue)
+ge(ones_diff_cols, 3)
+or_(True, True)
+le(max_row_clue, 4)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+and_(or_(or_(and_(ge(ones_diff_rows, 78), le(1, max_row_clue)), le(_if_then_else(False, 1, zeros_diff_cols), _if_then_else(True, 18, compare_blocks_rows))), or_(le(_if_then_else(True, zeros_diff_rows, 0), _if_then_else(True, compare_blocks_rows, max_row_clue)), and_(or_(False, True), or_(False, False)))), and_(le(_if_then_else(ge(1, compare_blocks_cols), _if_then_else(False, zeros_diff_cols, 0), _if_then_else(False, 1, 3)), _if_then_else(and_(False, False), _if_then_else(True, zeros_diff_rows, max_row_clue), _if_then_else(False, zeros_diff_rows, zeros_diff_rows))), or_(le(_if_then_else(False, zeros_diff_rows, zeros_diff_cols), _if_then_else(True, 2, max_col_clue)), or_(ge(zeros_diff_rows, ones_diff_rows), ge(max_col_clue, zeros_diff_cols)))))
+le(_if_then_else(or_(ge(ones_diff_cols, max_col_clue), or_(False, False)), _if_then_else(or_(False, True), _if_then_else(False, ones_diff_cols, compare_blocks_cols), _if_then_else(False, 0, 1)), _if_then_else(le(max_row_clue, zeros_diff_rows), _if_then_else(True, 1, max_row_clue), _if_then_else(True, 2, 0))), max_col_clue)
+and_(ge(zeros_diff_cols, max_col_clue), ge(0, 2))
+and_(and_(le(zeros_diff_rows, 3), True), le(zeros_diff_rows, _if_then_else(True, -66, ones_diff_rows)))
+le(max_row_clue, _if_then_else(ge(54, compare_blocks_cols), _if_then_else(True, ones_diff_rows, ones_diff_rows), _if_then_else(False, zeros_diff_rows, max_col_clue)))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(and_(False, True), _if_then_else(False, _if_then_else(False, 0, compare_blocks_cols), 1), _if_then_else(True, compare_blocks_rows, max_row_clue)), max_row_clue)
+le(_if_then_else(or_(le(0, ones_diff_rows), and_(False, False)), _if_then_else(ge(2, ones_diff_cols), _if_then_else(True, max_col_clue, compare_blocks_cols), _if_then_else(False, 0, compare_blocks_rows)), _if_then_else(ge(3, max_col_clue), _if_then_else(True, zeros_diff_cols, max_row_clue), _if_then_else(False, ones_diff_rows, max_col_clue))), zeros_diff_cols)
+le(_if_then_else(True, zeros_diff_cols, 0), _if_then_else(True, 96, 4))
+or_(le(_if_then_else(True, max_row_clue, max_row_clue), _if_then_else(False, ones_diff_rows, compare_blocks_rows)), or_(or_(or_(False, True), ge(zeros_diff_rows, max_col_clue)), or_(or_(True, False), or_(True, True))))
+le(_if_then_else(or_(and_(False, False), le(compare_blocks_cols, 2)), _if_then_else(and_(True, True), _if_then_else(False, ones_diff_rows, compare_blocks_cols), _if_then_else(False, zeros_diff_cols, 3)), _if_then_else(and_(False, True), _if_then_else(True, compare_blocks_rows, zeros_diff_cols), _if_then_else(False, 1, ones_diff_rows))), 1)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(True, _if_then_else(True, max_col_clue, max_col_clue), _if_then_else(True, max_col_clue, max_col_clue)), -71)
+le(zeros_diff_cols, _if_then_else(False, 1, ones_diff_cols))
+ge(-71, -71)
+or_(True, True)
+le(1, _if_then_else(le(max_row_clue, max_col_clue), max_row_clue, compare_blocks_cols))
+VAL TREES:
+add(mul(ones_diff_rows, ones_diff_rows), mul(zeros_diff_cols, zeros_diff_rows))
+mul(add(mul(add(zeros_diff_cols, compare_blocks_rows), add(-98, ones_diff_rows)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, add(add(add(mul(mul(68, -86), add(zeros_diff_cols, ones_diff_rows)), mul(add(-4, ones_diff_cols), add(ones_diff_rows, -71))), add(mul(mul(zeros_diff_rows, zeros_diff_rows), add(ones_diff_cols, zeros_diff_cols)), add(add(-78, zeros_diff_rows), mul(16, ones_diff_cols)))), add(mul(add(add(zeros_diff_cols, zeros_diff_rows), mul(zeros_diff_cols, ones_diff_cols)), add(add(-53, ones_diff_rows), mul(-15, ones_diff_cols))), mul(add(add(-28, compare_blocks_cols), add(ones_diff_rows, compare_blocks_rows)), add(add(-100, -21), mul(ones_diff_rows, compare_blocks_rows)))))), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(add(mul(ones_diff_rows, zeros_diff_rows), add(compare_blocks_rows, add(-94, ones_diff_cols))), ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, add(mul(compare_blocks_rows, ones_diff_cols), mul(ones_diff_rows, zeros_diff_cols))), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(add(mul(zeros_diff_cols, ones_diff_cols), mul(zeros_diff_cols, ones_diff_rows)), zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(False, zeros_diff_cols, zeros_diff_cols), zeros_diff_cols)
+ge(-71, -71)
+or_(le(max_row_clue, -26), True)
+le(max_row_clue, _if_then_else(False, compare_blocks_cols, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(False, zeros_diff_cols, zeros_diff_cols), zeros_diff_cols)
+ge(3, 3)
+or_(le(max_row_clue, -26), True)
+le(max_row_clue, _if_then_else(False, compare_blocks_cols, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(ones_diff_rows, max_col_clue)
+le(zeros_diff_cols, _if_then_else(False, zeros_diff_cols, zeros_diff_cols))
+ge(3, compare_blocks_cols)
+or_(True, le(max_row_clue, _if_then_else(False, ones_diff_rows, compare_blocks_rows)))
+le(compare_blocks_cols, _if_then_else(False, _if_then_else(le(max_row_clue, max_col_clue), max_row_clue, max_row_clue), compare_blocks_cols))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(-71, -71)
+le(_if_then_else(False, 1, ones_diff_cols), zeros_diff_cols)
+ge(compare_blocks_cols, _if_then_else(False, compare_blocks_cols, -71))
+or_(le(_if_then_else(True, max_row_clue, max_row_clue), _if_then_else(False, ones_diff_rows, compare_blocks_rows)), True)
+le(max_row_clue, 1)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(ones_diff_rows, -71)
+le(zeros_diff_cols, _if_then_else(False, zeros_diff_cols, zeros_diff_cols))
+ge(-71, compare_blocks_cols)
+or_(True, le(max_row_clue, _if_then_else(False, ones_diff_rows, compare_blocks_rows)))
+le(compare_blocks_cols, _if_then_else(False, _if_then_else(le(max_row_clue, max_col_clue), max_row_clue, max_row_clue), compare_blocks_cols))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, max_col_clue)
+le(zeros_diff_cols, zeros_diff_cols)
+ge(compare_blocks_cols, _if_then_else(False, compare_blocks_cols, -71))
+or_(le(_if_then_else(True, max_row_clue, max_row_clue), _if_then_else(False, ones_diff_rows, compare_blocks_rows)), True)
+le(max_row_clue, _if_then_else(False, max_row_clue, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(False, zeros_diff_cols, zeros_diff_cols), zeros_diff_cols)
+ge(3, -71)
+or_(le(max_row_clue, -26), True)
+le(max_row_clue, _if_then_else(False, compare_blocks_cols, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, _if_then_else(or_(False, or_(False, True)), _if_then_else(and_(True, True), 2, 44), _if_then_else(False, 3, _if_then_else(True, 4, 0))))
+le(_if_then_else(le(9, ones_diff_rows), _if_then_else(True, -47, 4), _if_then_else(True, max_row_clue, max_row_clue)), _if_then_else(and_(True, False), _if_then_else(False, compare_blocks_cols, compare_blocks_rows), _if_then_else(True, compare_blocks_cols, zeros_diff_cols)))
+le(_if_then_else(True, compare_blocks_rows, compare_blocks_cols), _if_then_else(True, 1, compare_blocks_rows))
+or_(and_(or_(True, True), and_(False, False)), True)
+le(max_row_clue, _if_then_else(or_(False, True), _if_then_else(False, _if_then_else(False, zeros_diff_cols, 4), 3), _if_then_else(True, compare_blocks_cols, compare_blocks_cols)))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(ge(max_col_clue, 4), _if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, ones_diff_cols, -71)), -71)
+le(_if_then_else(False, max_col_clue, 1), _if_then_else(le(max_col_clue, max_col_clue), zeros_diff_cols, zeros_diff_rows))
+ge(_if_then_else(False, compare_blocks_cols, compare_blocks_cols), -71)
+or_(True, True)
+le(1, compare_blocks_cols)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(compare_blocks_cols, -71)
+le(_if_then_else(True, zeros_diff_cols, zeros_diff_cols), zeros_diff_cols)
+ge(3, _if_then_else(ge(max_col_clue, compare_blocks_rows), _if_then_else(False, 1, max_row_clue), _if_then_else(True, compare_blocks_cols, zeros_diff_rows)))
+or_(le(max_row_clue, -26), True)
+le(max_row_clue, _if_then_else(or_(ge(compare_blocks_rows, compare_blocks_cols), and_(False, True)), max_row_clue, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_row_clue, -71)
+le(zeros_diff_cols, zeros_diff_cols)
+ge(3, compare_blocks_cols)
+or_(True, False)
+le(max_row_clue, _if_then_else(False, _if_then_else(le(max_row_clue, max_col_clue), max_row_clue, max_row_clue), compare_blocks_cols))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(ones_diff_rows, ones_diff_rows)
+le(zeros_diff_cols, _if_then_else(False, max_col_clue, zeros_diff_cols))
+ge(-71, 3)
+or_(True, le(max_row_clue, _if_then_else(True, ones_diff_rows, compare_blocks_rows)))
+le(compare_blocks_cols, 4)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(ge(compare_blocks_cols, 4), _if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, 92, max_row_clue)), -71)
+le(_if_then_else(False, max_col_clue, 1), _if_then_else(False, 1, ones_diff_cols))
+ge(_if_then_else(False, compare_blocks_cols, compare_blocks_cols), 3)
+or_(True, True)
+le(1, 4)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(ge(compare_blocks_cols, 4), _if_then_else(or_(True, and_(False, False)), _if_then_else(False, _if_then_else(and_(False, and_(False, True)), 2, zeros_diff_cols), _if_then_else(ge(1, _if_then_else(True, compare_blocks_rows, compare_blocks_rows)), 1, zeros_diff_rows)), _if_then_else(False, 1, 2)), _if_then_else(True, 92, max_col_clue)), -71)
+le(_if_then_else(and_(ge(compare_blocks_rows, ones_diff_cols), or_(True, True)), max_col_clue, 1), zeros_diff_cols)
+ge(_if_then_else(and_(or_(and_(True, True), le(3, zeros_diff_cols)), ge(_if_then_else(True, compare_blocks_cols, 2), _if_then_else(True, max_col_clue, zeros_diff_cols))), _if_then_else(or_(le(zeros_diff_rows, compare_blocks_rows), and_(False, False)), _if_then_else(ge(compare_blocks_cols, max_col_clue), _if_then_else(False, max_col_clue, ones_diff_cols), _if_then_else(True, 0, zeros_diff_rows)), _if_then_else(ge(3, ones_diff_cols), _if_then_else(False, 2, ones_diff_cols), _if_then_else(True, zeros_diff_rows, 1))), _if_then_else(ge(_if_then_else(True, 92, zeros_diff_rows), _if_then_else(True, compare_blocks_cols, zeros_diff_cols)), _if_then_else(le(compare_blocks_cols, 4), _if_then_else(True, 0, max_col_clue), _if_then_else(False, ones_diff_cols, compare_blocks_cols)), _if_then_else(or_(True, False), _if_then_else(True, 3, -45), _if_then_else(False, 0, compare_blocks_cols)))), -71)
+or_(or_(and_(True, False), ge(compare_blocks_rows, zeros_diff_rows)), True)
+le(_if_then_else(and_(or_(False, True), and_(ge(max_row_clue, _if_then_else(True, compare_blocks_cols, 2)), le(1, ones_diff_cols))), max_row_clue, max_row_clue), compare_blocks_cols)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_row_clue, 4)
+le(zeros_diff_cols, max_col_clue)
+ge(-71, 3)
+or_(True, True)
+le(max_row_clue, 4)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(ge(compare_blocks_cols, ones_diff_rows), _if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, ones_diff_cols, -71)), -71)
+le(_if_then_else(False, max_col_clue, 1), _if_then_else(True, zeros_diff_cols, zeros_diff_rows))
+ge(_if_then_else(False, compare_blocks_cols, compare_blocks_cols), 3)
+or_(True, True)
+le(1, compare_blocks_cols)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(True, _if_then_else(True, max_col_clue, max_col_clue), _if_then_else(True, max_col_clue, max_col_clue)), -71)
+le(zeros_diff_cols, _if_then_else(False, 1, ones_diff_cols))
+ge(3, -71)
+or_(True, True)
+le(1, _if_then_else(le(max_row_clue, max_col_clue), max_row_clue, compare_blocks_cols))
+VAL TREES:
+add(mul(ones_diff_rows, ones_diff_rows), mul(zeros_diff_cols, zeros_diff_rows))
+mul(add(mul(add(zeros_diff_cols, compare_blocks_rows), add(-98, ones_diff_rows)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, add(add(add(mul(mul(68, -86), add(zeros_diff_cols, ones_diff_rows)), mul(add(-4, ones_diff_cols), add(ones_diff_rows, -71))), add(mul(mul(zeros_diff_rows, zeros_diff_rows), add(ones_diff_cols, zeros_diff_cols)), add(add(-78, zeros_diff_rows), mul(16, ones_diff_cols)))), add(mul(add(add(zeros_diff_cols, zeros_diff_rows), mul(zeros_diff_cols, ones_diff_cols)), add(add(-53, ones_diff_rows), mul(-15, ones_diff_cols))), mul(add(add(-28, compare_blocks_cols), add(ones_diff_rows, compare_blocks_rows)), add(add(-100, -21), mul(ones_diff_rows, compare_blocks_rows)))))), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(add(mul(ones_diff_rows, zeros_diff_rows), add(compare_blocks_rows, add(-94, ones_diff_cols))), ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, add(mul(compare_blocks_rows, ones_diff_cols), mul(ones_diff_rows, zeros_diff_cols))), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(add(mul(zeros_diff_cols, ones_diff_cols), mul(zeros_diff_cols, ones_diff_rows)), zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(False, zeros_diff_cols, zeros_diff_cols), zeros_diff_cols)
+ge(-71, -71)
+or_(le(max_row_clue, -26), True)
+le(max_row_clue, _if_then_else(False, compare_blocks_cols, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(ge(compare_blocks_cols, 4), _if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, ones_diff_cols, -71)), max_col_clue)
+le(zeros_diff_cols, zeros_diff_cols)
+ge(compare_blocks_cols, _if_then_else(False, compare_blocks_cols, -71))
+or_(le(_if_then_else(True, max_row_clue, max_row_clue), _if_then_else(False, ones_diff_rows, compare_blocks_rows)), True)
+le(max_row_clue, _if_then_else(False, max_row_clue, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(False, max_col_clue, 1), _if_then_else(True, zeros_diff_cols, zeros_diff_rows))
+ge(_if_then_else(False, compare_blocks_cols, compare_blocks_cols), -71)
+or_(True, True)
+le(1, compare_blocks_cols)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(False, zeros_diff_cols, zeros_diff_cols), zeros_diff_cols)
+ge(3, -71)
+or_(True, True)
+le(max_row_clue, 4)
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(_if_then_else(ge(compare_blocks_cols, 4), _if_then_else(True, max_row_clue, max_col_clue), _if_then_else(True, 92, max_row_clue)), -71)
+le(_if_then_else(False, max_col_clue, 1), _if_then_else(False, 1, ones_diff_cols))
+ge(_if_then_else(False, compare_blocks_cols, compare_blocks_cols), 3)
+or_(le(max_row_clue, -26), True)
+le(1, _if_then_else(False, compare_blocks_cols, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(max_col_clue, -71)
+le(_if_then_else(False, zeros_diff_cols, zeros_diff_cols), zeros_diff_cols)
+ge(3, -71)
+or_(le(max_row_clue, -26), True)
+le(max_row_clue, _if_then_else(False, compare_blocks_cols, max_row_clue))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+COND TREES:
+ge(ones_diff_rows, -71)
+le(_if_then_else(False, zeros_diff_cols, compare_blocks_cols), _if_then_else(False, zeros_diff_cols, zeros_diff_cols))
+ge(3, 3)
+or_(True, le(max_row_clue, -26))
+le(compare_blocks_cols, _if_then_else(False, max_row_clue, compare_blocks_cols))
+VAL TREES:
+add(add(ones_diff_rows, ones_diff_rows), add(56, zeros_diff_cols))
+mul(add(mul(mul(compare_blocks_rows, compare_blocks_cols), mul(ones_diff_cols, -86)), add(mul(ones_diff_cols, ones_diff_cols), mul(ones_diff_rows, -46))), add(mul(add(zeros_diff_rows, 51), mul(compare_blocks_rows, ones_diff_rows)), add(mul(9, ones_diff_cols), mul(zeros_diff_rows, zeros_diff_cols))))
+mul(add(zeros_diff_rows, compare_blocks_rows), add(mul(zeros_diff_rows, mul(add(compare_blocks_cols, ones_diff_cols), mul(ones_diff_cols, compare_blocks_rows))), compare_blocks_rows))
+mul(mul(compare_blocks_cols, 61), add(compare_blocks_rows, add(zeros_diff_cols, ones_diff_rows)))
+mul(mul(compare_blocks_cols, mul(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_cols, zeros_diff_cols), add(ones_diff_cols, zeros_diff_cols)))
+mul(add(zeros_diff_cols, zeros_diff_cols), add(53, compare_blocks_cols))
+
+
+INFO:root:hof: COND TREES:
+ge(_if_then_else(and_(and_(or_(True, True), False), False), compare_blocks_cols, -19), _if_then_else(False, -64, ones_diff_rows))
+or_(or_(and_(False, True), False), ge(_if_then_else(False, compare_blocks_rows, 2), _if_then_else(True, 2, -87)))
+and_(or_(and_(le(compare_blocks_cols, compare_blocks_cols), le(3, max_row_clue)), le(_if_then_else(True, ones_diff_rows, 4), _if_then_else(True, -90, zeros_diff_cols))), le(_if_then_else(and_(True, False), _if_then_else(False, max_row_clue, 2), _if_then_else(False, max_col_clue, 4)), _if_then_else(or_(False, True), _if_then_else(True, zeros_diff_cols, max_col_clue), _if_then_else(True, max_col_clue, max_col_clue))))
+or_(ge(4, compare_blocks_cols), or_(True, True))
+or_(le(_if_then_else(False, zeros_diff_rows, zeros_diff_cols), _if_then_else(False, max_col_clue, 2)), or_(le(zeros_diff_cols, max_col_clue), le(3, ones_diff_cols)))
+VAL TREES:
+mul(add(mul(add(53, compare_blocks_cols), add(compare_blocks_rows, -61)), mul(add(ones_diff_rows, compare_blocks_cols), mul(compare_blocks_rows, zeros_diff_rows))), add(add(mul(11, zeros_diff_rows), add(compare_blocks_rows, ones_diff_rows)), add(add(compare_blocks_rows, compare_blocks_cols), add(ones_diff_rows, compare_blocks_rows))))
+add(mul(mul(mul(zeros_diff_cols, compare_blocks_cols), add(zeros_diff_cols, zeros_diff_cols)), mul(mul(zeros_diff_rows, ones_diff_rows), mul(ones_diff_rows, compare_blocks_cols))), add(add(add(ones_diff_cols, ones_diff_cols), add(compare_blocks_cols, zeros_diff_cols)), add(add(zeros_diff_cols, compare_blocks_cols), mul(ones_diff_cols, -38))))
+mul(add(add(mul(ones_diff_cols, compare_blocks_cols), add(zeros_diff_cols, ones_diff_rows)), mul(mul(-94, zeros_diff_cols), mul(0, compare_blocks_rows))), mul(add(mul(zeros_diff_rows, compare_blocks_rows), mul(zeros_diff_cols, zeros_diff_rows)), add(mul(zeros_diff_cols, compare_blocks_cols), add(-67, compare_blocks_rows))))
+add(mul(93, compare_blocks_rows), add(ones_diff_rows, compare_blocks_rows))
+mul(add(add(add(zeros_diff_rows, -20), add(zeros_diff_rows, compare_blocks_cols)), mul(mul(-1, zeros_diff_rows), mul(ones_diff_cols, compare_blocks_cols))), mul(add(mul(zeros_diff_rows, zeros_diff_cols), add(-74, compare_blocks_cols)), mul(mul(compare_blocks_cols, compare_blocks_rows), mul(zeros_diff_cols, compare_blocks_rows))))
+add(add(add(zeros_diff_cols, compare_blocks_rows), zeros_diff_cols), add(-14, add(add(compare_blocks_cols, zeros_diff_cols), ones_diff_cols)))
+
+
+INFO:root:stats: {'fitness': <deap.tools.support.Statistics object at 0x7fe1b2e56908>}
+

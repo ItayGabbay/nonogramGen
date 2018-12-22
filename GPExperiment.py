@@ -134,7 +134,7 @@ def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: 
     # toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     # toolbox.register("select", tools.selTournament, tournsize=5)
-    toolbox.register("select", tools.selDoubleTournament, fitness_size=3, parsimony_size=1.5, fitness_first=True)
+    toolbox.register("select", tools.selDoubleTournament, fitness_size=6, parsimony_size=1.7, fitness_first=True)
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
                      cond_pset=cond_pset_arg, val_pset=val_pset_arg)
@@ -223,8 +223,8 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     whites_in_solution = (NUM_COLS * NUM_ROWS) - max_sum
     res = points_correct_box * np.sum(corrects) / max_sum - points_incorrect_box * np.sum(wrongs) / whites_in_solution
 
-    if max_sum == np.sum(corrects) and np.sum(wrongs) == 0:
-        print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
+    # if max_sum == np.sum(corrects) and np.sum(wrongs) == 0:
+    #     print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
     return res if res >= 0 else 0
 
 
@@ -252,7 +252,7 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
             round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4))
     if print_individual_fitness:
         print("Fitness:", results, round(np.mean(results), 4))
-    print('-------------------')
+    # print('-------------------')
     return np.mean(results),
 
 
@@ -323,6 +323,31 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
 #     creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
 #     creator.create("Individual", dict, fitness=creator.FitnessMax)
 
+def num_of_max(population):
+    # print('pop:', population)
+    max_val = np.max(population)
+    return len(list(filter(lambda i: i == max_val, population)))
+
+
+def num_of_min(population):
+    min_val = np.min(population)
+    return len(list(filter(lambda i: i == min_val, population)))
+
+
+def most_common(population):
+    d = dict()
+    for i in population:
+        if i in d:
+            d[i] = d[i] + 1
+        else:
+            d[i] = 1
+    m = 0
+    res = 0
+    for fit, count in d.items():
+        if count > m:
+            res = fit
+    return res
+
 
 class GPExperiment(object):
     def __init__(self) -> None:
@@ -335,21 +360,29 @@ class GPExperiment(object):
         self.hof = tools.HallOfFame(hof_size)
 
         stats_fit = tools.Statistics(lambda ind: ind.fitness.values)
-        stats_size = tools.Statistics(len)
-        mstats = tools.MultiStatistics(fitness=stats_fit, size=stats_size)
-        mstats.register("avg", np.mean)
-        mstats.register("std", np.std)
-        mstats.register("min", np.min)
-        mstats.register("max", np.max)
-        mstats.register("size", len)
+        # stats_size = tools.Statistics(len)
+        mstats = tools.MultiStatistics(fitness=stats_fit,)
+        # mstats = tools.MultiStatistics(fitness=stats_fit, size=stats_size)
+        mstats.register("avg |", np.mean)
+        mstats.register("std |", np.std)
+        mstats.register("min |", np.min)
+        mstats.register("max |", np.max)
+        mstats.register("size |", len)
+        mstats.register("num max |", num_of_max)
+        mstats.register("num min |", num_of_min)
+        mstats.register("most common |", most_common)
         self.stats = mstats
 
     def start_experiment(self):
         nonogram_names = [unsolved.title for unsolved, solved in train_nonograms]
         print('running experiment on', train_size, 'nonograms. names:', nonogram_names)
-        max_possible_fitness = _calc_max_possible_fitness()
+        # max_possible_fitness = _calc_max_possible_fitness()
 
         start = time.time()
+        # mu = len(self.pop)
+        # lambda_ = len(self.pop)
+        # pop, log = algorithms.eaMuPlusLambda(self.pop, self.toolbox, mu, lambda_, prob_crossover_global, prob_mutate_global, num_gen,
+        #                                      halloffame=self.hof, verbose=True, stats=self.stats)
         pop, log = algorithms.eaSimple(self.pop, self.toolbox, prob_crossover_global, prob_mutate_global, num_gen,
                                        halloffame=self.hof, verbose=True, stats=self.stats)
         end = time.time()
