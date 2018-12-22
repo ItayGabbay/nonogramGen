@@ -3,7 +3,7 @@ NUM_ROWS = 20
 # NUM_COLS = 20
 NUM_COLS = 20
 empty_in_split = '\xa0'
-
+convert_to_sat = True
 pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
@@ -27,7 +27,11 @@ prob_mutate_individual_val = 0.7
 points_correct_box = 5
 points_incorrect_box = 0
 # points_incorrect_box = -2
+<<<<<<< HEAD
 pop_size = 150
+=======
+pop_size = 400
+>>>>>>> 11d90d40a89fc4d004f359dead21dbbef7dbfae2
 hof_size = 1
 # num_gen = 40
 num_gen = 10
