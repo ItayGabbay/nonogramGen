@@ -10,7 +10,7 @@ pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
 should_run_in_parallel = True
 print_individual_fitness = False
 
-NUM_COND_TREES = 5
+NUM_COND_TREES = 10
 NUM_VAL_TREES = NUM_COND_TREES + 1
 prob_crossover_global = 0.7  # global probability for cx
 prob_crossover_individual_cond = 0.8  # probability to cx a specific cond tree in an individual
@@ -20,10 +20,10 @@ prob_mutate_individual_cond = 0.7
 prob_mutate_individual_val = 0.7
 
 points_correct_box = 5
-points_incorrect_box = 0
+points_incorrect_box = 1
 # points_incorrect_box = -2
-pop_size = 400
+pop_size = 300
 hof_size = 1
 # num_gen = 40
 num_gen = 10
-train_size = 3
+train_size = 10

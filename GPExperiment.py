@@ -219,10 +219,12 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
     maximum = mapper_func(lambda s, c: s and c, mat_solved, mat_solved)
     wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
-    res = points_correct_box * np.sum(corrects) - points_incorrect_box * np.sum(wrongs)
+    res = points_correct_box * np.sum(corrects) / np.sum(maximum) - points_incorrect_box * np.sum(wrongs)
 
-    if np.sum(maximum) == np.sum(corrects) and np.sum(wrongs) == 0:
-        print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
+    # if np.sum(maximum) == np.sum(corrects) and np.sum(wrongs) == 0:
+        # res = res * 10
+        # print("Solved the", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects) / np.sum(maximum))
+        # print("--" * 40)
     return res if res >= 0 else 0
 
 
@@ -239,6 +241,7 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     compiled_values = [compile_valtree(val_tree) for val_tree in individual.value_trees]
     # compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
     results = []
+    num_of_solved = 0
     # run with Bomb only
     # nonogram_solved = utils.load_solved_bomb_nonogram_from_file()
     # nonogram_unsolved = utils.load_unsolved_bomb_nonogram_from_file()
@@ -246,10 +249,14 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
 
     # run on all solved nonograms
     for nonogram_unsolved, nonogram_solved in train_nonograms:
-        results.append(
-            round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4))
+        result = round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4)
+        results.append(result)
+        if result == 5:
+            num_of_solved += 1
     if print_individual_fitness:
         print("Fitness:", results, round(np.mean(results), 4))
+    if num_of_solved > 0:
+        print("Solved:", num_of_solved, "Nonograms")
     return np.mean(results),
 
 
