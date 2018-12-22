@@ -219,12 +219,12 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
     maximum = mapper_func(lambda s, c: s and c, mat_solved, mat_solved)
     wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
-    res = points_correct_box * np.sum(corrects) / np.sum(maximum) - points_incorrect_box * np.sum(wrongs)
+    max_sum = np.sum(maximum)
+    whites_in_solution = (NUM_COLS * NUM_ROWS) - max_sum
+    res = points_correct_box * np.sum(corrects) / max_sum - points_incorrect_box * np.sum(wrongs) / whites_in_solution
 
-    # if np.sum(maximum) == np.sum(corrects) and np.sum(wrongs) == 0:
-        # res = res * 10
-        # print("Solved the", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects) / np.sum(maximum))
-        # print("--" * 40)
+    # if max_sum == np.sum(corrects) and np.sum(wrongs) == 0:
+    #     print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
     return res if res >= 0 else 0
 
 
@@ -255,6 +255,7 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
             num_of_solved += 1
     if print_individual_fitness:
         print("Fitness:", results, round(np.mean(results), 4))
+
     if num_of_solved > 0:
         print("Solved:", num_of_solved, "Nonograms")
     return np.mean(results),
@@ -313,8 +314,9 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
     # Here need to compare to the solution!
     # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
     # TODO switched to sat!
-    # fitness = selected_step.convert_to_sat()
-    fitness = _compare_to_solution(selected_step, nonogram_solved)
+    fitness_by_sat = selected_step.convert_to_sat()
+    fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
+    fitness = fitness_by_compare * fitness_by_sat
     # print('fitness:', fitness)
     return fitness
 
