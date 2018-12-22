@@ -97,6 +97,8 @@ from GPExperiment import GPExperiment
 import logging
 import time
 
+from plotter import Plotter
+
 
 def main():
     logging.basicConfig(filename='log/log_gp' + str(time.time()) + '.log',level=logging.DEBUG)
@@ -116,6 +118,10 @@ def main():
     logging.info('hof: %s\n', utils.individual_lst_to_str(hof))
 
     logging.info('stats: %s\n', stats)
+
+    plot = Plotter(log)
+    plot.plot_fitness_values()
+    plot.plot_sizes()
 
 
 if __name__ == '__main__':

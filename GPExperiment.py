@@ -352,7 +352,7 @@ def most_common(population):
     for fit, count in d.items():
         if count > m:
             res = fit
-    return res
+    return res[0]
 
 
 class GPExperiment(object):
@@ -369,14 +369,15 @@ class GPExperiment(object):
         # stats_size = tools.Statistics(len)
         mstats = tools.MultiStatistics(fitness=stats_fit,)
         # mstats = tools.MultiStatistics(fitness=stats_fit, size=stats_size)
-        mstats.register("avg |", np.mean)
-        mstats.register("std |", np.std)
-        mstats.register("min |", np.min)
-        mstats.register("max |", np.max)
-        mstats.register("size |", len)
-        mstats.register("num max |", num_of_max)
-        mstats.register("num min |", num_of_min)
-        mstats.register("most common |", most_common)
+        mstats.register("avg", np.mean)
+        mstats.register("median", np.median)
+        mstats.register("std", np.std)
+        mstats.register("min", np.min)
+        mstats.register("max", np.max)
+        mstats.register("size", len)
+        mstats.register("num max", num_of_max)
+        mstats.register("num min", num_of_min)
+        mstats.register("most common", most_common)
         self.stats = mstats
 
     def start_experiment(self):

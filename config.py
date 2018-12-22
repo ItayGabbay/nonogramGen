@@ -1,3 +1,4 @@
+import time
 # NUM_ROWS = 20
 NUM_ROWS = 5
 # NUM_COLS = 20
@@ -6,6 +7,9 @@ empty_in_split = '\xa0'
 pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
+fitness_plot_path = 'plots/fitness' + str(time.time()) + '.pkl'
+nums_plot_path = 'plots/nums' + str(time.time()) + '.pkl'
+
 convert_to_sat = True
 should_run_in_parallel = True
 print_individual_fitness = False
