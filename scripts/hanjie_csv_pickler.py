@@ -1,7 +1,8 @@
 import csv
-from config import NUM_COLS, NUM_ROWS, pickle_unsolved_file_path
+from config import NUM_COLS, NUM_ROWS, pickle_unsolved_file_path, unsolved_nonograms_archive_name
 from nonogram import Nonogram
 import pickle
+from klepto.archives import dir_archive
 
 csv_path = '../data/hanjie.csv'
 
@@ -17,5 +18,9 @@ with open(csv_path) as csvfile:
     for nono in nonograms:
         print(nono)
 
-with open('../' + pickle_unsolved_file_path, 'wb') as f:
-    pickle.dump(nonograms, f)
+d = {'nonograms': nonograms}
+archive = dir_archive('../' + unsolved_nonograms_archive_name, d, serialized=True)
+archive.dump()
+
+# with open('../' + pickle_unsolved_file_path, 'wb') as f:
+#     pickle.dump(nonograms, f)

@@ -2,10 +2,11 @@ import pickle
 import random
 
 import numpy as np
-from config import pickle_unsolved_file_path, pickle_solved_file_path, train_size
+from config import pickle_unsolved_file_path, pickle_solved_file_path, train_size, unsolved_nonograms_archive_name
 from typing import List
-from config import pickle_row_options_path
+from config import all_rows_archive_name
 from individual import DoubleTreeBasedIndividual
+from klepto.archives import dir_archive
 
 
 def copy_and_transpose_matrix(matrix):
@@ -20,19 +21,29 @@ def _load_pickled(path):
         return pickle.load(f)
 
 
-def load_unsolved_nonograms_from_file(path: str = pickle_unsolved_file_path):
-    return _load_pickled(path)
+# def load_unsolved_nonograms_from_file(path: str = pickle_unsolved_file_path):
+#     return _load_pickled(path)
+
+def load_unsolved_nonograms_from_file(path: str = unsolved_nonograms_archive_name):
+    archive = dir_archive(path, {}, serialized=True)
+    archive.load()
+    return archive['nonograms']
 
 
 def load_solved_nonograms_from_file(path: str = pickle_solved_file_path):
     return _load_pickled(path)
 
 
-def load_all_row_opts(path=pickle_row_options_path):
-    return _load_pickled(path)
+# def load_all_row_opts(path=pickle_row_options_path):
+#     return _load_pickled(path)
+
+def load_all_row_opts(path=all_rows_archive_name):
+    archive = dir_archive(path, {}, serialized=True)
+    archive.load()
+    return archive
 
 
-def load_train_and_test_sets(solved_path=pickle_solved_file_path, unsolved_path=pickle_unsolved_file_path,
+def load_train_and_test_sets(solved_path=pickle_solved_file_path, unsolved_path=unsolved_nonograms_archive_name,
                              train_set_size=train_size):
     # solved_nonograms = load_solved_nonograms_from_file(solved_path)
     unsolved_nonograms = load_unsolved_nonograms_from_file(unsolved_path)

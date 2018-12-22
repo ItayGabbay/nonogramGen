@@ -1,12 +1,16 @@
 # NUM_ROWS = 20
-NUM_ROWS = 20
+NUM_ROWS = 5
 # NUM_COLS = 20
-NUM_COLS = 20
+NUM_COLS = 5
 empty_in_split = '\xa0'
 
 pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
+
+all_rows_archive_name = 'data/all_row_opts_archive_%dx%d' % (NUM_ROWS, NUM_COLS)
+unsolved_nonograms_archive_name = 'data/unsolved_nonograms_archive_%dx%d' % (NUM_ROWS, NUM_COLS)
+
 should_run_in_parallel = True
 print_individual_fitness = True
 convert_to_sat = True

@@ -1,8 +1,9 @@
 from itertools import chain, combinations
-from config import NUM_ROWS, pickle_row_options_path
+from config import NUM_ROWS, pickle_row_options_path, all_rows_archive_name
 import numpy as np
 import pickle
 from typing import List, Dict
+from klepto.archives import dir_archive
 
 
 def get_all_idx_options(line_len=NUM_ROWS):
@@ -56,6 +57,10 @@ for opt in options:
     print('found clues for', opt, clues)
     d = add_or_append_to_dict(d, opt, str(clues))
 
-print('result:', d)
-with open('../' + pickle_row_options_path, 'wb') as f:
-    pickle.dump(d, f)
+archive = dir_archive('../' + all_rows_archive_name, d, serialized=True)
+# save
+archive.dump()
+del archive
+
+# with open('../' + pickle_row_options_path, 'wb') as f:
+#     pickle.dump(d, f)
