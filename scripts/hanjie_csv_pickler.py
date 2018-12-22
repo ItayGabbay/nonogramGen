@@ -4,7 +4,7 @@ from nonogram import Nonogram
 import pickle
 from klepto.archives import dir_archive
 
-csv_path = '../data/hanjie.csv'
+csv_path = 'data/hanjie.csv'
 
 save = True  # True -> save to file, False -> load file
 
@@ -15,11 +15,15 @@ with open(csv_path) as csvfile:
     filtered = [{'title': row[2], 'number': int(row[3]), 'solution': row[4], 'rows':row[6], 'cols': row[7]}
                 for i, row in enumerate(readCSV) if i > 0 and int(row[0]) == NUM_COLS and int(row[1]) == NUM_ROWS]
     nonograms = [Nonogram(d['rows'], d['cols'], d['title'], d['number'], d['solution']) for d in filtered]
-    d = {n.title: n for n in nonograms}
+    print('made', len(nonograms), 'nonograms')
+    d = {n.title[0]: n for n in nonograms}
+    print('created dict with', len(d.keys()), 'entries')
 
 # d = {'nonograms': nonograms}
 archive = dir_archive(unsolved_nonograms_archive_name, d, serialized=True)
+print('created archive')
 archive.dump()
+print('done')
 
 # with open('../' + pickle_unsolved_file_path, 'wb') as f:
 #     pickle.dump(nonograms, f)
