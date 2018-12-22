@@ -241,6 +241,7 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     compiled_values = [compile_valtree(val_tree) for val_tree in individual.value_trees]
     # compiled_values = [compile_valtree(val_tree) for val_tree in individual["VALUE_TREES"]]
     results = []
+    num_of_solved = 0
     # run with Bomb only
     # nonogram_solved = utils.load_solved_bomb_nonogram_from_file()
     # nonogram_unsolved = utils.load_unsolved_bomb_nonogram_from_file()
@@ -248,11 +249,16 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
 
     # run on all solved nonograms
     for nonogram_unsolved, nonogram_solved in train_nonograms:
-        results.append(
-            round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4))
+        result = round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4)
+        results.append(result)
+        if result == 5:
+            num_of_solved += 1
     if print_individual_fitness:
         print("Fitness:", results, round(np.mean(results), 4))
     # print('-------------------')
+
+    # if num_of_solved > 0:
+    #     print("Solved:", num_of_solved, "Nonograms")
     return np.mean(results),
 
 
