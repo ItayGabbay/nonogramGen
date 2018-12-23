@@ -69,7 +69,7 @@ val_pset.renameArguments(ARG5='compare_blocks_cols')
 val_pset.addEphemeralConstant("rand101_1", lambda : np.random.randint(-100, 100))
 
 # creator stuff:
-creator.create("FitnessMax", base.Fitness, weights=tuple(1.0 for i in range(train_size)))
+creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
 creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
 creator.create("Individual", DoubleTreeBasedIndividual, fitness=creator.FitnessMax)
@@ -135,8 +135,8 @@ def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: 
     toolbox.register("individual", _init_individual, toolbox.cond_tree, toolbox.value_tree)
     # toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    toolbox.register("select", tools.selTournament, tournsize=2)
-    # toolbox.register("select", tools.selDoubleTournament, fitness_size=3, parsimony_size=1.5, fitness_first=True)
+    # toolbox.register("select", tools.selTournament, tournsize=2)
+    toolbox.register("select", tools.selDoubleTournament, fitness_size=2, parsimony_size=1.5, fitness_first=True)
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
                      cond_pset=cond_pset_arg, val_pset=val_pset_arg)
@@ -238,6 +238,11 @@ def _calc_max_possible_fitness():
     return res
 
 
+def _calc_distance(fitnesses, to_compare_to=tuple(0 for _ in range(train_size))):
+    pows = [fitnesses[i] - to_compare_to[i] for i in range(len(fitnesses))]
+    return np.sqrt(np.sum(pows))
+
+
 def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndividual):
     compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual.cond_trees]
     # compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
@@ -262,7 +267,8 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
 
     # if num_of_solved > 0:
     #     print("Solved:", num_of_solved, "Nonograms")
-    return tuple(results)
+    distance = _calc_distance(results)
+    return distance,
 
 
 def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram,
@@ -331,26 +337,14 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
 #     creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
 #     creator.create("Individual", dict, fitness=creator.FitnessMax)
 
-def num_of_max_by_mean(population):
-    means = [np.mean(i) for i in population]
-    max_val = np.max(means)
-    return len(list(filter(lambda i: i == max_val, means)))
-
-
-def num_of_max_by_in(population):
+def num_of_max(population):
     max_val = np.max(population)
-    return len(list(filter(lambda i: max_val in i, population)))
+    return len(list(filter(lambda i: i == max_val, population)))
 
 
-def num_of_min_by_mean(population):
-    means = [np.mean(i) for i in population]
-    min_val = np.min(means)
-    return len(list(filter(lambda i: i == min_val, means)))
-
-
-def max_by_mean(population):
-    means = [np.mean(i) for i in population]
-    return np.max(means)
+def num_of_min(population):
+    min_val = np.min(population)
+    return len(list(filter(lambda i: i == min_val, population)))
 
 
 def most_common(population):
@@ -367,7 +361,7 @@ def most_common(population):
             res = fit
     if m == 1:
         return None
-    return res
+    return res[0]
 
 
 class GPExperiment(object):
@@ -389,11 +383,9 @@ class GPExperiment(object):
         mstats.register("std", np.std)
         mstats.register("min", np.min)
         mstats.register("max", np.max)
-        mstats.register("max mean", max_by_mean)
         mstats.register("size", len)
-        mstats.register("num max mean", num_of_max_by_mean)
-        mstats.register("num min mean", num_of_min_by_mean)
-        mstats.register("num max in", num_of_max_by_mean)
+        mstats.register("num max", num_of_max)
+        mstats.register("num min", num_of_min)
         mstats.register("most common", most_common)
         self.stats = mstats
 
