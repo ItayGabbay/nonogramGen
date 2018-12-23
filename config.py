@@ -19,7 +19,7 @@ print_individual_fitness = False
 
 plot_fitness_stats = True
 plot_min_max_stats = True
-plot_d3_fitness = True
+plot_d3_fitness = False
 plot_fitness_distribution_2d = True
 
 NUM_COND_TREES = 5
