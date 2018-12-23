@@ -10,6 +10,8 @@ from deap import base
 from deap import creator
 from deap import gp
 from deap import tools
+
+from algorithms import eaSimple_new
 from config import *
 from evaluator import *
 from heuristics import *
@@ -133,8 +135,8 @@ def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: 
     toolbox.register("individual", _init_individual, toolbox.cond_tree, toolbox.value_tree)
     # toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    # toolbox.register("select", tools.selTournament, tournsize=5)
-    toolbox.register("select", tools.selDoubleTournament, fitness_size=6, parsimony_size=1.7, fitness_first=True)
+    toolbox.register("select", tools.selTournament, tournsize=5)
+    # toolbox.register("select", tools.selDoubleTournament, fitness_size=6, parsimony_size=1.7, fitness_first=True)
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
                      cond_pset=cond_pset_arg, val_pset=val_pset_arg)
@@ -203,7 +205,8 @@ def _mutate(individual: DoubleTreeBasedIndividual, cond_expr, val_expr, cond_pse
         # trees = individual['VALUE_TREES']
     for i, tree in enumerate(trees):
         if random() <= prob:
-            tree, = gp.mutUniform(tree, expr, pset)
+            # tree, = gp.mutUniform(tree, expr, pset)
+            tree, = gp.mutInsert(tree, pset)
             trees[i] = tree
     return individual,
 
@@ -314,7 +317,6 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
         next_steps = generate_next_steps_blocks(selected_step)
     # Here need to compare to the solution!
     # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
-    # TODO switched to sat!
     fitness_by_sat = selected_step.convert_to_sat()
     fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
     fitness = fitness_by_compare * fitness_by_sat
