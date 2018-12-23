@@ -8,10 +8,11 @@ empty_in_split = '\xa0'
 pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
-fitness_plot_path = 'plots/fitness' + str(time.time()) + '.pkl'
-nums_plot_path = 'plots/nums' + str(time.time()) + '.pkl'
-plot_fitness_distr_path = 'plots/fitness_distr' + str(time.time()) + '.pkl'
-plot_population_3d = 'plots/population_3d' + str(time.time()) + '.pkl'
+curr_time = str(time.time())
+fitness_plot_path = 'plots/' + curr_time + '/fitness.pkl'
+nums_plot_path = 'plots/' + curr_time + '/nums.pkl'
+plot_fitness_distr_path = 'plots/' + curr_time + '/fitness_distr.pkl'
+plot_population_3d = 'plots/population_3d' + curr_time + '.pkl'
 
 convert_to_sat = True
 should_run_in_parallel = True
@@ -19,7 +20,7 @@ print_individual_fitness = False
 
 plot_fitness_stats = True
 plot_min_max_stats = True
-plot_d3_fitness = True
+plot_d3_fitness = False
 plot_fitness_distribution_2d = True
 
 NUM_COND_TREES = 5
@@ -37,5 +38,5 @@ points_incorrect_box = 0
 pop_size = 100
 hof_size = 1
 # num_gen = 40
-num_gen = 40
+num_gen = 10
 train_size = 3
