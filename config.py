@@ -1,4 +1,5 @@
 import time
+
 # NUM_ROWS = 20
 NUM_ROWS = 5
 # NUM_COLS = 20
@@ -14,6 +15,10 @@ convert_to_sat = True
 should_run_in_parallel = True
 print_individual_fitness = False
 
+plot_fitness_stats = False
+plot_min_max_stats = False
+plot_d3_fitness = True
+
 NUM_COND_TREES = 5
 NUM_VAL_TREES = NUM_COND_TREES + 1
 prob_crossover_global = 0.8  # global probability for cx
@@ -26,8 +31,8 @@ prob_mutate_individual_val = 1
 points_correct_box = 5
 points_incorrect_box = 0
 # points_incorrect_box = -2
-pop_size = 40
+pop_size = 100
 hof_size = 1
 # num_gen = 40
-num_gen = 60
-train_size = 4
+num_gen = 30
+train_size = 3
