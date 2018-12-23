@@ -89,10 +89,9 @@ class Plotter(object):
 
     def plot_min_max_counts(self):
         gen = list(range(self.num_gen))
-        plt.plot(gen, self.res_dict['num max mean'])
-        plt.plot(gen, self.res_dict['num min mean'])
-        plt.plot(gen, self.res_dict['num max in'])
-        plt.legend(['NUM MAX by mean', 'NUM MIN by mean', 'NUM MAX by mean'], loc='upper left')
+        plt.plot(gen, self.res_dict['num max'])
+        plt.plot(gen, self.res_dict['num min'])
+        plt.legend(['NUM MAX', 'NUM MIN'], loc='upper left')
 
         graph = plt.show(block=True)
 
