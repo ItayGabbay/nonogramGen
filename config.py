@@ -15,9 +15,10 @@ convert_to_sat = True
 should_run_in_parallel = True
 print_individual_fitness = False
 
-plot_fitness_stats = True
-plot_min_max_stats = True
+plot_fitness_stats = False
+plot_min_max_stats = False
 plot_d3_fitness = False
+plot_fitness_distribution_2d = True
 
 NUM_COND_TREES = 5
 NUM_VAL_TREES = NUM_COND_TREES + 1
@@ -34,5 +35,5 @@ points_incorrect_box = 0
 pop_size = 100
 hof_size = 1
 # num_gen = 40
-num_gen = 20
+num_gen = 40
 train_size = 3

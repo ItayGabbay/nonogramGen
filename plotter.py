@@ -22,7 +22,7 @@ class Plotter(object):
         self.num_gen = len(fitness_chapter)
         self.population_fitness = fitnesses
 
-    def plot_population_tuples(self):
+    def plot_population_tuples_3d(self):
         count_dict = dict()
         for fit in self.population_fitness:
             if fit not in count_dict:
@@ -47,7 +47,27 @@ class Plotter(object):
         ax.scatter(np.array(fit1), np.array(fit2), np.array(fit3), c=np.array(counts))
         plt.show(block=True)
 
-    def plot_fitness_values(self):
+    def plot_fitness_distribution_2d(self):
+        count_dict = dict()
+        for fit in self.population_fitness:
+            if fit not in count_dict:
+                count_dict[fit] = 1
+            else:
+                count_dict[fit] = count_dict[fit] + 1
+        fit_lst = []
+        counts = []
+
+        for fit, count in count_dict.items():
+            fit_lst.append(fit)
+            counts.append(count)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.scatter(np.array(fit_lst), np.array(counts))
+        plt.xlabel('fitness')
+        plt.ylabel('count')
+        plt.show(block=True)
+
+    def plot_fitness_stats_from_logbook(self):
         gen = list(range(self.num_gen))
         plt.plot(gen, self.res_dict['avg'])
         plt.plot(gen, self.res_dict['median'])
@@ -61,7 +81,7 @@ class Plotter(object):
         with open(fitness_plot_path, 'wb') as f:
             pickle.dump(graph, f)
 
-    def plot_sizes(self):
+    def plot_min_max_counts(self):
         gen = list(range(self.num_gen))
         plt.plot(gen, self.res_dict['num max mean'])
         plt.plot(gen, self.res_dict['num min mean'])

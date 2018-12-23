@@ -98,7 +98,7 @@ import logging
 import time
 
 from plotter import Plotter
-from config import plot_d3_fitness, plot_fitness_stats, plot_min_max_stats
+from config import plot_d3_fitness, plot_fitness_stats, plot_min_max_stats, plot_fitness_distribution_2d
 
 
 def main():
@@ -128,6 +128,8 @@ def main():
         plot.plot_fitness_stats_from_logbook()
     if plot_min_max_stats:
         plot.plot_min_max_counts()
+    if plot_fitness_distribution_2d:
+        plot.plot_fitness_distribution_2d()
 
 
 if __name__ == '__main__':
