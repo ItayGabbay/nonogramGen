@@ -8,11 +8,9 @@ empty_in_split = '\xa0'
 pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
-curr_time = str(time.time())
-fitness_plot_path = 'plots/' + curr_time + '/fitness.pkl'
-nums_plot_path = 'plots/' + curr_time + '/nums.pkl'
-plot_fitness_distr_path = 'plots/' + curr_time + '/fitness_distr.pkl'
-plot_population_3d = 'plots/population_3d' + curr_time + '.pkl'
+fitness_plot_path = 'plots/fitness' + str(time.time()) + '.pkl'
+nums_plot_path = 'plots/nums' + str(time.time()) + '.pkl'
+plot_fitness_distr_path = 'plots/fitneess_distr' + str(time.time()) + '.pkl'
 
 convert_to_sat = True
 should_run_in_parallel = True
