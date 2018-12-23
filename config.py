@@ -10,7 +10,7 @@ pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COL
 pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
 fitness_plot_path = 'plots/fitness' + str(time.time()) + '.pkl'
 nums_plot_path = 'plots/nums' + str(time.time()) + '.pkl'
-plot_fitness_distr_path = 'plots/fitneess_distr' + str(time.time()) + '.pkl'
+plot_fitness_distr_path = 'plots/fitness_distr' + str(time.time()) + '.pkl'
 plot_population_3d = 'plots/population_3d' + str(time.time()) + '.pkl'
 
 convert_to_sat = True
