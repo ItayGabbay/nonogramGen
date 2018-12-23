@@ -10,14 +10,16 @@ pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COL
 pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
 fitness_plot_path = 'plots/fitness' + str(time.time()) + '.pkl'
 nums_plot_path = 'plots/nums' + str(time.time()) + '.pkl'
+plot_fitness_distr_path = 'plots/fitneess_distr' + str(time.time()) + '.pkl'
+plot_population_3d = 'plots/population_3d' + str(time.time()) + '.pkl'
 
 convert_to_sat = True
 should_run_in_parallel = True
 print_individual_fitness = False
 
-plot_fitness_stats = False
-plot_min_max_stats = False
-plot_d3_fitness = False
+plot_fitness_stats = True
+plot_min_max_stats = True
+plot_d3_fitness = True
 plot_fitness_distribution_2d = True
 
 NUM_COND_TREES = 5

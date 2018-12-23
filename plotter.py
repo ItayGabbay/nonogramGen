@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from deap.tools import Logbook
-from config import fitness_plot_path, nums_plot_path
+from config import fitness_plot_path, nums_plot_path, plot_fitness_distr_path, plot_population_3d
 import pickle
 from typing import List
 import numpy as np
@@ -45,7 +45,10 @@ class Plotter(object):
         ax = fig.add_subplot(111, projection='3d')
         plt.hot()
         ax.scatter(np.array(fit1), np.array(fit2), np.array(fit3), c=np.array(counts))
-        plt.show(block=True)
+        graph = plt.show(block=True)
+
+        with open(plot_population_3d, 'wb') as f:
+            pickle.dump(graph, f)
 
     def plot_fitness_distribution_2d(self):
         count_dict = dict()
@@ -65,7 +68,10 @@ class Plotter(object):
         ax.scatter(np.array(fit_lst), np.array(counts))
         plt.xlabel('fitness')
         plt.ylabel('count')
-        plt.show(block=True)
+        graph = plt.show(block=True)
+
+        with open(plot_fitness_distr_path, 'wb') as f:
+            pickle.dump(graph, f)
 
     def plot_fitness_stats_from_logbook(self):
         gen = list(range(self.num_gen))
