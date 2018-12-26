@@ -225,7 +225,7 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     # print('nono', nonogram.title, 'corrects:', corrects, 'wrongs:', wrongs)
     max_sum = np.sum(maximum)
     whites_in_solution = (NUM_COLS * NUM_ROWS) - max_sum
-    res = points_correct_box * np.sum(corrects) / max_sum - points_incorrect_box * np.sum(wrongs) / whites_in_solution
+    res = points_correct_box * np.sum(corrects) / max_sum + points_incorrect_box * np.sum(wrongs) / whites_in_solution
 
     # if max_sum == np.sum(corrects) and np.sum(wrongs) == 0:
     #     print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
@@ -259,6 +259,8 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     # run on all solved nonograms
     for nonogram_unsolved, nonogram_solved in train_nonograms:
         result = evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved)
+        if result == 1:
+            num_of_solved += 1
         results.append(result)
         # if result == 5:
         #     num_of_solved += 1
@@ -268,7 +270,7 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     #     print("Solved:", num_of_solved, "Nonograms")
     distance = _calc_distance(results)
     if print_individual_fitness:
-        print("Fitness:", [round(res, 4) for res in results], round(distance, 4))
+        print("Fitness:", [round(res, 4) for res in results], round(distance, 4), 'solved:', num_of_solved)
     return distance,
 
 
