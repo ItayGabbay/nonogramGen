@@ -328,7 +328,7 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
     # print('fitness:', fitness)
     # fitness = fitness_by_compare
     # print(nonogram_unsolved.title,  result)
-    if result != 0:
+    if result < 1000:
         print("Solved the", nonogram_unsolved.title, "with", result)
     return result
 

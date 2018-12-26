@@ -14,7 +14,7 @@ convert_to_sat = True
 should_run_in_parallel = True
 print_individual_fitness = False
 
-NUM_COND_TREES = 5
+NUM_COND_TREES = 1
 NUM_VAL_TREES = NUM_COND_TREES + 1
 prob_crossover_global = 0.8  # global probability for cx
 prob_crossover_individual_cond = 0.7  # probability to cx a specific cond tree in an individual
@@ -29,5 +29,5 @@ points_incorrect_box = 0
 pop_size = 30
 hof_size = 1
 # num_gen = 40
-num_gen = 60
-train_size = 2
+num_gen = 4
+train_size = 3

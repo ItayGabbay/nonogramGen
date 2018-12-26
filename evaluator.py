@@ -42,6 +42,16 @@ def perform_astar(compiled_conditions, compiled_values, nonogram_solved: Nonogra
                 max_row_clue = get_max_col_clue(option['nonogram'])
                 max_col_clue = get_max_col_clue(option['nonogram'])
                 heuristic = None
+
+                # print('ones_diff_rows_val', ones_diff_rows_val)
+                # print('ones_diff_cols_val', ones_diff_cols_val)
+                # print('zeros_diff_rows_val', zeros_diff_rows_val)
+                # print('zeros_diff_cols_val', zeros_diff_cols_val)
+                # print('compare_blocks_rows_val', compare_blocks_rows_val)
+                # print('compare_blocks_cols_val', compare_blocks_cols_val)
+                # print('max_row_clue', max_row_clue)
+                # print('max_col_clue', max_col_clue)
+
                 for condition_index in range(len(compiled_conditions)):
                     res = compiled_conditions[condition_index](ones_diff_rows_val,
                                                                ones_diff_cols_val,
@@ -85,9 +95,9 @@ def perform_astar(compiled_conditions, compiled_values, nonogram_solved: Nonogra
         selected_step = max_heuristic
         number_of_steps += 1
 
-        if number_of_steps > 2000:
-            print("Reached 2000 steps for", nonogram_solved.title)
-            return 0
+        if number_of_steps > 1000:
+            print("Reached 1000 steps for", nonogram_solved.title)
+            return 1000
         # print(selected_step.matrix)
 
         # next_steps = generate_next_steps_blocks(selected_step)
