@@ -40,12 +40,10 @@ cond_pset.addPrimitive(operator.__and__, [bool, bool], bool)
 cond_pset.addPrimitive(operator.__or__, [bool, bool], bool)
 cond_pset.addPrimitive(operator.le, [float, float], bool)
 cond_pset.addPrimitive(operator.ge, [float, float], bool)
-cond_pset.addTerminal(True, bool)
-cond_pset.addTerminal(False, bool)
-cond_pset.addEphemeralConstant("rand101", lambda: np.random.randint(-100, 100), float)
-for i in range(0, 5, 1):
-    cond_pset.addTerminal(i, float)
-
+# cond_pset.addTerminal(True, bool)
+# cond_pset.addTerminal(False, bool)
+cond_pset.addEphemeralConstant("rand101", lambda: np.random.randint(0, 100), float)
+cond_pset.addEphemeralConstant("randbool", lambda: np.random.choice([True, False]), bool)
 cond_pset.addPrimitive(_if_then_else, [bool, float, float], float)
 cond_pset.renameArguments(ARG0='ones_diff_rows')
 cond_pset.renameArguments(ARG1='ones_diff_cols')
@@ -57,7 +55,7 @@ cond_pset.renameArguments(ARG6='max_row_clue')
 cond_pset.renameArguments(ARG7='max_col_clue')
 
 # value pset:
-val_pset = gp.PrimitiveSet("MAIN", 6)
+val_pset = gp.PrimitiveSet("MAIN", 8)
 val_pset.addPrimitive(operator.add, 2)
 val_pset.addPrimitive(operator.mul, 2)
 val_pset.renameArguments(ARG0='ones_diff_rows')
@@ -66,7 +64,9 @@ val_pset.renameArguments(ARG2='zeros_diff_rows')
 val_pset.renameArguments(ARG3='zeros_diff_cols')
 val_pset.renameArguments(ARG4='compare_blocks_rows')
 val_pset.renameArguments(ARG5='compare_blocks_cols')
-val_pset.addEphemeralConstant("rand101_1", lambda : np.random.randint(-100, 100))
+val_pset.renameArguments(ARG6='max_row_clue')
+val_pset.renameArguments(ARG7='max_col_clue')
+val_pset.addEphemeralConstant("rand101_1", lambda : np.random.randint(0, 100))
 
 # creator stuff:
 creator.create("FitnessMax", base.Fitness, weights=tuple(1.0 for i in range(train_size)))
@@ -260,9 +260,9 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
         print("Fitness:", results, round(results, 4))
     # print('-------------------')
 
-    # if num_of_solved > 0:
-    #     print("Solved:", num_of_solved, "Nonograms")
-    return tuple(results)
+    if num_of_solved > 0:
+        print("Solved:", num_of_solved, "Nonograms")
+    return np.mean(results),
 
 
 def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram,
@@ -298,7 +298,10 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
                                                                  zeros_diff_rows_val,
                                                                  zeros_diff_cols_val,
                                                                  compare_blocks_rows_val,
-                                                                 compare_blocks_cols_val)
+                                                                 compare_blocks_cols_val,
+                                                                 max_row_clue,
+                                                                 max_col_clue
+                                                                 )
                     break
             if heuristic is None:
                 heuristic = compiled_values[-1](ones_diff_rows_val,
@@ -306,7 +309,10 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
                                                 zeros_diff_rows_val,
                                                 zeros_diff_cols_val,
                                                 compare_blocks_rows_val,
-                                                compare_blocks_cols_val)
+                                                compare_blocks_cols_val,
+                                                max_row_clue,
+                                                max_col_clue
+                                                )
             heuristics.append(heuristic)
 
         # heuristics are max based (the bigger the result the better)
@@ -319,8 +325,9 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
     # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
     fitness_by_sat = selected_step.convert_to_sat()
     fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
-    fitness = fitness_by_compare * fitness_by_sat
+    # fitness = fitness_by_compare * fitness_by_sat
     # print('fitness:', fitness)
+    fitness = fitness_by_compare
     return fitness
 
 
