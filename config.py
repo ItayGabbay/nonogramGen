@@ -32,10 +32,10 @@ prob_mutate_individual_cond = 1
 prob_mutate_individual_val = 1
 
 points_correct_box = 5
-points_incorrect_box = 0
+points_incorrect_box = -1
 # points_incorrect_box = -2
-pop_size = 10
+pop_size = 20
 hof_size = 1
 # num_gen = 40
 num_gen = 10
-train_size = 3
+train_size = 5

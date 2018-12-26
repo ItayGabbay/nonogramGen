@@ -1,4 +1,6 @@
 import copy
+from utils import load_all_row_opts
+from typing import List
 
 
 def evaluate_individual(individual, step):
@@ -27,6 +29,7 @@ def generate_next_steps(current_step):
 
     return next_steps
 
+
 # def _generate_clues_combinations(clues_list):
 #     combs = []
 #
@@ -42,6 +45,43 @@ def generate_next_steps(current_step):
 #
 #     for row in range(len(current_step.matrix)):
 #         combinations = _generate_clues_combinations(clues['rows'][row])
+
+all_options = load_all_row_opts()
+
+
+def is_option_possible(option: List, curr_row: List):
+    for actual_cell, option_cell in zip(curr_row, option):
+        if actual_cell and not option_cell:
+            return False
+    return True
+
+
+def generate_next_steps_blocks_options(current_step):
+    next_steps = []
+    # clues = dict()
+    # clues['rows'] = current_step.row_clues
+    # clues['cols'] = current_step.col_clues
+
+    for row_index, row_clues in enumerate(current_step.row_clues):
+        options = all_options[str([clue for clue in row_clues if clue is not 0])]
+        curr_row = current_step.matrix[row_index]
+
+        for option in filter(lambda op: (op != curr_row).all(), options):
+            if is_option_possible(option, curr_row):
+                next_step = copy.deepcopy(current_step)
+                next_step.matrix[row_index] = option
+                next_steps.append(next_step)
+
+    for col_index, col_clues in enumerate(current_step.col_clues):
+        options = all_options[str([clue for clue in col_clues if clue is not 0])]
+        curr_col = current_step.matrix[:, col_index]
+        for option in filter(lambda op: (op != curr_col).all(), options):
+            if is_option_possible(option, curr_col):
+                next_step = copy.deepcopy(current_step)
+                next_step.matrix[:, col_index] = option
+                next_steps.append(next_step)
+
+    return next_steps
 
 
 def generate_next_steps_blocks(current_step):

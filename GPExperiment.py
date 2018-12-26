@@ -125,8 +125,8 @@ def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMax()):
 
 def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: gp.PrimitiveSetTyped = val_pset):
     toolbox = base.Toolbox()
-    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=2, max_=5)
-    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=2, max_=5)
+    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=2, max_=10)
+    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=2, max_=10)
     toolbox.register("value_tree", tools.initIterate, creator.ValueTree, toolbox.value_expr)
     toolbox.register("cond_tree", tools.initIterate, creator.ConditionTree, toolbox.cond_expr)
     toolbox.register("compile_valtree", gp.compile, pset=val_pset_arg)
@@ -225,7 +225,10 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     # print('nono', nonogram.title, 'corrects:', corrects, 'wrongs:', wrongs)
     max_sum = np.sum(maximum)
     whites_in_solution = (NUM_COLS * NUM_ROWS) - max_sum
-    res = points_correct_box * np.sum(corrects) / max_sum + points_incorrect_box * np.sum(wrongs) / whites_in_solution
+    corrects_ratio = np.sum(corrects) / max_sum
+    incorrects_ratio = np.sum(wrongs) / whites_in_solution
+    # print('corrects:', corrects_ratio, 'incorrects:', incorrects_ratio)
+    res = points_correct_box * corrects_ratio + points_incorrect_box * incorrects_ratio
 
     # if max_sum == np.sum(corrects) and np.sum(wrongs) == 0:
     #     print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
