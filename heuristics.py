@@ -2,6 +2,7 @@ from nonogram import Nonogram, BOARD_SIZE, NUM_ROWS, NUM_COLS
 import math
 from utils import copy_and_transpose_matrix
 
+
 def _ones_diff_helper(matrix, clues):
     actual_sums = [r.sum() for r in matrix]
     expected_sums = [math.fsum(r) for r in clues]
@@ -25,6 +26,7 @@ def ones_diff_rows(nonogram: Nonogram) -> float:
     """
     return _ones_diff_helper(nonogram.matrix, nonogram.row_clues)
 
+
 # (2)
 def ones_diff_cols(nonogram: Nonogram):
     """
@@ -33,12 +35,14 @@ def ones_diff_cols(nonogram: Nonogram):
     trans = copy_and_transpose_matrix(nonogram.matrix)
     return _ones_diff_helper(trans, nonogram.col_clues)
 
+
 # (3)
 def zeros_diff_rows(nonogram: Nonogram):
     """
     the difference between the number of 0’s for rows
     """
     return _zeros_diff_helper(NUM_COLS, nonogram.matrix, nonogram.row_clues)
+
 
 # (4)
 def zeros_diff_cols(nonogram: Nonogram):
@@ -47,6 +51,7 @@ def zeros_diff_cols(nonogram: Nonogram):
     """
     trans = copy_and_transpose_matrix(nonogram.matrix)
     return _zeros_diff_helper(NUM_ROWS, trans, nonogram.col_clues)
+
 
 # (5)
 def compare_blocks_rows(nonogram: Nonogram):
@@ -59,6 +64,7 @@ def compare_blocks_rows(nonogram: Nonogram):
                                 (row, col, len(nonogram.matrix), len(nonogram.matrix[0])))
             diff_sum += math.fabs(clue - nonogram.matrix[row][col])
     return diff_sum
+
 
 # (6)
 def compare_blocks_cols(nonogram: Nonogram):
