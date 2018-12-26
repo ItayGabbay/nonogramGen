@@ -1,6 +1,8 @@
 from nonogram import Nonogram, BOARD_SIZE, NUM_ROWS, NUM_COLS
 import math
 from utils import copy_and_transpose_matrix
+from typing import List
+import numpy as np
 
 
 def _ones_diff_helper(matrix, clues):
@@ -19,6 +21,39 @@ def _zeros_diff_helper(max_val, matrix, clues):
     res = (BOARD_SIZE - math.fsum(diffs)) / BOARD_SIZE
     # print('_zeros_diff_helper returned', res)
     return res
+
+
+def _find_clue_for_row(row_to_check: List[bool]) -> List[int]:
+    def skip_till_val(start=0, val=True):
+        if start >= len(row_to_check):
+            return len(row_to_check), -1
+
+        count = 0
+        while start < len(row_to_check) and row_to_check[start] != val:
+            start += 1
+            count += 1
+        return start, count
+
+    clues_to_ret = []
+    block_idx, block_len = skip_till_val()
+    while block_idx < len(row_to_check):
+        block_idx, block_len = skip_till_val(block_idx, False)
+        clues_to_ret.append(block_len)
+        block_idx, block_len = skip_till_val(block_idx)
+    return clues_to_ret
+
+
+def _make_same_len(lst1, lst2):
+    def padd_with_zeros(to_padd, final_len):
+        while len(to_padd) < final_len:
+            to_padd.append(0)
+
+    if len(lst1) < len(lst2):
+        padd_with_zeros(lst1, len(lst2))
+    elif len(lst1) > len(lst2):
+        padd_with_zeros(lst2, len(lst1))
+
+    return lst1, lst2
 
 
 # heuristics are taken from "Solving Nonograms Using Genetic Algorithms"
@@ -60,32 +95,41 @@ def zeros_diff_cols(nonogram: Nonogram):
 # (5)
 def compare_blocks_rows(nonogram: Nonogram):
     diff_sum = 0
+    row_clues_sum = np.sum([np.sum(clues) for clues in nonogram.row_clues])
     for row in range(NUM_ROWS):
-        for col in range(NUM_COLS):
-            clue = nonogram.get_row_clue(row, col)
-            if clue == -1:
-                raise Exception("Indexes are off in compare_blocks_rows! row: %d col: %d matrix size: (%d, %d)" %
-                                (row, col, len(nonogram.matrix), len(nonogram.matrix[0])))
-            if clue > 0:
-                diff_sum += math.fabs(clue - nonogram.matrix[row][col])
-    res = diff_sum / BOARD_SIZE
-    # print('compare_blocks_rows returned', res)
+        row_blocks = _find_clue_for_row(nonogram.matrix[row])
+        row_clues = nonogram.row_clues[row]
+        row_blocks, row_clues = _make_same_len(row_blocks, row_clues)
+        if len(row_blocks) == 0:
+            continue
+
+        actual = 0
+        for block, clue in zip(row_blocks, row_clues):
+            val = math.fabs(clue - block)
+            actual += val
+        diff_sum += actual
+    res = (row_clues_sum - diff_sum) / row_clues_sum
     return res
 
 
 # (6)
 def compare_blocks_cols(nonogram: Nonogram):
     diff_sum = 0
+    col_clues_sum = np.sum([np.sum(clues) for clues in nonogram.col_clues])
+    matrix = copy_and_transpose_matrix(nonogram.matrix)
     for col in range(NUM_COLS):
-        for row in range(NUM_ROWS):
-            clue = nonogram.get_col_clue(col, row)
-            if clue == -1:
-                raise Exception("Indexes are off in compare_blocks_cols! row: %d col: %d matrix size: (%d, %d)" %
-                                (row, col, len(nonogram.matrix), len(nonogram.matrix[0])))
-            if clue > 0:
-                diff_sum += math.fabs(clue - nonogram.matrix[row][col])
-    res = diff_sum / BOARD_SIZE
-    # print('compare_blocks_cols returned', res)
+        col_blocks = _find_clue_for_row(matrix[col])
+        col_clues = nonogram.row_clues[col]
+        col_blocks, col_clues = _make_same_len(col_blocks, col_clues)
+        if len(col_blocks) == 0:
+            continue
+
+        actual = 0
+        for block, clue in zip(col_blocks, col_clues):
+            val = math.fabs(clue - block)
+            actual += val
+        diff_sum += actual
+    res = (col_clues_sum - diff_sum) / col_clues_sum
     return res
 
 

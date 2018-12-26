@@ -259,15 +259,15 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     for nonogram_unsolved, nonogram_solved in train_nonograms:
         result = round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4)
         results.append(result)
-        if result == 5:
-            num_of_solved += 1
-    if print_individual_fitness:
-        print("Fitness:", results, round(results, 4))
+        # if result == 5:
+        #     num_of_solved += 1
     # print('-------------------')
 
     # if num_of_solved > 0:
     #     print("Solved:", num_of_solved, "Nonograms")
     distance = _calc_distance(results)
+    if print_individual_fitness:
+        print("Fitness:", results, round(distance, 4))
     return distance,
 
 
@@ -275,7 +275,7 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
                              nonogram_unsolved: Nonogram):
     # print(nonogram.title)
     selected_step = nonogram_unsolved
-    next_steps = generate_next_steps_blocks(selected_step)
+    next_steps = generate_next_steps(selected_step)
     while len(next_steps) > 0:
         heuristics = []
         # Evaluating the heuristics on the candidates and choosing the best
@@ -326,10 +326,10 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
         # print("Max heuristic:", max(heuristics), " index:", max_heuristic_index)
         selected_step = next_steps[max_heuristic_index]
         # print(selected_step.matrix)
-        next_steps = generate_next_steps_blocks(selected_step)
+        next_steps = generate_next_steps(selected_step)
     # Here need to compare to the solution!
     # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
-    fitness_by_sat = selected_step.convert_to_sat()
+    # fitness_by_sat = selected_step.convert_to_sat()
     fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
     # fitness = fitness_by_compare * fitness_by_sat
     # print('fitness:', fitness)
