@@ -67,10 +67,10 @@ val_pset.renameArguments(ARG7='max_col_clue')
 val_pset.addEphemeralConstant("rand101_1", lambda : np.random.randint(0, 100))
 
 # creator stuff:
-creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
 creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
-creator.create("Individual", DoubleTreeBasedIndividual, fitness=creator.FitnessMax)
+creator.create("Individual", DoubleTreeBasedIndividual, fitness=creator.FitnessMin)
 
 
 # nonograms = load_unsolved_nonograms_from_file(path=pickle_unsolved_file_path)
@@ -111,7 +111,7 @@ creator.create("Individual", DoubleTreeBasedIndividual, fitness=creator.FitnessM
 #     return val_pset
 
 
-def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMax()):
+def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMin()):
     return DoubleTreeBasedIndividual(cond_tree, val_tree, fitness)
 
 # def _init_individual(cls, cond_tree, val_tree):
@@ -264,69 +264,73 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
 
 def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram,
                              nonogram_unsolved: Nonogram):
+    result = perform_astar(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved)
     # print(nonogram.title)
-    selected_step = nonogram_unsolved
-    next_steps = generate_next_steps_blocks(selected_step)
-    while len(next_steps) > 0:
-        heuristics = []
-        # Evaluating the heuristics on the candidates and choosing the best
-        for option in next_steps:
-            ones_diff_rows_val = ones_diff_rows(option)
-            ones_diff_cols_val = ones_diff_cols(option)
-            zeros_diff_rows_val = zeros_diff_rows(option)
-            zeros_diff_cols_val = zeros_diff_cols(option)
-            compare_blocks_rows_val = compare_blocks_rows(option)
-            compare_blocks_cols_val = compare_blocks_cols(option)
-            max_row_clue = get_max_col_clue(option)
-            max_col_clue = get_max_col_clue(option)
-            heuristic = None
-            for condition_index in range(len(compiled_conditions)):
-                res = compiled_conditions[condition_index](ones_diff_rows_val,
-                                                           ones_diff_cols_val,
-                                                           zeros_diff_rows_val,
-                                                           zeros_diff_cols_val,
-                                                           compare_blocks_rows_val,
-                                                           compare_blocks_cols_val,
-                                                           max_row_clue,
-                                                           max_col_clue)
-                if res is True:
-                    heuristic = compiled_values[condition_index](ones_diff_rows_val,
-                                                                 ones_diff_cols_val,
-                                                                 zeros_diff_rows_val,
-                                                                 zeros_diff_cols_val,
-                                                                 compare_blocks_rows_val,
-                                                                 compare_blocks_cols_val,
-                                                                 max_row_clue,
-                                                                 max_col_clue
-                                                                 )
-                    break
-            if heuristic is None:
-                heuristic = compiled_values[-1](ones_diff_rows_val,
-                                                ones_diff_cols_val,
-                                                zeros_diff_rows_val,
-                                                zeros_diff_cols_val,
-                                                compare_blocks_rows_val,
-                                                compare_blocks_cols_val,
-                                                max_row_clue,
-                                                max_col_clue
-                                                )
-            heuristics.append(heuristic)
-
-        # heuristics are max based (the bigger the result the better)
-        max_heuristic_index = heuristics.index(max(heuristics))
-        # print("Max heuristic:", max(heuristics), " index:", max_heuristic_index)
-        selected_step = next_steps[max_heuristic_index]
-        # print(selected_step.matrix)
-        next_steps = generate_next_steps_blocks(selected_step)
+    # selected_step = nonogram_unsolved
+    # next_steps = generate_next_steps_blocks(selected_step)
+    # while len(next_steps) > 0:
+    #     heuristics = []
+    #     # Evaluating the heuristics on the candidates and choosing the best
+    #     for option in next_steps:
+    #         ones_diff_rows_val = ones_diff_rows(option)
+    #         ones_diff_cols_val = ones_diff_cols(option)
+    #         zeros_diff_rows_val = zeros_diff_rows(option)
+    #         zeros_diff_cols_val = zeros_diff_cols(option)
+    #         compare_blocks_rows_val = compare_blocks_rows(option)
+    #         compare_blocks_cols_val = compare_blocks_cols(option)
+    #         max_row_clue = get_max_col_clue(option)
+    #         max_col_clue = get_max_col_clue(option)
+    #         heuristic = None
+    #         for condition_index in range(len(compiled_conditions)):
+    #             res = compiled_conditions[condition_index](ones_diff_rows_val,
+    #                                                        ones_diff_cols_val,
+    #                                                        zeros_diff_rows_val,
+    #                                                        zeros_diff_cols_val,
+    #                                                        compare_blocks_rows_val,
+    #                                                        compare_blocks_cols_val,
+    #                                                        max_row_clue,
+    #                                                        max_col_clue)
+    #             if res is True:
+    #                 heuristic = compiled_values[condition_index](ones_diff_rows_val,
+    #                                                              ones_diff_cols_val,
+    #                                                              zeros_diff_rows_val,
+    #                                                              zeros_diff_cols_val,
+    #                                                              compare_blocks_rows_val,
+    #                                                              compare_blocks_cols_val,
+    #                                                              max_row_clue,
+    #                                                              max_col_clue
+    #                                                              )
+    #                 break
+    #         if heuristic is None:
+    #             heuristic = compiled_values[-1](ones_diff_rows_val,
+    #                                             ones_diff_cols_val,
+    #                                             zeros_diff_rows_val,
+    #                                             zeros_diff_cols_val,
+    #                                             compare_blocks_rows_val,
+    #                                             compare_blocks_cols_val,
+    #                                             max_row_clue,
+    #                                             max_col_clue
+    #                                             )
+    #         heuristics.append(heuristic)
+    #
+    #     # heuristics are max based (the bigger the result the better)
+    #     max_heuristic_index = heuristics.index(max(heuristics))
+    #     # print("Max heuristic:", max(heuristics), " index:", max_heuristic_index)
+    #     selected_step = next_steps[max_heuristic_index]
+    #     # print(selected_step.matrix)
+    #     next_steps = generate_next_steps_blocks(selected_step)
     # Here need to compare to the solution!
     # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
     # TODO switched to sat!
-    fitness_by_sat = selected_step.convert_to_sat()
-    fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
+    # fitness_by_sat = selected_step.convert_to_sat()
+    # fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
     # fitness = fitness_by_compare * fitness_by_sat
     # print('fitness:', fitness)
-    fitness = fitness_by_compare
-    return fitness
+    # fitness = fitness_by_compare
+    # print(nonogram_unsolved.title,  result)
+    if result != 0:
+        print("Solved the", nonogram_unsolved.title, "with", result)
+    return result
 
 
 # TODO was pulled to global scope

@@ -1,11 +1,97 @@
 import copy
-
+from nonogram import Nonogram
+from heuristics import *
+import numpy as np
+import operator
 
 def evaluate_individual(individual, step):
     next_steps = generate_next_steps(step)
 
     # while len(next_steps) > 0:
     #     print "AAA"
+
+def perform_astar(compiled_conditions, compiled_values, nonogram_solved: Nonogram,
+                  nonogram_unsolved: Nonogram):
+
+    selected_step = dict({'nonogram': nonogram_unsolved, 'f_value': None, 'parent': None})
+    closed_list = []
+    number_of_steps = 0
+    open_list = [selected_step]
+    while np.allclose(nonogram_solved.matrix, selected_step['nonogram'].matrix) == False:
+
+        if selected_step not in closed_list:
+            new_nodes = generate_next_steps(selected_step['nonogram'])
+            closed_list.append(selected_step)
+            open_list.remove(selected_step)
+
+            if len(new_nodes) == 0:
+                selected_step = selected_step['parent']
+            else:
+                for node_index in range(len(new_nodes)):
+                    open_list.append({'nonogram': new_nodes[node_index], 'f_value': None, 'parent': selected_step})
+
+        # Evaluating the heuristics on the candidates and choosing the best
+        for option in open_list:
+            if option['f_value'] is None:
+                ones_diff_rows_val = ones_diff_rows(option['nonogram'])
+                ones_diff_cols_val = ones_diff_cols(option['nonogram'])
+                zeros_diff_rows_val = zeros_diff_rows(option['nonogram'])
+                zeros_diff_cols_val = zeros_diff_cols(option['nonogram'])
+                compare_blocks_rows_val = compare_blocks_rows(option['nonogram'])
+                compare_blocks_cols_val = compare_blocks_cols(option['nonogram'])
+                max_row_clue = get_max_col_clue(option['nonogram'])
+                max_col_clue = get_max_col_clue(option['nonogram'])
+                heuristic = None
+                for condition_index in range(len(compiled_conditions)):
+                    res = compiled_conditions[condition_index](ones_diff_rows_val,
+                                                               ones_diff_cols_val,
+                                                               zeros_diff_rows_val,
+                                                               zeros_diff_cols_val,
+                                                               compare_blocks_rows_val,
+                                                               compare_blocks_cols_val,
+                                                               max_row_clue,
+                                                               max_col_clue)
+                    if res is True:
+                        heuristic = compiled_values[condition_index](ones_diff_rows_val,
+                                                                     ones_diff_cols_val,
+                                                                     zeros_diff_rows_val,
+                                                                     zeros_diff_cols_val,
+                                                                     compare_blocks_rows_val,
+                                                                     compare_blocks_cols_val,
+                                                                     max_row_clue,
+                                                                     max_col_clue
+                                                                     )
+                        break
+                if heuristic is None:
+                    heuristic = compiled_values[-1](ones_diff_rows_val,
+                                                    ones_diff_cols_val,
+                                                    zeros_diff_rows_val,
+                                                    zeros_diff_cols_val,
+                                                    compare_blocks_rows_val,
+                                                    compare_blocks_cols_val,
+                                                    max_row_clue,
+                                                    max_col_clue
+                                                    )
+                option['f_value'] = heuristic
+
+        # heuristics are max based (the bigger the result the better)
+        children = [x for x in open_list if x['parent'] is selected_step]
+        while len(children) == 0:
+            selected_step = selected_step['parent']
+            children = [x for x in open_list if x['parent'] is selected_step]
+        max_heuristic = max(children, key=lambda x: x['f_value'])
+        # max_heuristic_index = heuristics.index(max(heuristics))
+        # print("Max heuristic:", max(heuristics), " index:", max_heuristic_index)
+        selected_step = max_heuristic
+        number_of_steps += 1
+
+        if number_of_steps > 2000:
+            print("Reached 2000 steps for", nonogram_solved.title)
+            return 0
+        # print(selected_step.matrix)
+
+        # next_steps = generate_next_steps_blocks(selected_step)
+    return number_of_steps
 
 
 def generate_next_steps(current_step):
