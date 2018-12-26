@@ -7,14 +7,18 @@ def _ones_diff_helper(matrix, clues):
     actual_sums = [r.sum() for r in matrix]
     expected_sums = [math.fsum(r) for r in clues]
     diffs = [math.fabs(actual_sums[i] - expected_sums[i]) for i in range(len(clues))]
-    return (BOARD_SIZE - math.fsum(diffs)) / BOARD_SIZE
+    res = (BOARD_SIZE - math.fsum(diffs)) / BOARD_SIZE
+    # print('_ones_diff_helper returned', res)
+    return res
 
 
 def _zeros_diff_helper(max_val, matrix, clues):
     actual_sums = [max_val - r.sum() for r in matrix]
     expected_sums = [max_val - math.fsum(r) for r in clues]
     diffs = [math.fabs(actual_sums[i] - expected_sums[i]) for i in range(len(clues))]
-    return (BOARD_SIZE - math.fsum(diffs)) / BOARD_SIZE
+    res = (BOARD_SIZE - math.fsum(diffs)) / BOARD_SIZE
+    # print('_zeros_diff_helper returned', res)
+    return res
 
 
 # heuristics are taken from "Solving Nonograms Using Genetic Algorithms"
@@ -62,8 +66,11 @@ def compare_blocks_rows(nonogram: Nonogram):
             if clue == -1:
                 raise Exception("Indexes are off in compare_blocks_rows! row: %d col: %d matrix size: (%d, %d)" %
                                 (row, col, len(nonogram.matrix), len(nonogram.matrix[0])))
-            diff_sum += math.fabs(clue - nonogram.matrix[row][col])
-    return diff_sum
+            if clue > 0:
+                diff_sum += math.fabs(clue - nonogram.matrix[row][col])
+    res = diff_sum / BOARD_SIZE
+    # print('compare_blocks_rows returned', res)
+    return res
 
 
 # (6)
@@ -75,8 +82,11 @@ def compare_blocks_cols(nonogram: Nonogram):
             if clue == -1:
                 raise Exception("Indexes are off in compare_blocks_cols! row: %d col: %d matrix size: (%d, %d)" %
                                 (row, col, len(nonogram.matrix), len(nonogram.matrix[0])))
-            diff_sum += math.fabs(clue - nonogram.matrix[row][col])
-    return diff_sum
+            if clue > 0:
+                diff_sum += math.fabs(clue - nonogram.matrix[row][col])
+    res = diff_sum / BOARD_SIZE
+    # print('compare_blocks_cols returned', res)
+    return res
 
 
 def get_max_row_clue(nonogram: Nonogram):
@@ -87,7 +97,9 @@ def get_max_row_clue(nonogram: Nonogram):
             if max_row_clue < nonogram.row_clues[row_index][clue_index]:
                 max_row_clue = nonogram.row_clues[row_index][clue_index]
 
-    return float(max_row_clue)
+    res = float(max_row_clue) / NUM_ROWS
+    # print('get_max_row_clue returned', res)
+    return res
 
 
 def get_max_col_clue(nonogram: Nonogram):
@@ -98,4 +110,6 @@ def get_max_col_clue(nonogram: Nonogram):
             if max_col_clue < nonogram.col_clues[col_index][clue_index]:
                 max_col_clue = nonogram.col_clues[col_index][clue_index]
 
-    return float(max_col_clue)
+    res = float(max_col_clue) / NUM_COLS
+    # print('get_max_col_clue returned', res)
+    return res
