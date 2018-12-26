@@ -222,6 +222,7 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
     corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
     maximum = mapper_func(lambda s, c: s and c, mat_solved, mat_solved)
     wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
+    # print('nono', nonogram.title, 'corrects:', corrects, 'wrongs:', wrongs)
     max_sum = np.sum(maximum)
     whites_in_solution = (NUM_COLS * NUM_ROWS) - max_sum
     res = points_correct_box * np.sum(corrects) / max_sum - points_incorrect_box * np.sum(wrongs) / whites_in_solution
@@ -239,7 +240,7 @@ def _calc_max_possible_fitness():
 
 
 def _calc_distance(fitnesses, to_compare_to=tuple(0 for _ in range(train_size))):
-    pows = [fitnesses[i] - to_compare_to[i] for i in range(len(fitnesses))]
+    pows = [np.power(fitnesses[i] - to_compare_to[i], 2) for i in range(len(fitnesses))]
     return np.sqrt(np.sum(pows))
 
 
@@ -257,7 +258,7 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
 
     # run on all solved nonograms
     for nonogram_unsolved, nonogram_solved in train_nonograms:
-        result = round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4)
+        result = evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved)
         results.append(result)
         # if result == 5:
         #     num_of_solved += 1
@@ -267,13 +268,13 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     #     print("Solved:", num_of_solved, "Nonograms")
     distance = _calc_distance(results)
     if print_individual_fitness:
-        print("Fitness:", results, round(distance, 4))
+        print("Fitness:", [round(res, 4) for res in results], round(distance, 4))
     return distance,
 
 
 def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram,
                              nonogram_unsolved: Nonogram):
-    # print(nonogram.title)
+    # print('eval single nono', nonogram_unsolved.title)
     selected_step = nonogram_unsolved
     next_steps = generate_next_steps(selected_step)
     while len(next_steps) > 0:
@@ -329,11 +330,12 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
         next_steps = generate_next_steps(selected_step)
     # Here need to compare to the solution!
     # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
-    # fitness_by_sat = selected_step.convert_to_sat()
+    fitness_by_sat = selected_step.convert_to_sat()
     fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
-    # fitness = fitness_by_compare * fitness_by_sat
+    fitness = fitness_by_compare * fitness_by_sat
+    # print('compare:', fitness_by_compare, 'sat:', fitness_by_sat, 'fitness:', fitness)
     # print('fitness:', fitness)
-    fitness = fitness_by_compare
+    # fitness = fitness_by_compare
     return fitness
 
 
