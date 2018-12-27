@@ -17,17 +17,14 @@ from evaluator import *
 from heuristics import *
 from individual import DoubleTreeBasedIndividual
 from utils import load_train_and_test_sets
+import pickle
+from scoop import futures, shared
+
 
 if should_run_in_parallel:
-    from scoop import futures
+
     stderr.write("RUNNING WITH SCOOP! MAKE SURE YOU ARE RUNNING WITH: 'python -m scoop playground.py' !!\n")
-
-
-train_test_sets = load_train_and_test_sets()
-train_dicts = train_test_sets['train']
-train_nonograms = [(d['unsolved'], d['solved']) for d in train_dicts]
-test_dicts = train_test_sets['test']
-test_nonograms = [(d['unsolved'], d['solved']) for d in test_dicts]
+    # shared.setConst(train=train_nonograms)
 
 
 def _if_then_else(inp, out1, out2):
@@ -236,6 +233,7 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
 
 
 def _calc_max_possible_fitness():
+    train_nonograms = shared.getConst('train_nonograms')
     compares = [_compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
     res = np.mean(compares)
     print('max possible fitness is:', res)
@@ -260,11 +258,12 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     # results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
 
     # run on all solved nonograms
-    for nonogram_unsolved, nonogram_solved in train_nonograms:
-        result = evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved)
+    train_nonograms_sh = shared.getConst('train_nonograms')
+    for nonogram_unsolved, nonogram_solved in train_nonograms_sh:
+        result = round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4)
+        results.append(result)
         if result == 1:
             num_of_solved += 1
-        results.append(result)
         # if result == 5:
         #     num_of_solved += 1
     # print('-------------------')
@@ -404,6 +403,7 @@ class GPExperiment(object):
         self.stats = mstats
 
     def start_experiment(self):
+        train_nonograms = shared.getConst('train_nonograms')
         nonogram_names = [unsolved.title for unsolved, solved in train_nonograms]
         print('running experiment on', train_size, 'nonograms. names:', nonogram_names)
         # max_possible_fitness = _calc_max_possible_fitness()
