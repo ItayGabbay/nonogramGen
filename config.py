@@ -22,7 +22,7 @@ plot_min_max_stats = True
 plot_d3_fitness = False
 plot_fitness_distribution_2d = True
 
-NUM_COND_TREES = 5
+NUM_COND_TREES = 1
 NUM_VAL_TREES = NUM_COND_TREES + 1
 prob_crossover_global = 0.8  # global probability for cx
 prob_crossover_individual_cond = 0.7  # probability to cx a specific cond tree in an individual
@@ -37,5 +37,6 @@ points_incorrect_box = -1
 pop_size = 20
 hof_size = 1
 # num_gen = 40
-num_gen = 10
-train_size = 5
+num_gen = 3
+train_size = 3
+

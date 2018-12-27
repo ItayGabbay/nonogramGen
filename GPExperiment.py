@@ -22,11 +22,16 @@ from scoop import futures, shared
 
 
 if should_run_in_parallel:
-
+    train_nonograms = shared.getConst('train_nonograms')
     stderr.write("RUNNING WITH SCOOP! MAKE SURE YOU ARE RUNNING WITH: 'python -m scoop playground.py' !!\n")
     # shared.setConst(train=train_nonograms)
 
-
+else:
+    train_test_sets = load_train_and_test_sets()
+    train_dicts = train_test_sets['train']
+    train_nonograms = [(d['unsolved'], d['solved']) for d in train_dicts]
+    test_dicts = train_test_sets['test']
+    test_nonograms = [(d['unsolved'], d['solved']) for d in test_dicts]
 def _if_then_else(inp, out1, out2):
     return out1 if inp else out2
 
@@ -39,7 +44,7 @@ cond_pset.addPrimitive(operator.le, [float, float], bool)
 cond_pset.addPrimitive(operator.ge, [float, float], bool)
 # cond_pset.addTerminal(True, bool)
 # cond_pset.addTerminal(False, bool)
-cond_pset.addEphemeralConstant("rand101", lambda: np.random.randint(0, 100), float)
+cond_pset.addEphemeralConstant("rand101", lambda: np.random.randint(0, 5), float)
 cond_pset.addEphemeralConstant("randbool", lambda: np.random.choice([True, False]), bool)
 cond_pset.addPrimitive(_if_then_else, [bool, float, float], float)
 cond_pset.renameArguments(ARG0='ones_diff_rows')
@@ -63,13 +68,13 @@ val_pset.renameArguments(ARG4='compare_blocks_rows')
 val_pset.renameArguments(ARG5='compare_blocks_cols')
 val_pset.renameArguments(ARG6='max_row_clue')
 val_pset.renameArguments(ARG7='max_col_clue')
-val_pset.addEphemeralConstant("rand101_1", lambda : np.random.randint(0, 100))
+val_pset.addEphemeralConstant("rand101_1", lambda : np.random.randint(0, 5))
 
 # creator stuff:
-creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("ValueTree", gp.PrimitiveTree, pset=val_pset)
 creator.create("ConditionTree", gp.PrimitiveTree, pset=cond_pset)
-creator.create("Individual", DoubleTreeBasedIndividual, fitness=creator.FitnessMax)
+creator.create("Individual", DoubleTreeBasedIndividual, fitness=creator.FitnessMin)
 
 
 # nonograms = load_unsolved_nonograms_from_file(path=pickle_unsolved_file_path)
@@ -110,7 +115,7 @@ creator.create("Individual", DoubleTreeBasedIndividual, fitness=creator.FitnessM
 #     return val_pset
 
 
-def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMax()):
+def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMin()):
     return DoubleTreeBasedIndividual(cond_tree, val_tree, fitness)
 
 # def _init_individual(cls, cond_tree, val_tree):
@@ -122,8 +127,8 @@ def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMax()):
 
 def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: gp.PrimitiveSetTyped = val_pset):
     toolbox = base.Toolbox()
-    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=2, max_=10)
-    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=2, max_=10)
+    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=2, max_=4)
+    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=2, max_=4)
     toolbox.register("value_tree", tools.initIterate, creator.ValueTree, toolbox.value_expr)
     toolbox.register("cond_tree", tools.initIterate, creator.ConditionTree, toolbox.cond_expr)
     toolbox.register("compile_valtree", gp.compile, pset=val_pset_arg)
@@ -233,7 +238,6 @@ def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
 
 
 def _calc_max_possible_fitness():
-    train_nonograms = shared.getConst('train_nonograms')
     compares = [_compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
     res = np.mean(compares)
     print('max possible fitness is:', res)
@@ -258,8 +262,7 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     # results.append(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved))
 
     # run on all solved nonograms
-    train_nonograms_sh = shared.getConst('train_nonograms')
-    for nonogram_unsolved, nonogram_solved in train_nonograms_sh:
+    for nonogram_unsolved, nonogram_solved in train_nonograms:
         result = round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4)
         results.append(result)
         if result == 1:
@@ -278,69 +281,16 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
 
 def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram,
                              nonogram_unsolved: Nonogram):
-    # print('eval single nono', nonogram_unsolved.title)
-    selected_step = nonogram_unsolved
-    next_steps = generate_next_steps(selected_step)
-    while len(next_steps) > 0:
-        heuristics = []
-        # Evaluating the heuristics on the candidates and choosing the best
-        for option in next_steps:
-            ones_diff_rows_val = ones_diff_rows(option)
-            ones_diff_cols_val = ones_diff_cols(option)
-            zeros_diff_rows_val = zeros_diff_rows(option)
-            zeros_diff_cols_val = zeros_diff_cols(option)
-            compare_blocks_rows_val = compare_blocks_rows(option)
-            compare_blocks_cols_val = compare_blocks_cols(option)
-            max_row_clue = get_max_col_clue(option)
-            max_col_clue = get_max_col_clue(option)
-            heuristic = None
-            for condition_index in range(len(compiled_conditions)):
-                res = compiled_conditions[condition_index](ones_diff_rows_val,
-                                                           ones_diff_cols_val,
-                                                           zeros_diff_rows_val,
-                                                           zeros_diff_cols_val,
-                                                           compare_blocks_rows_val,
-                                                           compare_blocks_cols_val,
-                                                           max_row_clue,
-                                                           max_col_clue)
-                if res is True:
-                    heuristic = compiled_values[condition_index](ones_diff_rows_val,
-                                                                 ones_diff_cols_val,
-                                                                 zeros_diff_rows_val,
-                                                                 zeros_diff_cols_val,
-                                                                 compare_blocks_rows_val,
-                                                                 compare_blocks_cols_val,
-                                                                 max_row_clue,
-                                                                 max_col_clue
-                                                                 )
-                    break
-            if heuristic is None:
-                heuristic = compiled_values[-1](ones_diff_rows_val,
-                                                ones_diff_cols_val,
-                                                zeros_diff_rows_val,
-                                                zeros_diff_cols_val,
-                                                compare_blocks_rows_val,
-                                                compare_blocks_cols_val,
-                                                max_row_clue,
-                                                max_col_clue
-                                                )
-            heuristics.append(heuristic)
-
-        # heuristics are max based (the bigger the result the better)
-        max_heuristic_index = heuristics.index(max(heuristics))
-        # print("Max heuristic:", max(heuristics), " index:", max_heuristic_index)
-        selected_step = next_steps[max_heuristic_index]
-        # print(selected_step.matrix)
-        next_steps = generate_next_steps(selected_step)
-    # Here need to compare to the solution!
-    # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
-    fitness_by_sat = selected_step.convert_to_sat()
-    fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
-    fitness = fitness_by_compare * fitness_by_sat
-    # print('compare:', fitness_by_compare, 'sat:', fitness_by_sat, 'fitness:', fitness)
+    result = perform_astar(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved)
+    # fitness_by_sat = selected_step.convert_to_sat()
+    # fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
+    # fitness = fitness_by_compare * fitness_by_sat
     # print('fitness:', fitness)
     # fitness = fitness_by_compare
-    return fitness
+    # print(nonogram_unsolved.title,  result)
+    if result < 1000:
+        print("Solved the", nonogram_unsolved.title, "with", result)
+    return result
 
 
 # TODO was pulled to global scope
@@ -403,7 +353,6 @@ class GPExperiment(object):
         self.stats = mstats
 
     def start_experiment(self):
-        train_nonograms = shared.getConst('train_nonograms')
         nonogram_names = [unsolved.title for unsolved, solved in train_nonograms]
         print('running experiment on', train_size, 'nonograms. names:', nonogram_names)
         # max_possible_fitness = _calc_max_possible_fitness()
