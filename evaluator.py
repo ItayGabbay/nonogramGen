@@ -22,7 +22,7 @@ def perform_astar(compiled_conditions, compiled_values, nonogram_solved: Nonogra
     while np.allclose(nonogram_solved.matrix, selected_step['nonogram'].matrix) == False:
 
         if selected_step not in closed_list:
-            new_nodes = generate_next_steps_blocks(selected_step['nonogram'])
+            new_nodes = generate_next_steps_blocks_options(selected_step['nonogram'])
             closed_list.append(selected_step)
             open_list.remove(selected_step)
 
@@ -96,7 +96,6 @@ def perform_astar(compiled_conditions, compiled_values, nonogram_solved: Nonogra
         # print("Max heuristic:", max(heuristics), " index:", max_heuristic_index)
         selected_step = max_heuristic
         number_of_steps += 1
-        print(number_of_steps)
         if number_of_steps > 1000:
             print("Reached 1000 steps for", nonogram_solved.title)
             return 1000
@@ -162,7 +161,7 @@ def generate_next_steps_blocks_options(current_step):
         options = all_options[str([clue for clue in row_clues if clue is not 0])]
         curr_row = current_step.matrix[row_index]
 
-        for option in filter(lambda op: (op != curr_row).all(), options):
+        for option in filter(lambda op: np.allclose(op, curr_row) == False, options):
             if is_option_possible(option, curr_row):
                 next_step = copy.deepcopy(current_step)
                 next_step.matrix[row_index] = option
