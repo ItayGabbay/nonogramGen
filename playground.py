@@ -123,6 +123,13 @@ def main():
     plot.plot_fitness_values()
     plot.plot_sizes()
 
-
+from scoop import shared
+from utils import load_train_and_test_sets
 if __name__ == '__main__':
+    train_test_sets = load_train_and_test_sets()
+    train_dicts = train_test_sets['train']
+    train_nonograms = [(d['unsolved'], d['solved']) for d in train_dicts]
+    test_dicts = train_test_sets['test']
+    test_nonograms = [(d['unsolved'], d['solved']) for d in test_dicts]
+    shared.setConst(train_nonograms=train_nonograms)
     main()
