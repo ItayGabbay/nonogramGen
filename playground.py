@@ -93,7 +93,6 @@
 # ns = utils.load_nonograms_from_file()
 # print(ns)
 import utils
-from GPExperiment import GPExperiment
 import logging
 import time
 
@@ -133,11 +132,15 @@ def main():
 
 from scoop import shared
 from utils import load_train_and_test_sets
+from config import should_run_in_parallel
 if __name__ == '__main__':
-    train_test_sets = load_train_and_test_sets()
-    train_dicts = train_test_sets['train']
-    train_nonograms = [(d['unsolved'], d['solved']) for d in train_dicts]
-    test_dicts = train_test_sets['test']
-    test_nonograms = [(d['unsolved'], d['solved']) for d in test_dicts]
-    shared.setConst(train_nonograms=train_nonograms)
+    if should_run_in_parallel:
+        train_test_sets = load_train_and_test_sets()
+        train_dicts = train_test_sets['train']
+        train_nonograms = [(d['unsolved'], d['solved']) for d in train_dicts]
+        test_dicts = train_test_sets['test']
+        test_nonograms = [(d['unsolved'], d['solved']) for d in test_dicts]
+        shared.setConst(train_nonograms=train_nonograms)
+
+    from GPExperiment import GPExperiment
     main()
