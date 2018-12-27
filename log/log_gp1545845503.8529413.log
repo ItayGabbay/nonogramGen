@@ -1,0 +1,110 @@
+INFO:root:
+
+*******STARTING!!!******
+
+
+INFO:root:
+
+*******Configuration******
+
+
+INFO:root:import time
+
+
+INFO:root:# NUM_ROWS = 20
+
+
+INFO:root:NUM_ROWS = 5
+
+
+INFO:root:# NUM_COLS = 20
+
+
+INFO:root:NUM_COLS = 5
+
+
+INFO:root:empty_in_split = '\xa0'
+
+
+INFO:root:pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
+
+
+INFO:root:pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
+
+
+INFO:root:pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
+
+
+INFO:root:fitness_plot_path = 'plots/fitness' + str(time.time()) + '.pkl'
+
+
+INFO:root:nums_plot_path = 'plots/nums' + str(time.time()) + '.pkl'
+
+
+INFO:root:
+
+
+INFO:root:convert_to_sat = True
+
+
+INFO:root:should_run_in_parallel = True
+
+
+INFO:root:print_individual_fitness = False
+
+
+INFO:root:
+
+
+INFO:root:NUM_COND_TREES = 5
+
+
+INFO:root:NUM_VAL_TREES = NUM_COND_TREES + 1
+
+
+INFO:root:prob_crossover_global = 0.8  # global probability for cx
+
+
+INFO:root:prob_crossover_individual_cond = 0.7  # probability to cx a specific cond tree in an individual
+
+
+INFO:root:prob_crossover_individual_val = 0.7  # probability to cx a specific cond tree in an individual
+
+
+INFO:root:prob_mutate_global = 0.2
+
+
+INFO:root:prob_mutate_individual_cond = 1
+
+
+INFO:root:prob_mutate_individual_val = 1
+
+
+INFO:root:
+
+
+INFO:root:points_correct_box = 5
+
+
+INFO:root:points_incorrect_box = 0
+
+
+INFO:root:# points_incorrect_box = -2
+
+
+INFO:root:pop_size = 40
+
+
+INFO:root:hof_size = 1
+
+
+INFO:root:# num_gen = 40
+
+
+INFO:root:num_gen = 60
+
+
+INFO:root:train_size = 4
+
+
+WARNING:SCOOPLogger:Pickling Error: Can't pickle <function <lambda> at 0x000001E02CCEA950>: attribute lookup <lambda> on __main__ failed

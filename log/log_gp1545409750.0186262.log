@@ -1,0 +1,97 @@
+INFO:root:
+
+*******STARTING!!!******
+
+
+INFO:root:
+
+*******Configuration******
+
+
+INFO:root:# NUM_ROWS = 20
+
+
+INFO:root:NUM_ROWS = 5
+
+
+INFO:root:# NUM_COLS = 20
+
+
+INFO:root:NUM_COLS = 5
+
+
+INFO:root:empty_in_split = '\xa0'
+
+
+INFO:root:
+
+
+INFO:root:pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
+
+
+INFO:root:pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
+
+
+INFO:root:pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
+
+
+INFO:root:should_run_in_parallel = False
+
+
+INFO:root:print_individual_fitness = True
+
+
+INFO:root:
+
+
+INFO:root:NUM_COND_TREES = 3
+
+
+INFO:root:NUM_VAL_TREES = NUM_COND_TREES + 1
+
+
+INFO:root:prob_crossover_global = 0.7  # global probability for cx
+
+
+INFO:root:prob_crossover_individual_cond = 0.8  # probability to cx a specific cond tree in an individual
+
+
+INFO:root:prob_crossover_individual_val = 0.8  # probability to cx a specific cond tree in an individual
+
+
+INFO:root:prob_mutate_global = 0.3
+
+
+INFO:root:prob_mutate_individual_cond = 0.7
+
+
+INFO:root:prob_mutate_individual_val = 0.7
+
+
+INFO:root:
+
+
+INFO:root:points_correct_box = 5
+
+
+INFO:root:points_incorrect_box = 0
+
+
+INFO:root:# points_incorrect_box = -2
+
+
+INFO:root:pop_size = 50
+
+
+INFO:root:hof_size = 1
+
+
+INFO:root:# num_gen = 40
+
+
+INFO:root:num_gen = 10
+
+
+INFO:root:train_size = 10
+
+
