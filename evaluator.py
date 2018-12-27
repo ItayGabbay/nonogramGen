@@ -5,7 +5,8 @@ from nonogram import Nonogram
 from heuristics import *
 import numpy as np
 import operator
-from config import steps_threshold
+from config import steps_threshold, points_correct_box, points_incorrect_box
+from typing import Callable
 
 def evaluate_individual(individual, step):
     next_steps = generate_next_steps(step)
@@ -99,12 +100,36 @@ def perform_astar(compiled_conditions, compiled_values, nonogram_solved: Nonogra
         number_of_steps += 1
         if number_of_steps > steps_threshold:
             print("Reached", steps_threshold, "steps for", nonogram_solved.title)
-            return steps_threshold
+            grade = compare_to_solution(selected_step, nonogram_solved)
+            return steps_threshold * grade
         # print(selected_step.matrix)
 
         # next_steps = generate_next_steps_blocks(selected_step)
     return number_of_steps
 
+
+def compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
+    def mapper_func(f: Callable[[bool, bool], bool], solved_mat: np.ndarray, check_mat: np.ndarray):
+        inner_func = lambda row_solved, row_check: np.fromiter(map(f, row_solved, row_check), dtype=bool)
+        m = map(inner_func, solved_mat, check_mat)
+        return np.array(list(m))
+
+    mat_solved = nonogram_solved.matrix
+    to_check = nonogram.matrix
+    corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
+    maximum = mapper_func(lambda s, c: s and c, mat_solved, mat_solved)
+    wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
+    # print('nono', nonogram.title, 'corrects:', corrects, 'wrongs:', wrongs)
+    max_sum = np.sum(maximum)
+    whites_in_solution = (NUM_COLS * NUM_ROWS) - max_sum
+    corrects_ratio = np.sum(corrects) / max_sum
+    incorrects_ratio = np.sum(wrongs) / whites_in_solution
+    # print('corrects:', corrects_ratio, 'incorrects:', incorrects_ratio)
+    res = points_correct_box * corrects_ratio + points_incorrect_box * incorrects_ratio
+
+    # if max_sum == np.sum(corrects) and np.sum(wrongs) == 0:
+    #     print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
+    return res if res >= 0 else 0
 
 def generate_next_steps(current_step):
     next_steps = []

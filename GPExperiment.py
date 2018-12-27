@@ -213,32 +213,8 @@ def _mutate(individual: DoubleTreeBasedIndividual, cond_expr, val_expr, cond_pse
     return individual,
 
 
-def _compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
-    def mapper_func(f: Callable[[bool, bool], bool], solved_mat: np.ndarray, check_mat: np.ndarray):
-        inner_func = lambda row_solved, row_check: np.fromiter(map(f, row_solved, row_check), dtype=bool)
-        m = map(inner_func, solved_mat, check_mat)
-        return np.array(list(m))
-
-    mat_solved = nonogram_solved.matrix
-    to_check = nonogram.matrix
-    corrects = mapper_func(lambda s, c: s and c, mat_solved, to_check)
-    maximum = mapper_func(lambda s, c: s and c, mat_solved, mat_solved)
-    wrongs = mapper_func(lambda s, c: (not s) and c, mat_solved, to_check)
-    # print('nono', nonogram.title, 'corrects:', corrects, 'wrongs:', wrongs)
-    max_sum = np.sum(maximum)
-    whites_in_solution = (NUM_COLS * NUM_ROWS) - max_sum
-    corrects_ratio = np.sum(corrects) / max_sum
-    incorrects_ratio = np.sum(wrongs) / whites_in_solution
-    # print('corrects:', corrects_ratio, 'incorrects:', incorrects_ratio)
-    res = points_correct_box * corrects_ratio + points_incorrect_box * incorrects_ratio
-
-    # if max_sum == np.sum(corrects) and np.sum(wrongs) == 0:
-    #     print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
-    return res if res >= 0 else 0
-
-
 def _calc_max_possible_fitness():
-    compares = [_compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
+    compares = [compare_to_solution(solved, solved) for unsolved, solved in train_nonograms]
     res = np.mean(compares)
     print('max possible fitness is:', res)
     return res
@@ -283,7 +259,7 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
                              nonogram_unsolved: Nonogram):
     result = perform_astar(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved)
     # fitness_by_sat = selected_step.convert_to_sat()
-    # fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
+    # fitness_by_compare = compare_to_solution(selected_step, nonogram_solved)
     # fitness = fitness_by_compare * fitness_by_sat
     # print('fitness:', fitness)
     # fitness = fitness_by_compare
