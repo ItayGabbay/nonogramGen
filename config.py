@@ -40,3 +40,4 @@ hof_size = 1
 num_gen = 10
 train_size = 10
 
+steps_threshold = 700

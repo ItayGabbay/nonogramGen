@@ -5,6 +5,7 @@ from nonogram import Nonogram
 from heuristics import *
 import numpy as np
 import operator
+from config import steps_threshold
 
 def evaluate_individual(individual, step):
     next_steps = generate_next_steps(step)
@@ -96,9 +97,9 @@ def perform_astar(compiled_conditions, compiled_values, nonogram_solved: Nonogra
         # print("Max heuristic:", max(heuristics), " index:", max_heuristic_index)
         selected_step = max_heuristic
         number_of_steps += 1
-        if number_of_steps > 1000:
-            print("Reached 1000 steps for", nonogram_solved.title)
-            return 1000
+        if number_of_steps > steps_threshold:
+            print("Reached", steps_threshold, "steps for", nonogram_solved.title)
+            return steps_threshold
         # print(selected_step.matrix)
 
         # next_steps = generate_next_steps_blocks(selected_step)
