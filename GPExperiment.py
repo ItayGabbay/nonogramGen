@@ -10,6 +10,8 @@ from deap import base
 from deap import creator
 from deap import gp
 from deap import tools
+
+from algorithms import eaSimple_new
 from config import *
 from evaluator import *
 from heuristics import *
@@ -130,8 +132,8 @@ def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: 
     toolbox.register("individual", _init_individual, toolbox.cond_tree, toolbox.value_tree)
     # toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-    # toolbox.register("select", tools.selTournament, tournsize=5)
-    toolbox.register("select", tools.selDoubleTournament, fitness_size=6, parsimony_size=1.7, fitness_first=True)
+    # toolbox.register("select", tools.selTournament, tournsize=2)
+    toolbox.register("select", tools.selDoubleTournament, fitness_size=10, parsimony_size=1.2, fitness_first=True)
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
                      cond_pset=cond_pset_arg, val_pset=val_pset_arg)
@@ -200,7 +202,8 @@ def _mutate(individual: DoubleTreeBasedIndividual, cond_expr, val_expr, cond_pse
         # trees = individual['VALUE_TREES']
     for i, tree in enumerate(trees):
         if random() <= prob:
-            tree, = gp.mutUniform(tree, expr, pset)
+            # tree, = gp.mutUniform(tree, expr, pset)
+            tree, = gp.mutInsert(tree, pset)
             trees[i] = tree
     return individual,
 
@@ -233,6 +236,11 @@ def _calc_max_possible_fitness():
     return res
 
 
+def _calc_distance(fitnesses, to_compare_to=tuple(0 for _ in range(train_size))):
+    pows = [fitnesses[i] - to_compare_to[i] for i in range(len(fitnesses))]
+    return np.sqrt(np.sum(pows))
+
+
 def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndividual):
     compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual.cond_trees]
     # compiled_conditions = [compile_condtree(cond_tree) for cond_tree in individual["CONDITION_TREES"]]
@@ -253,12 +261,13 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
         if result == 5:
             num_of_solved += 1
     if print_individual_fitness:
-        print("Fitness:", results, round(np.mean(results), 4))
+        print("Fitness:", results, round(results, 4))
     # print('-------------------')
 
-    if num_of_solved > 0:
-        print("Solved:", num_of_solved, "Nonograms")
-    return np.mean(results),
+    # if num_of_solved > 0:
+    #     print("Solved:", num_of_solved, "Nonograms")
+    distance = _calc_distance(results)
+    return distance,
 
 
 def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved: Nonogram,
@@ -319,7 +328,6 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
         next_steps = generate_next_steps_blocks(selected_step)
     # Here need to compare to the solution!
     # print('selected step for nonogram', nonogram_solved.title, '\n', selected_step.matrix)
-    # TODO switched to sat!
     fitness_by_sat = selected_step.convert_to_sat()
     fitness_by_compare = _compare_to_solution(selected_step, nonogram_solved)
     # fitness = fitness_by_compare * fitness_by_sat
@@ -336,7 +344,6 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
 #     creator.create("Individual", dict, fitness=creator.FitnessMax)
 
 def num_of_max(population):
-    # print('pop:', population)
     max_val = np.max(population)
     return len(list(filter(lambda i: i == max_val, population)))
 
@@ -358,6 +365,8 @@ def most_common(population):
     for fit, count in d.items():
         if count > m:
             res = fit
+    if m == 1:
+        return None
     return res[0]
 
 
@@ -397,7 +406,7 @@ class GPExperiment(object):
         # lambda_ = len(self.pop)
         # pop, log = algorithms.eaMuPlusLambda(self.pop, self.toolbox, mu, lambda_, prob_crossover_global, prob_mutate_global, num_gen,
         #                                      halloffame=self.hof, verbose=True, stats=self.stats)
-        pop, log = algorithms.eaSimple(self.pop, self.toolbox, prob_crossover_global, prob_mutate_global, num_gen,
+        pop, log = eaSimple_new(self.pop, self.toolbox, prob_crossover_global, prob_mutate_global, num_gen,
                                        halloffame=self.hof, verbose=True, stats=self.stats)
         end = time.time()
         return pop, log, self.hof, self.stats, end - start

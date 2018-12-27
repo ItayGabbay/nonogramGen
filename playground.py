@@ -98,6 +98,7 @@ import logging
 import time
 
 from plotter import Plotter
+from config import plot_d3_fitness, plot_fitness_stats, plot_min_max_stats, plot_fitness_distribution_2d
 
 
 def main():
@@ -119,9 +120,16 @@ def main():
 
     logging.info('stats: %s\n', stats)
 
-    plot = Plotter(log)
-    plot.plot_fitness_values()
-    plot.plot_sizes()
+    fitnesses = [ind.fitness.values for ind in pop]
+    plot = Plotter(log, fitnesses)
+    if plot_d3_fitness:
+        plot.plot_population_tuples_3d()
+    if plot_fitness_stats:
+        plot.plot_fitness_stats_from_logbook()
+    if plot_min_max_stats:
+        plot.plot_min_max_counts()
+    if plot_fitness_distribution_2d:
+        plot.plot_fitness_distribution_2d()
 
 from scoop import shared
 from utils import load_train_and_test_sets

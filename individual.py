@@ -20,3 +20,6 @@ class DoubleTreeBasedIndividual(dict):
     def __len__(self):
         sum_func = lambda trees: np.mean([tree.height for tree in trees])
         return int(sum_func(self.cond_trees) + sum_func(self.value_trees))
+
+    def __repr__(self):
+        return self.fitness.values[0]

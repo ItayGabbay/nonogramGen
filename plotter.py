@@ -1,12 +1,15 @@
 # This is a Harry Plotter
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from deap.tools import Logbook
-from config import fitness_plot_path, nums_plot_path
+from config import fitness_plot_path, nums_plot_path, plot_fitness_distr_path, plot_population_3d
 import pickle
+from typing import List
+import numpy as np
 
 
 class Plotter(object):
-    def __init__(self, logbook: Logbook):
+    def __init__(self, logbook: Logbook, fitnesses: List[tuple]):
         fitness_chapter = logbook.chapters['fitness']
         res_dict = dict()
         for d in fitness_chapter:
@@ -17,8 +20,60 @@ class Plotter(object):
                     res_dict[key].append(val)
         self.res_dict = res_dict
         self.num_gen = len(fitness_chapter)
+        self.population_fitness = fitnesses
 
-    def plot_fitness_values(self):
+    def plot_population_tuples_3d(self):
+        count_dict = dict()
+        for fit in self.population_fitness:
+            if fit not in count_dict:
+                count_dict[fit] = 1
+            else:
+                count_dict[fit] = count_dict[fit] + 1
+        # count_dict = {fit: len(val) for fit, val in count_dict}
+        fit1 = []
+        fit2 = []
+        fit3 = []
+        counts = []
+
+        for fit, count in count_dict.items():
+            fit1.append(fit[0])
+            fit2.append(fit[1])
+            fit3.append(fit[2])
+            counts.append(count)
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        plt.hot()
+        ax.scatter(np.array(fit1), np.array(fit2), np.array(fit3), c=np.array(counts))
+        graph = plt.show(block=True)
+
+        with open(plot_population_3d, 'wb') as f:
+            pickle.dump(graph, f)
+
+    def plot_fitness_distribution_2d(self):
+        count_dict = dict()
+        for fit in self.population_fitness:
+            if fit not in count_dict:
+                count_dict[fit] = 1
+            else:
+                count_dict[fit] = count_dict[fit] + 1
+        fit_lst = []
+        counts = []
+
+        for fit, count in count_dict.items():
+            fit_lst.append(fit)
+            counts.append(count)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.scatter(np.array(fit_lst), np.array(counts))
+        plt.xlabel('fitness')
+        plt.ylabel('count')
+        graph = plt.show(block=True)
+
+        with open(plot_fitness_distr_path, 'wb') as f:
+            pickle.dump(graph, f)
+
+    def plot_fitness_stats_from_logbook(self):
         gen = list(range(self.num_gen))
         plt.plot(gen, self.res_dict['avg'])
         plt.plot(gen, self.res_dict['median'])
@@ -32,7 +87,7 @@ class Plotter(object):
         with open(fitness_plot_path, 'wb') as f:
             pickle.dump(graph, f)
 
-    def plot_sizes(self):
+    def plot_min_max_counts(self):
         gen = list(range(self.num_gen))
         plt.plot(gen, self.res_dict['num max'])
         plt.plot(gen, self.res_dict['num min'])
@@ -40,7 +95,7 @@ class Plotter(object):
 
         graph = plt.show(block=True)
 
-        with open(fitness_plot_path, 'wb') as f:
+        with open(nums_plot_path, 'wb') as f:
             pickle.dump(graph, f)
 
 
