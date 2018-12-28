@@ -97,11 +97,14 @@ import logging
 import time
 
 from plotter import Plotter
-from config import plot_d3_fitness, plot_fitness_stats, plot_min_max_stats, plot_fitness_distribution_2d
+from config import plot_d3_fitness, plot_fitness_stats, plot_min_max_stats, plot_fitness_distribution_2d, plot_hof_trees
+from config import should_run_in_parallel, curr_time
+from scoop import shared
+from utils import load_train_and_test_sets
 
 
 def main():
-    logging.basicConfig(filename='log/log_gp' + str(time.time()) + '.log',level=logging.DEBUG)
+    logging.basicConfig(filename='log/log_gp' + curr_time + '.log', level=logging.DEBUG)
     gp = GPExperiment()
     logging.info('\n\n*******STARTING!!!******\n\n')
     logging.info('\n\n*******Configuration******\n\n')
@@ -120,7 +123,9 @@ def main():
     logging.info('stats: %s\n', stats)
 
     fitnesses = [ind.fitness.values for ind in pop]
-    plot = Plotter(log, fitnesses)
+    plot = Plotter(log, fitnesses, hof)
+    if plot_hof_trees:
+        plot.plot_hof_trees()
     if plot_d3_fitness:
         plot.plot_population_tuples_3d()
     if plot_fitness_stats:
@@ -130,9 +135,7 @@ def main():
     if plot_fitness_distribution_2d:
         plot.plot_fitness_distribution_2d()
 
-from scoop import shared
-from utils import load_train_and_test_sets
-from config import should_run_in_parallel
+
 if __name__ == '__main__':
     if should_run_in_parallel:
         train_test_sets = load_train_and_test_sets()
@@ -143,4 +146,5 @@ if __name__ == '__main__':
         shared.setConst(train_nonograms=train_nonograms)
 
     from GPExperiment import GPExperiment
+
     main()

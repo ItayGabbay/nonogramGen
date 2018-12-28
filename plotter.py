@@ -1,15 +1,25 @@
 # This is a Harry Plotter
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from deap.tools import Logbook
-from config import fitness_plot_path, nums_plot_path, plot_fitness_distr_path, plot_population_3d
+from deap.tools import Logbook, HallOfFame
+from config import plots_dir_path, plot_img_format
 import pickle
 from typing import List
 import numpy as np
+from os import mkdir, path
+import pygraphviz as pgv
+import networkx as nx
+from networkx.drawing.nx_agraph import pygraphviz_layout
+from deap import gp
+
+
+def _check_if_dir_exists(dir_path=plots_dir_path):
+    if not path.isdir(dir_path):
+        mkdir(dir_path)
 
 
 class Plotter(object):
-    def __init__(self, logbook: Logbook, fitnesses: List[tuple]):
+    def __init__(self, logbook: Logbook, fitnesses: List[tuple], hof: HallOfFame):
         fitness_chapter = logbook.chapters['fitness']
         res_dict = dict()
         for d in fitness_chapter:
@@ -21,8 +31,11 @@ class Plotter(object):
         self.res_dict = res_dict
         self.num_gen = len(fitness_chapter)
         self.population_fitness = fitnesses
+        self.hof = hof
 
-    def plot_population_tuples_3d(self):
+    def plot_population_tuples_3d(self, show_plot=True):
+        _check_if_dir_exists()
+
         count_dict = dict()
         for fit in self.population_fitness:
             if fit not in count_dict:
@@ -45,12 +58,13 @@ class Plotter(object):
         ax = fig.add_subplot(111, projection='3d')
         plt.hot()
         ax.scatter(np.array(fit1), np.array(fit2), np.array(fit3), c=np.array(counts))
-        graph = plt.show(block=True)
+        fig.savefig(plots_dir_path + '/population_3d.' + plot_img_format, bbox_inches='tight')
+        if show_plot:
+            plt.show(block=True)
 
-        with open(plot_population_3d, 'wb') as f:
-            pickle.dump(graph, f)
+    def plot_fitness_distribution_2d(self, show_plot=True):
+        _check_if_dir_exists()
 
-    def plot_fitness_distribution_2d(self):
         count_dict = dict()
         for fit in self.population_fitness:
             if fit not in count_dict:
@@ -68,12 +82,14 @@ class Plotter(object):
         ax.scatter(np.array(fit_lst), np.array(counts))
         plt.xlabel('fitness')
         plt.ylabel('count')
-        graph = plt.show(block=True)
 
-        with open(plot_fitness_distr_path, 'wb') as f:
-            pickle.dump(graph, f)
+        fig.savefig(plots_dir_path + '/fitness_distrib_2d.' + plot_img_format, bbox_inches='tight')
+        if show_plot:
+            plt.show(block=True)
 
-    def plot_fitness_stats_from_logbook(self):
+    def plot_fitness_stats_from_logbook(self, show_plot=True):
+        _check_if_dir_exists()
+
         gen = list(range(self.num_gen))
         plt.plot(gen, self.res_dict['avg'])
         plt.plot(gen, self.res_dict['median'])
@@ -82,20 +98,90 @@ class Plotter(object):
         plt.plot(gen, self.res_dict['min'])
         plt.legend(['avg', 'median', 'most common', 'MAX', 'MIN'], loc='upper left')
 
-        graph = plt.show(block=True)
+        plt.savefig(plots_dir_path + '/fitness_stats.' + plot_img_format, bbox_inches='tight')
+        if show_plot:
+            plt.show(block=True)
 
-        with open(fitness_plot_path, 'wb') as f:
-            pickle.dump(graph, f)
+    def plot_min_max_counts(self, show_plot=True):
+        _check_if_dir_exists()
 
-    def plot_min_max_counts(self):
         gen = list(range(self.num_gen))
         plt.plot(gen, self.res_dict['num max'])
         plt.plot(gen, self.res_dict['num min'])
         plt.legend(['NUM MAX', 'NUM MIN'], loc='upper left')
 
-        graph = plt.show(block=True)
+        plt.savefig(plots_dir_path + '/min_max_counts.' + plot_img_format, bbox_inches='tight')
+        if show_plot:
+            plt.show(block=True)
 
-        with open(nums_plot_path, 'wb') as f:
-            pickle.dump(graph, f)
+    # def plot_hof_trees(self):
+    #     _check_if_dir_exists()
+    #
+    #     hof: HallOfFame = self.hof
+    #     _check_if_dir_exists(plots_dir_path + '/hof')
+    #
+    #     cond_dir = plots_dir_path + '/hof/cond'
+    #     val_dir = plots_dir_path + '/hof/val'
+    #     _check_if_dir_exists(cond_dir)
+    #     _check_if_dir_exists(val_dir)
+    #
+    #     for ind_idx, ind in enumerate(hof.items):
+    #         for i, cont_tree in enumerate(ind.cond_trees):
+    #             nodes, edges, labels = gp.graph(cont_tree)
+    #             g = nx.Graph()
+    #             g.add_nodes_from(nodes)
+    #             g.add_edges_from(edges)
+    #             # pos = nx.graphviz_layout(g, prog="dot")
+    #             pos = pygraphviz_layout(g)
+    #
+    #             nx.draw_networkx_nodes(g, pos)
+    #             nx.draw_networkx_edges(g, pos)
+    #             nx.draw_networkx_labels(g, pos, labels)
+    #             plt.savefig(cond_dir + '/' + str(i) + '.' + plot_img_format, bbox_inches='tight')
+    #
+    #         for i, val_tree in enumerate(ind.cond_trees):
+    #             nodes, edges, labels = gp.graph(val_tree)
+    #             g = nx.Graph()
+    #             g.add_nodes_from(nodes)
+    #             g.add_edges_from(edges)
+    #             # pos = nx.graphviz_layout(g, prog="dot")
+    #             pos = pygraphviz_layout(g, prog='sfdp', root='0', args='-Lg')
+    #
+    #             nx.draw_networkx_nodes(g, pos)
+    #             nx.draw_networkx_edges(g, pos)
+    #             nx.draw_networkx_labels(g, pos, labels)
+    #             plt.savefig(val_dir + '/' + str(i) + '.' + plot_img_format, bbox_inches='tight')
 
+    def plot_hof_trees(self):
+        def _make_graph(edges, labels, nodes):
+            g = pgv.AGraph()
+            g.add_nodes_from(nodes)
+            g.add_edges_from(edges)
+            g.layout(prog="dot")
+            for node in nodes:
+                n = g.get_node(node)
+                n.attr["label"] = labels[node]
+            return g
 
+        _check_if_dir_exists()
+        hof: HallOfFame = self.hof
+        _check_if_dir_exists(plots_dir_path + '/hof')
+
+        cond_dir = plots_dir_path + '/hof/cond'
+        val_dir = plots_dir_path + '/hof/val'
+        _check_if_dir_exists(cond_dir)
+        _check_if_dir_exists(val_dir)
+        for ind_idx, ind in enumerate(hof.items):
+            for i, cont_tree in enumerate(ind.cond_trees):
+                nodes, edges, labels = gp.graph(cont_tree)
+                labels = {key: str(val).replace('_', '\n') for key, val in labels.items()}
+                g = _make_graph(edges, labels, nodes)
+
+                g.draw(cond_dir + "/" + str(i) + '.' + plot_img_format)
+
+            for i, val_tree in enumerate(ind.cond_trees):
+                nodes, edges, labels = gp.graph(val_tree)
+                labels = {key: str(val).replace('_', '\n') for key, val in labels.items()}
+                g = _make_graph(edges, labels, nodes)
+
+                g.draw(val_dir + "/" + str(i) + "." + plot_img_format)
