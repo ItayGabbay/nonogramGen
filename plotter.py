@@ -2,10 +2,16 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from deap.tools import Logbook
-from config import fitness_plot_path, nums_plot_path, plot_fitness_distr_path, plot_population_3d
+from config import plots_dir_path, plot_img_format
 import pickle
 from typing import List
 import numpy as np
+from os import mkdir, path
+
+
+def _check_if_plot_dir_exists():
+    if not path.isdir(plots_dir_path):
+        mkdir(plots_dir_path)
 
 
 class Plotter(object):
@@ -22,7 +28,9 @@ class Plotter(object):
         self.num_gen = len(fitness_chapter)
         self.population_fitness = fitnesses
 
-    def plot_population_tuples_3d(self):
+    def plot_population_tuples_3d(self, show_plot=True):
+        _check_if_plot_dir_exists()
+
         count_dict = dict()
         for fit in self.population_fitness:
             if fit not in count_dict:
@@ -45,12 +53,13 @@ class Plotter(object):
         ax = fig.add_subplot(111, projection='3d')
         plt.hot()
         ax.scatter(np.array(fit1), np.array(fit2), np.array(fit3), c=np.array(counts))
-        graph = plt.show(block=True)
+        fig.savefig(plots_dir_path + '/population_3d.' + plot_img_format, bbox_inches='tight')
+        if show_plot:
+            plt.show(block=True)
 
-        with open(plot_population_3d, 'wb') as f:
-            pickle.dump(graph, f)
+    def plot_fitness_distribution_2d(self, show_plot=True):
+        _check_if_plot_dir_exists()
 
-    def plot_fitness_distribution_2d(self):
         count_dict = dict()
         for fit in self.population_fitness:
             if fit not in count_dict:
@@ -68,12 +77,14 @@ class Plotter(object):
         ax.scatter(np.array(fit_lst), np.array(counts))
         plt.xlabel('fitness')
         plt.ylabel('count')
-        graph = plt.show(block=True)
 
-        with open(plot_fitness_distr_path, 'wb') as f:
-            pickle.dump(graph, f)
+        fig.savefig(plots_dir_path + '/fitness_distrib_2d.' + plot_img_format, bbox_inches='tight')
+        if show_plot:
+            plt.show(block=True)
 
-    def plot_fitness_stats_from_logbook(self):
+    def plot_fitness_stats_from_logbook(self, show_plot=True):
+        _check_if_plot_dir_exists()
+
         gen = list(range(self.num_gen))
         plt.plot(gen, self.res_dict['avg'])
         plt.plot(gen, self.res_dict['median'])
@@ -82,20 +93,18 @@ class Plotter(object):
         plt.plot(gen, self.res_dict['min'])
         plt.legend(['avg', 'median', 'most common', 'MAX', 'MIN'], loc='upper left')
 
-        graph = plt.show(block=True)
+        plt.savefig(plots_dir_path + '/fitness_stats.' + plot_img_format, bbox_inches='tight')
+        if show_plot:
+            plt.show(block=True)
 
-        with open(fitness_plot_path, 'wb') as f:
-            pickle.dump(graph, f)
+    def plot_min_max_counts(self, show_plot=True):
+        _check_if_plot_dir_exists()
 
-    def plot_min_max_counts(self):
         gen = list(range(self.num_gen))
         plt.plot(gen, self.res_dict['num max'])
         plt.plot(gen, self.res_dict['num min'])
         plt.legend(['NUM MAX', 'NUM MIN'], loc='upper left')
 
-        graph = plt.show(block=True)
-
-        with open(nums_plot_path, 'wb') as f:
-            pickle.dump(graph, f)
-
-
+        plt.savefig(plots_dir_path + '/min_max_counts.' + plot_img_format, bbox_inches='tight')
+        if show_plot:
+            plt.show(block=True)

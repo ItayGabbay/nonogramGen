@@ -99,9 +99,13 @@ import time
 from plotter import Plotter
 from config import plot_d3_fitness, plot_fitness_stats, plot_min_max_stats, plot_fitness_distribution_2d
 
+from scoop import shared
+from utils import load_train_and_test_sets
+from config import should_run_in_parallel
+
 
 def main():
-    logging.basicConfig(filename='log/log_gp' + str(time.time()) + '.log',level=logging.DEBUG)
+    logging.basicConfig(filename='log/log_gp' + str(time.time()) + '.log', level=logging.DEBUG)
     gp = GPExperiment()
     logging.info('\n\n*******STARTING!!!******\n\n')
     logging.info('\n\n*******Configuration******\n\n')
@@ -130,9 +134,7 @@ def main():
     if plot_fitness_distribution_2d:
         plot.plot_fitness_distribution_2d()
 
-from scoop import shared
-from utils import load_train_and_test_sets
-from config import should_run_in_parallel
+
 if __name__ == '__main__':
     if should_run_in_parallel:
         train_test_sets = load_train_and_test_sets()
@@ -143,4 +145,5 @@ if __name__ == '__main__':
         shared.setConst(train_nonograms=train_nonograms)
 
     from GPExperiment import GPExperiment
+
     main()
