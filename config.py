@@ -18,10 +18,10 @@ convert_to_sat = True
 should_run_in_parallel = True
 print_individual_fitness = False
 
-plot_fitness_stats = False
-plot_min_max_stats = False
+plot_fitness_stats = True
+plot_min_max_stats = True
 plot_d3_fitness = False
-plot_fitness_distribution_2d = False
+plot_fitness_distribution_2d = True
 plot_hof_trees = True
 
 NUM_COND_TREES = 5
@@ -36,10 +36,10 @@ prob_mutate_individual_val = 1
 points_correct_box = 5
 points_incorrect_box = -1
 # points_incorrect_box = -2
-pop_size = 40
+pop_size = 3
 hof_size = 1
 # num_gen = 40
-num_gen = 30
+num_gen = 3
 train_size = 10
 
 steps_threshold = 700
