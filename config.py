@@ -21,7 +21,8 @@ print_individual_fitness = False
 plot_fitness_stats = False
 plot_min_max_stats = False
 plot_d3_fitness = False
-plot_fitness_distribution_2d = True
+plot_fitness_distribution_2d = False
+plot_hof_trees = True
 
 NUM_COND_TREES = 5
 NUM_VAL_TREES = NUM_COND_TREES + 1

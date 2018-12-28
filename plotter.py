@@ -179,7 +179,7 @@ class Plotter(object):
 
                 g.draw(cond_dir + "/" + str(i) + '.' + plot_img_format)
 
-            for i, val_tree in enumerate(ind.cond_trees):
+            for i, val_tree in enumerate(ind.value_trees):
                 nodes, edges, labels = gp.graph(val_tree)
                 labels = {key: str(val).replace('_', '\n') for key, val in labels.items()}
                 g = _make_graph(edges, labels, nodes)
