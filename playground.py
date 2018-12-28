@@ -101,11 +101,11 @@ from config import plot_d3_fitness, plot_fitness_stats, plot_min_max_stats, plot
 
 from scoop import shared
 from utils import load_train_and_test_sets
-from config import should_run_in_parallel
+from config import should_run_in_parallel, curr_time
 
 
 def main():
-    logging.basicConfig(filename='log/log_gp' + str(time.time()) + '.log', level=logging.DEBUG)
+    logging.basicConfig(filename='log/log_gp' + curr_time + '.log', level=logging.DEBUG)
     gp = GPExperiment()
     logging.info('\n\n*******STARTING!!!******\n\n')
     logging.info('\n\n*******Configuration******\n\n')

@@ -5,13 +5,14 @@ NUM_ROWS = 5
 # NUM_COLS = 20
 NUM_COLS = 5
 empty_in_split = '\xa0'
+
 pickle_unsolved_file_path = 'data/%dx%d_nonograms.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_solved_file_path = 'data/%dx%d_nonograms_solved.pkl' % (NUM_ROWS, NUM_COLS)
 pickle_row_options_path = 'data/%dx%d_row_options.pkl' % (NUM_ROWS, NUM_ROWS)
-fitness_plot_path = 'plots/fitness' + str(time.time()) + '.pkl'
-nums_plot_path = 'plots/nums' + str(time.time()) + '.pkl'
-plot_fitness_distr_path = 'plots/fitness_distr' + str(time.time()) + '.pkl'
-plot_population_3d = 'plots/population_3d' + str(time.time()) + '.pkl'
+
+curr_time = time.strftime("%Y-%m-%d_%H_%M_%S", time.gmtime())
+plots_dir_path = 'plots/' + curr_time
+plot_img_format = 'png'
 
 convert_to_sat = True
 should_run_in_parallel = True
@@ -34,10 +35,10 @@ prob_mutate_individual_val = 1
 points_correct_box = 5
 points_incorrect_box = -1
 # points_incorrect_box = -2
-pop_size = 10
+pop_size = 40
 hof_size = 1
 # num_gen = 40
-num_gen = 3
+num_gen = 10
 train_size = 10
 
 steps_threshold = 700
