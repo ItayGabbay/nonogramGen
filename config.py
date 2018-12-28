@@ -36,10 +36,10 @@ prob_mutate_individual_val = 1
 points_correct_box = 5
 points_incorrect_box = -1
 # points_incorrect_box = -2
-pop_size = 3
+pop_size = 40
 hof_size = 1
 # num_gen = 40
-num_gen = 0
+num_gen = 30
 train_size = 10
 
 steps_threshold = 700
