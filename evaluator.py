@@ -99,7 +99,7 @@ def perform_astar(compiled_conditions, compiled_values, nonogram_solved: Nonogra
         selected_step = max_heuristic
         number_of_steps += 1
         if number_of_steps > steps_threshold:
-            print("Reached", steps_threshold, "steps for", nonogram_solved.title)
+            #print("Reached", steps_threshold, "steps for", nonogram_solved.title)
             grade = compare_to_solution(selected_step['nonogram'], nonogram_solved)
             return steps_threshold * grade
         # print(selected_step.matrix)

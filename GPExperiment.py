@@ -127,8 +127,8 @@ def _init_individual(cond_tree, val_tree, fitness=creator.FitnessMin()):
 
 def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: gp.PrimitiveSetTyped = val_pset):
     toolbox = base.Toolbox()
-    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=2, max_=4)
-    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=2, max_=4)
+    toolbox.register("value_expr", gp.genHalfAndHalf, pset=val_pset_arg, min_=5, max_=5)
+    toolbox.register("cond_expr", gp.genHalfAndHalf, pset=cond_pset_arg, min_=5, max_=5)
     toolbox.register("value_tree", tools.initIterate, creator.ValueTree, toolbox.value_expr)
     toolbox.register("cond_tree", tools.initIterate, creator.ConditionTree, toolbox.cond_expr)
     toolbox.register("compile_valtree", gp.compile, pset=val_pset_arg)
@@ -138,7 +138,7 @@ def make_toolbox(cond_pset_arg: gp.PrimitiveSetTyped = cond_pset, val_pset_arg: 
     # toolbox.register("individual", _init_individual, creator.Individual, toolbox.cond_tree, toolbox.value_tree)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
     # toolbox.register("select", tools.selTournament, tournsize=2)
-    toolbox.register("select", tools.selDoubleTournament, fitness_size=10, parsimony_size=1.2, fitness_first=True)
+    toolbox.register("select", tools.selDoubleTournament, fitness_size=3, parsimony_size=1.3, fitness_first=True)
     toolbox.register("mate", _crossover)
     toolbox.register("mutate", _mutate, cond_expr=toolbox.cond_expr, val_expr=toolbox.value_expr,
                      cond_pset=cond_pset_arg, val_pset=val_pset_arg)
@@ -241,7 +241,7 @@ def evaluate(compile_valtree, compile_condtree, individual: DoubleTreeBasedIndiv
     for nonogram_unsolved, nonogram_solved in train_nonograms:
         result = round(evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solved, nonogram_unsolved), 4)
         results.append(result)
-        if result == 1:
+        if result < 1000:
             num_of_solved += 1
         # if result == 5:
         #     num_of_solved += 1
@@ -264,8 +264,8 @@ def evaluate_single_nonogram(compiled_conditions, compiled_values, nonogram_solv
     # print('fitness:', fitness)
     # fitness = fitness_by_compare
     # print(nonogram_unsolved.title,  result)
-    if result < 1000:
-        print("Solved the", nonogram_unsolved.title, "with", result)
+    #if result < 1000:
+        #print("Solved the", nonogram_unsolved.title, "with", result)
     return result
 
 
