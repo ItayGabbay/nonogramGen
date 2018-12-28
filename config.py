@@ -39,7 +39,7 @@ points_incorrect_box = -1
 pop_size = 40
 hof_size = 1
 # num_gen = 40
-num_gen = 30
+num_gen = 5
 train_size = 10
 
 steps_threshold = 700

@@ -130,7 +130,7 @@ def compare_to_solution(nonogram: Nonogram, nonogram_solved: Nonogram) -> int:
 
     # if max_sum == np.sum(corrects) and np.sum(wrongs) == 0:
     #     print("Solved the ", nonogram.title, "Fitness:", points_correct_box * np.sum(corrects))
-    return max_sum / res
+    return max_sum - res
 
 def generate_next_steps(current_step):
     next_steps = []
