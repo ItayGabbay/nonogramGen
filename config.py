@@ -22,6 +22,7 @@ plot_fitness_stats = True
 plot_min_max_stats = True
 plot_d3_fitness = False
 plot_fitness_distribution_2d = True
+plot_hof_trees = True
 
 NUM_COND_TREES = 8
 NUM_VAL_TREES = NUM_COND_TREES + 1
