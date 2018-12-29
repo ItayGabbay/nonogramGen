@@ -1,21 +1,45 @@
 # This is a Harry Plotter
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from deap.tools import Logbook, HallOfFame
-from config import plots_dir_path, plot_img_format
-import pickle
-from typing import List
-import numpy as np
 from os import mkdir, path
+from typing import List
+
+import matplotlib.pyplot as plt
+import numpy as np
 import pygraphviz as pgv
-import networkx as nx
-from networkx.drawing.nx_agraph import pygraphviz_layout
 from deap import gp
+from deap.tools import Logbook, HallOfFame
+
+from config import plots_dir_path, plot_img_format
 
 
 def _check_if_dir_exists(dir_path=plots_dir_path):
     if not path.isdir(dir_path):
         mkdir(dir_path)
+
+
+# for manual string plotting
+def plot_tree_from_str(string, pset, i):
+    def _make_graph(edges, labels, nodes):
+        g = pgv.AGraph()
+        g.add_nodes_from(nodes)
+        g.add_edges_from(edges)
+        g.layout(prog="dot")
+        for node in nodes:
+            n = g.get_node(node)
+            n.attr["label"] = labels[node]
+        return g
+
+    tree = gp.PrimitiveTree.from_string(string, pset)
+    nodes, edges, labels = gp.graph(tree)
+    labels = {key: str(val).replace('_', '\n') for key, val in labels.items()}
+    g = _make_graph(edges, labels, nodes)
+    print('drawing', i)
+    g.draw("./plots/fromLog/condTrees/" + str(i) + ".png")
+
+
+def plot_lst_trees(pset, str_to_split: str):
+    sp = str_to_split.split(';')
+    for i, s in enumerate(sp):
+        plot_tree_from_str(s, pset, i)
 
 
 class Plotter(object):
